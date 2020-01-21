@@ -5,8 +5,8 @@ use kiss3d::light::Light;
 use kiss3d::resource::Mesh;
 use kiss3d::text::Font;
 use kiss3d::window::Window;
-use na::{DMatrix};
-use na::{Point2, Point3, UnitQuaternion, Vector3};
+use na::DMatrix;
+use na::{Matrix3x4, Point2, Point3, UnitQuaternion, Vector3};
 use std::cell::RefCell;
 use std::rc::Rc;
 mod geometry;
@@ -26,11 +26,13 @@ fn bezier_tests() {
             1.4, -2.1, 6.6, -4.1,
         ],
     );
-    let point = bezier::point_on_bezier_curve(control_points, 3, 0.1);
+
+    let cc = Matrix3x4::new(1., 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);
+    let point = bezier::point_on_bezier_curve(cc, 3, 0.1);
     println!("{}", point);
 }
 
-fn kiss3d_tests() {    
+fn kiss3d_tests() {
     let mut window = Window::new("Kiss3d: custom_mesh");
 
     let a = Point3::new(-1.0, -1.0, 0.0);
