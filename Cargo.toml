@@ -1,0 +1,17 @@
+[package]
+name = "crobot"
+version = "0.1.0"
+authors = ["Yuechuan Xue <xueyuechuan@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[profile.dev]
+opt-level = 0
+
+[dependencies]
+kiss3d = "0.21"
+nalgebra = "0.18.0"
+ncollide3d = "0.19"
+petgraph = "0.5.0"
+urdf-rs = "0.5.0"
