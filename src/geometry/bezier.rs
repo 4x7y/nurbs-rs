@@ -2,7 +2,17 @@ extern crate nalgebra as na;
 extern crate alga;
 use na::{DVector};
 
+/// Compute point on power basis curve.
+pub fn horner(a: &Vec<f64>, n: usize, u: f64) -> f64 {
+    let mut c = a[n];
+    for i in (0..n).rev() {
+        c = c * u + a[i];
+    }
+    return c;
+}
 
+
+/// Compute value of the i-th Bernstein polynomial of order n at fixed u.
 pub fn bernstein(i: usize, n: usize, u: f64) -> f64 {
     let mut temp = DVector::zeros(n + 1);
     temp[n - i] = 1.;
@@ -16,6 +26,7 @@ pub fn bernstein(i: usize, n: usize, u: f64) -> f64 {
     return temp[n];
 }
 
+/// Compute values of all the Bernstein polynomials of order n at fixed u.
 pub fn all_bernstein(n: usize, u: f64) -> DVector<f64> {
     let mut bernstein = DVector::zeros(n + 1);
     bernstein[0] = 1.;
@@ -34,7 +45,8 @@ pub fn all_bernstein(n: usize, u: f64) -> DVector<f64> {
     return bernstein;
 }
 
-pub fn point_on_bezier_curve(control_points: Vec<DVector<f64>>, n: usize, u: f64) -> DVector<f64> {
+/// Compute the point on the n-th order Bezier curve at fixed u.
+pub fn point_on_bezier_curve(control_points: &Vec<DVector<f64>>, n: usize, u: f64) -> DVector<f64> {
     let bernstein = all_bernstein(n, u);
     let dim = control_points[0].nrows();
     let mut point = DVector::zeros(dim);

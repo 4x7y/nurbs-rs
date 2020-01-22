@@ -7,6 +7,12 @@ use na::DVector;
 use geometry::bezier;
 
 fn bezier_tests() {
+
+    let coeffs = vec![1., 2., 3.];
+    let p = bezier::horner(&coeffs, 2, 0.5);
+    println!("{}", p);
+
+
     let bernstein = bezier::bernstein(0, 5, 0.3);
     println!("{}", bernstein);
 
@@ -19,7 +25,7 @@ fn bezier_tests() {
         DVector::from_row_slice(&[ 0.2,  0.8,  6.6]),
         DVector::from_row_slice(&[-5.9, 17.2, -4.1]),
     ];
-    let point = bezier::point_on_bezier_curve(control_points, 3, 0.1);
+    let point = bezier::point_on_bezier_curve(&control_points, 3, 0.1);
     println!("{}", point);
 }
 
