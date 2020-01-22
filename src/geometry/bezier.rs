@@ -36,7 +36,7 @@ pub fn all_bernstein(n: usize, u: f64) -> DVector<f64> {
 
 pub fn point_on_bezier_curve(control_points: Vec<DVector<f64>>, n: usize, u: f64) -> DVector<f64> {
     let bernstein = all_bernstein(n, u);
-    let dim = control_points[0].ncols();
+    let dim = control_points[0].nrows();
     let mut point = DVector::zeros(dim);
     for k in 0..=n {
         point = point + bernstein[k] * &control_points[k];
