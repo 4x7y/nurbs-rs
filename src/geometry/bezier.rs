@@ -1,5 +1,4 @@
 extern crate alga;
-extern crate nalgebra as na;
 use na::{DVector, Vector3};
 
 /// Compute point on power basis curve.
@@ -57,10 +56,56 @@ pub fn point_on_bezier_curve(control_points: &Vec<Vector3<f32>>, n: usize, u: f3
 /// Compute n-th order bezier curve.
 pub fn bezier(control_points: &Vec<Vector3<f32>>, n: usize, m: usize) -> Vec<Vector3<f32>> {
     let mut curve: Vec<Vector3<f32>> = Vec::new();
-    for i in 0..m {
+    for i in 0..=m {
         let u: f32 = (i as f32) / (m as f32);
         curve.push(point_on_bezier_curve(control_points, n, u));
     }
 
     return curve;
 }
+
+
+// /// Given a set of control points, generates a (non-rational) Bezier surface.
+// #[cfg(feature = "dim3")]
+// pub fn bezier_surface<N>(
+//     control_points: &[Point<N>],
+//     nupoints: usize,
+//     nvpoints: usize,
+//     usubdivs: usize,
+//     vsubdivs: usize,
+// ) -> TriMesh<N>
+// where
+//     N: RealField,
+// {
+//     assert!(nupoints * nvpoints == control_points.len());
+
+//     let mut surface = super::unit_quad(usubdivs, vsubdivs);
+
+//     {
+//         let uvs = &surface.uvs.as_ref().unwrap()[..];
+//         let coords = &mut surface.coords[..];
+
+//         let mut ucache = Vec::new();
+//         let mut vcache = Vec::new();
+
+//         for j in 0..vsubdivs + 1 {
+//             for i in 0..usubdivs + 1 {
+//                 let id = i + j * (usubdivs + 1);
+//                 coords[id] = bezier_surface_at(
+//                     control_points,
+//                     nupoints,
+//                     nvpoints,
+//                     uvs[id].x,
+//                     uvs[id].y,
+//                     &mut ucache,
+//                     &mut vcache,
+//                 )
+//             }
+//         }
+
+//         // XXX: compute the normals manually.
+//         surface.normals = None;
+//     }
+
+//     surface
+// }
