@@ -1,12 +1,24 @@
 <component name="ProjectDictionaryState">
   <dictionary name="yuechuan">
     <words>
+      <w>coef</w>
+      <w>coeffs</w>
+      <w>coord</w>
+      <w>hfield</w>
       <w>nalgebra</w>
+      <w>nbody</w>
+      <w>ndof</w>
       <w>qacc</w>
       <w>qfrc</w>
       <w>qpos</w>
+      <w>quat</w>
       <w>qvel</w>
+      <w>rbound</w>
+      <w>revolute</w>
+      <w>velocimeter</w>
       <w>xfrc</w>
+      <w>xpos</w>
+      <w>xvel</w>
     </words>
   </dictionary>
 </component>
