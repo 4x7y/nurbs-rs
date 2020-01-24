@@ -45,26 +45,26 @@ pub enum SensorType {
     BallAngleVel,            // 3D ball joint angular velocity
 
     // joint and tendon limit sensors, in constraint space
-    JOINTLIMITPOS,           // joint limit distance-margin
-    JOINTLIMITVEL,           // joint limit velocity
-    JOINTLIMITFRC,           // joint limit force
-    TENDONLIMITPOS,          // tendon limit distance-margin
-    TENDONLIMITVEL,          // tendon limit velocity
-    TENDONLIMITFRC,          // tendon limit force
+    JointLimitPos,           // joint limit distance-margin
+    JointLimitVel,           // joint limit velocity
+    JointLimitFrc,           // joint limit force
+    TendonLimitPos,          // tendon limit distance-margin
+    TendonLimitVel,          // tendon limit velocity
+    TendonLimitFrc,          // tendon limit force
 
     // sensors attached to an object with spatial frame: (x)body, geom, site, camera
-    FRAMEPOS,                // 3D position
-    FRAMEQUAT,               // 4D unit quaternion orientation
-    FRAMEXAXIS,              // 3D unit vector: x-axis of object's frame
-    FRAMEYAXIS,              // 3D unit vector: y-axis of object's frame
-    FRAMEZAXIS,              // 3D unit vector: z-axis of object's frame
-    FRAMELINVEL,             // 3D linear velocity
-    FRAMEANGVEL,             // 3D angular velocity
-    FRAMELINACC,             // 3D linear acceleration
-    FRAMEANGACC,             // 3D angular acceleration
+    FramePos,                // 3D position
+    FrameQuat,               // 4D unit quaternion orientation
+    FrameXAxis,              // 3D unit vector: x-axis of object's frame
+    FrameYAxis,              // 3D unit vector: y-axis of object's frame
+    FrameZAxis,              // 3D unit vector: z-axis of object's frame
+    FrameLinVel,             // 3D linear velocity
+    FrameAngVel,             // 3D angular velocity
+    FrameLinAcc,             // 3D linear acceleration
+    FrameAngAcc,             // 3D angular acceleration
 
     // sensors related to kinematic subtrees; attached to a body (which is the subtree root)
-    SUBTREECOM,              // 3D center of mass of subtree
-    SUBTREELINVEL,           // 3D linear velocity of subtree
-    SUBTREEANGMOM,           // 3D angular momentum of subtree
+    SubTreeCom,              // 3D center of mass of subtree
+    SubTreeLinVel,           // 3D linear velocity of subtree
+    SubTreeAngMom,           // 3D angular momentum of subtree
 }

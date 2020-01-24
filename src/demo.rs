@@ -12,28 +12,16 @@ fn sleep(millis: u64) {
 }
 
 fn bezier_tests() {
-    let coeffs = vec![1., 2., 3.];
-    let p = bezier::horner(&coeffs, 2, 0.5);
-    println!("{}", p);
-
-    let bernstein = bezier::bernstein(0, 5, 0.3);
-    println!("{}", bernstein);
-
-    let all_bernstein = bezier::all_bernstein(5, 0.3);
-    println!("{}", all_bernstein);
-
     let control_points = vec![
         Vector3::new(-0.1, -0.1, 0.0),
         Vector3::new(0.0, 0.1, 0.0),
         Vector3::new(0.1, -0.1, 0.1),
         Vector3::new(-0.1, 0.0, 0.3),
     ];
-    let point = bezier::point_on_bezier_curve(&control_points, 3, 0.1);
-    println!("{}", point);
+    let bezier_curve = bezier::BezierCurve::new(&control_points);
+    let curve = bezier_curve.get_curve(100);
 
-    let curve = bezier::bezier(&control_points, 3, 100);
-
-    let mut window = Window::new("Kiss3d: lines");
+    let mut window = Window::new("[ME 625] Bezier Demo");
     window.set_light(Light::StickToCamera);
 
     while window.render() {

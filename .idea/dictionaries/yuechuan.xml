@@ -1,13 +1,20 @@
 <component name="ProjectDictionaryState">
   <dictionary name="yuechuan">
     <words>
+      <w>anglr</w>
+      <w>casteljau</w>
       <w>coef</w>
       <w>coeffs</w>
       <w>coord</w>
+      <w>dcel</w>
+      <w>eulr</w>
       <w>hfield</w>
+      <w>jacobian</w>
+      <w>jcab</w>
       <w>nalgebra</w>
       <w>nbody</w>
       <w>ndof</w>
+      <w>omeg</w>
       <w>qacc</w>
       <w>qfrc</w>
       <w>qpos</w>
