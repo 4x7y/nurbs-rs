@@ -23,8 +23,10 @@
       <w>rbound</w>
       <w>revolute</w>
       <w>velocimeter</w>
+      <w>xdir</w>
       <w>xfrc</w>
       <w>xpos</w>
+      <w>xvec</w>
       <w>xvel</w>
     </words>
   </dictionary>

@@ -18,30 +18,31 @@ fn bezier_tests() {
         Vector3::new(0.1, -0.1, 0.1),
         Vector3::new(-0.1, 0.0, 0.3),
     ];
-    let bezier_curve = bezier::BezierCurve::new(&control_points);
-    let curve = bezier_curve.get_curve(100);
+    let weights = vec![1., 20., 1., 4.];
+
+
+    let bezier_curve = bezier::BezierCurve::new(control_points.clone());
+    let bc = bezier_curve.get_curve(100);
+    let rational_bezier_curve = bezier::RationalBezierCurve::new(control_points, weights);
+    let rbc = rational_bezier_curve.get_curve(100);
 
     let mut window = Window::new("[ME 625] Bezier Demo");
     window.set_light(Light::StickToCamera);
 
     while window.render() {
         let red   = Point3::new(1.0, 0.0, 0.0);
-        let white = Point3::new(1.0, 1.0, 1.0);
 
         for i in 1..=100 {
-            let s = Point3::from(curve[i - 1]);
-            let t = Point3::from(curve[i]);
+            let s = Point3::from(bc[i - 1]);
+            let t = Point3::from(bc[i]);
             window.draw_line(&s, &t, &red);
         }
 
-        window.draw_line(&Point3::from(control_points[0]), &Point3::from(control_points[1]), &white);
-        window.draw_line(&Point3::from(control_points[1]), &Point3::from(control_points[2]), &white);
-        window.draw_line(&Point3::from(control_points[2]), &Point3::from(control_points[3]), &white);
-        window.draw_line(&Point3::from(control_points[3]), &Point3::from(control_points[0]), &white);
-        window.draw_line(&Point3::from(control_points[0]), &Point3::from(control_points[2]), &white);
-        window.draw_line(&Point3::from(control_points[0]), &Point3::from(control_points[3]), &white);
-        window.draw_line(&Point3::from(control_points[1]), &Point3::from(control_points[3]), &white);
-
+        for i in 1..=100 {
+            let s = Point3::from(rbc[i - 1]);
+            let t = Point3::from(rbc[i]);
+            window.draw_line(&s, &t, &red);
+        }
         sleep(30);
     }
 }

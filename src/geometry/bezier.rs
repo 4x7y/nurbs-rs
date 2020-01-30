@@ -1,9 +1,15 @@
 extern crate alga;
-use na::{DVector, Vector3};
+use na::*;
+use na::allocator::Allocator;
 
-pub struct BezierCurve {
-    pub control_points: Vec<Vector3<f32>>,
+pub struct BezierCurve<D: Dim + DimName>
+    where DefaultAllocator: Allocator<f32, D> {
+    pub control_points: Vec<VectorN<f32, D>>,
     pub degree: usize,
+}
+
+pub struct RationalBezierCurve {
+    pub bezier_curve: BezierCurve<U4>,
 }
 
 pub struct LineSegment {
@@ -11,13 +17,63 @@ pub struct LineSegment {
     pub end: Vector3<f32>
 }
 
-impl BezierCurve {
+pub fn cart2homo(vec: &Vector3<f32>) -> Vector4<f32> {
+    return Vector4::new(vec[0], vec[1], vec[2], 1.0);
+}
+
+pub fn xvec2homo(vec: &Vector3<f32>) -> Vector4<f32> {
+    return Vector4::new(vec[0], vec[1], vec[2], 0.0);
+}
+
+pub fn homo2cart(vec: &Vector4<f32>) -> Option<Vector3<f32>> {
+    if vec[3] == 0.0 {
+        return None;
+    } else {
+        return Some(Vector3::new(vec[0], vec[1], vec[2]) / vec[3]);
+    }
+}
+
+pub fn homo2xvec(vec: &Vector4<f32>) -> Option<Vector3<f32>> {
+    if vec[3] == 0.0 {
+        return Some(Vector3::new(vec[0], vec[1], vec[2]) / vec[3]);
+    } else {
+        return None;
+    }
+}
+
+impl RationalBezierCurve {
+
+    /// Create a Rational Bezier curve given control points and weights
+    pub fn new(control_points: Vec<Vector3<f32>>, weights: Vec<f32>) -> Self {
+        let mut control_points_homo = Vec::new();
+        for i in 0..control_points.len() {
+            control_points_homo.push(cart2homo(&control_points[i]) * weights[i]);
+        }
+        RationalBezierCurve {
+            bezier_curve: BezierCurve::new(control_points_homo),
+        }
+    }
+
+    /// Compute n-th order rational bezier curve.
+    pub fn get_curve(&self, m: usize) -> Vec<Vector3<f32>> {
+        let curve_homo = self.bezier_curve.get_curve(m);
+        let mut curve = Vec::new();
+        for point in curve_homo {
+            curve.push(homo2cart(&point).unwrap());
+        }
+        return curve;
+    }
+}
+
+
+impl<D: Dim + DimName> BezierCurve<D>
+    where DefaultAllocator: Allocator<f32, D> {
 
     /// Create a Bezier curve given control points
-    pub fn new(control_points: &Vec<Vector3<f32>>) -> BezierCurve {
+    pub fn new(control_points: Vec<VectorN<f32, D>>) -> Self {
         BezierCurve {
-            control_points: control_points.clone(),
             degree: control_points.len() - 1,
+            control_points,
         }
     }
 
@@ -68,10 +124,10 @@ impl BezierCurve {
 
 
     /// Compute the point on the n-th order Bezier curve at fixed u.
-    pub fn point_on_bezier_curve(&self, u: f32) -> Vector3<f32> {
+    pub fn point_on_bezier_curve(&self, u: f32) -> VectorN<f32, D> {
         let n = self.degree;
         let bernstein = self.all_bernstein(u);
-        let mut point = Vector3::zeros();
+        let mut point = VectorN::zeros();
         for k in 0..=n {
             point = point + bernstein[k] * &self.control_points[k];
         }
@@ -80,21 +136,21 @@ impl BezierCurve {
 
 
     /// De Casteljau Algorithm
-    pub fn de_casteljau(&self, u: f32) -> Vector3<f32> {
+    pub fn de_casteljau(&self, u: f32) -> VectorN<f32, D> {
         let mut points = self.control_points.clone();
         let n = self.degree;
         for i in 1..=n {
             for k in 0..=n-i {
-                points[k] = (1. - u) * points[k] + u * points[k+1];
+                points[k] = (1. - u) * &points[k] + u * &points[k+1];
             }
         }
 
-        return points[0];
+        return points[0].clone();
     }
 
     /// Compute n-th order bezier curve.
-    pub fn get_curve(&self, m: usize) -> Vec<Vector3<f32>> {
-        let mut curve: Vec<Vector3<f32>> = Vec::new();
+    pub fn get_curve(&self, m: usize) -> Vec<VectorN<f32, D>> {
+        let mut curve: Vec<VectorN<f32, D>> = Vec::new();
         for i in 0..=m {
             let u: f32 = (i as f32) / (m as f32);
             curve.push(self.de_casteljau(u));
@@ -104,6 +160,16 @@ impl BezierCurve {
     }
 
     pub fn control_polygon(&self) -> Vec<LineSegment> {
+//        window.draw_line(&Point3::from(control_points[0]), &Point3::from(control_points[1]), &white);
+//        window.draw_line(&Point3::from(control_points[1]), &Point3::from(control_points[2]), &white);
+//        window.draw_line(&Point3::from(control_points[2]), &Point3::from(control_points[3]), &white);
+//        window.draw_line(&Point3::from(control_points[3]), &Point3::from(control_points[0]), &white);
+//        window.draw_line(&Point3::from(control_points[0]), &Point3::from(control_points[2]), &white);
+//        window.draw_line(&Point3::from(control_points[0]), &Point3::from(control_points[3]), &white);
+//        window.draw_line(&Point3::from(control_points[1]), &Point3::from(control_points[3]), &white);
+
         unimplemented!()
     }
 }
+
+
