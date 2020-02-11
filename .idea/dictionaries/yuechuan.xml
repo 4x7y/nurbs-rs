@@ -6,11 +6,13 @@
       <w>coef</w>
       <w>coeffs</w>
       <w>coord</w>
+      <w>ctrlpts</w>
       <w>dcel</w>
       <w>eulr</w>
       <w>hfield</w>
       <w>jacobian</w>
       <w>jcab</w>
+      <w>knotvec</w>
       <w>nalgebra</w>
       <w>nbody</w>
       <w>ndof</w>
