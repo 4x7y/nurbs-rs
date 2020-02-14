@@ -1,33 +1,23 @@
 extern crate nalgebra as na;
 
-use crobot::geometry::bezier;
+use crobot::geometry::bspline;
 use kiss3d::light::Light;
 use kiss3d::window::Window;
 use kiss3d::resource::Mesh;
-use na::{Point3, Vector3, UnitQuaternion};
+use na::{Point3, Vector3, VectorN, U4};
 use std::{thread, time};
 use std::cell::RefCell;
 use std::rc::Rc;
+use crobot::utils::trajectory::JointSpaceTrajectory;
+use crobot::math::matrix::VectorNf;
+
 
 fn sleep(millis: u64) {
     let duration = time::Duration::from_millis(millis);
     thread::sleep(duration);
 }
 
-fn bezier_tests() {
-//    let control_points = vec![
-//        Vector3::new(-0.1, -0.1, 0.0),
-//        Vector3::new(0.0, 0.1, 0.0),
-//        Vector3::new(0.1, -0.1, 0.1),
-//        Vector3::new(-0.1, 0.0, 0.3),
-//    ];
-//    let weights = vec![1., 20., 1., 4.];
-//
-//
-//    let bezier_curve = bezier::BezierCurve::new(control_points.clone());
-//    let bc = bezier_curve.get_curve(100);
-//    let rational_bezier_curve = bezier::RationalBezierCurve::new(control_points, weights);
-//    let rbc = rational_bezier_curve.get_curve(100);
+fn bspline_test() {
 
     let control_points = vec![
         Vector3::new(0.0, 0.0,  0.0),
@@ -50,18 +40,15 @@ fn bezier_tests() {
         0.0, 0.0, 0.0, 1.0, 1.0, 1.0,
     ];
 
-    let surface = bezier::BSplineSurface::new(
+    let surface = bspline::BSplineSurface::new(
         control_points,
         knot_vector_u,
         knot_vector_v,
-        3, // degree_u
-        2, // degree_v
-        4, // size_u
-        3, // size_v
+        3,               // degree_u
+        2,               // degree_v
+        4,                 // size_u
+        3,                 // size_v
     );
-
-    let point = surface.evaluate_single(0.1, 0.2);
-    println!("{}", point);
 
     let mut vertices = Vec::new();
     let mut indices = Vec::new();
@@ -92,7 +79,7 @@ fn bezier_tests() {
         vertices, indices, None, None, false,
     )));
 
-    let mut window = Window::new("[ME 625] Bezier Demo");
+    let mut window = Window::new("[ME 625] B-Spline Surface Demo");
     window.set_light(Light::StickToCamera);
 
     let mut c = window.add_mesh(mesh, Vector3::new(1.0, 1.0, 1.0));
@@ -105,5 +92,10 @@ fn bezier_tests() {
 }
 
 fn main() {
-    bezier_tests();
+    let vec = VectorNf::<U4>::zeros();
+    let vech = vec.to_homogeneous();
+    println!("{}", vec);
+    println!("{}", vech);
+
+    bspline_test();
 }

@@ -1,4 +1,4 @@
-use crate::math::vector::*;
+use crate::math::matrix::*;
 use std::f32;
 
 pub enum JointType {

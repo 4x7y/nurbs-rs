@@ -55,7 +55,7 @@
 //     }
 // }
 
-// #[test]
+// #[tests]
 // fn it_works() {
 //     kiss3d_tests();
 //     assert_eq!(2 + 2, 4);

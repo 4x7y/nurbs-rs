@@ -1,4 +1,4 @@
-use crate::math::vector::*;
+use crate::math::matrix::*;
 
 pub struct Robot {
     pub nq: usize,                    // dimension of generalized coordinates
@@ -6,19 +6,19 @@ pub struct Robot {
     pub nbody: usize,                 // number of bodies
 
     // state
-    pub qpos: VectorNf,               // generalized coordinates position         (nq x 1)
-    pub qvel: VectorNf,               // generalized coordinates velocity         (nv x 1)
+    pub qpos: VectorDf,               // generalized coordinates position         (nq x 1)
+    pub qvel: VectorDf,               // generalized coordinates velocity         (nv x 1)
 
     // control
-    pub ctrl: VectorNf,               // control input to the actuators           (nu x 1)
-    pub qfrc_applied: VectorNf,       // applied generalized force                (nv x 1)
-    pub xfrc_applied: VectorNf,       // applied Cartesian force/torque           (nbody x 6)
+    pub ctrl: VectorDf,               // control input to the actuators           (nu x 1)
+    pub qfrc_applied: VectorDf,       // applied generalized force                (nv x 1)
+    pub xfrc_applied: VectorDf,       // applied Cartesian force/torque           (nbody x 6)
 
     // dynamics
-    pub qacc: VectorNf,               // acceleration                             (nv x 1)
-    pub act_dot: VectorNf,            // time-derivative of actuator activation   (na x 1)
+    pub qacc: VectorDf,               // acceleration                             (nv x 1)
+    pub act_dot: VectorDf,            // time-derivative of actuator activation   (na x 1)
     pub mm: MatrixMNf,                // total inertia                            (nv x nv)
-    pub crb: VectorNf,                // com-based composite inertia and mass     (nbody x 10）
+    pub crb: VectorDf,                // com-based composite inertia and mass     (nbody x 10）
 }
 
 // type of sensor

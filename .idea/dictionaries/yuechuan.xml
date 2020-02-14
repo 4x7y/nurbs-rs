@@ -2,21 +2,29 @@
   <dictionary name="yuechuan">
     <words>
       <w>anglr</w>
+      <w>bspline</w>
       <w>casteljau</w>
       <w>coef</w>
+      <w>coeff</w>
       <w>coeffs</w>
       <w>coord</w>
+      <w>crobot</w>
       <w>ctrlpts</w>
       <w>dcel</w>
+      <w>ders</w>
       <w>eulr</w>
       <w>hfield</w>
       <w>jacobian</w>
       <w>jcab</w>
       <w>knotvec</w>
+      <w>lspb</w>
+      <w>matx</w>
       <w>nalgebra</w>
       <w>nbody</w>
       <w>ndof</w>
+      <w>nurbs</w>
       <w>omeg</w>
+      <w>piegl</w>
       <w>qacc</w>
       <w>qfrc</w>
       <w>qpos</w>
@@ -25,6 +33,8 @@
       <w>rbound</w>
       <w>revolute</w>
       <w>velocimeter</w>
+      <w>waypoint</w>
+      <w>waypoints</w>
       <w>xdir</w>
       <w>xfrc</w>
       <w>xpos</w>

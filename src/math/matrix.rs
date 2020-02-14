@@ -2,12 +2,16 @@ use na::*;
 use na::base::storage::Owned;
 
 pub type Scalar = f32;
+
+pub type Vector2f = Vector2<f32>;
 pub type Vector3f = Vector3<f32>;
 pub type Vector4f = Vector4<f32>;
+pub type Vector5f = Vector5<f32>;
 pub type Vector6f = Vector6<f32>;
+pub type VectorNf<D> = VectorN<f32, D>;
 pub type Screw = Vector6f;
 pub type Matrix3f = Matrix3<f32>;
-pub type VectorNf = DVector<f32>;
+pub type VectorDf = DVector<f32>;
 pub type Matrix4f = Matrix4<f32>;
 pub type Matrix6f = Matrix6<f32>;
 pub type MatrixMNf = DMatrix<f32>;
