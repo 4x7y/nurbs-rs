@@ -1,3 +1,8 @@
+#![allow(dead_code)]
+#![allow(unused_imports)]
+#![allow(unused_variables)]
+#![cfg_attr(debug_assertions, allow(dead_code, unused_imports))]
+
 extern crate nalgebra as na;
 
 use crobot::geometry::bspline;
@@ -9,7 +14,7 @@ use std::{thread, time};
 use std::cell::RefCell;
 use std::rc::Rc;
 use crobot::utils::trajectory::JointSpaceTrajectory;
-use crobot::math::matrix::VectorNf;
+use crobot::math::*;
 
 
 fn sleep(millis: u64) {
@@ -20,18 +25,18 @@ fn sleep(millis: u64) {
 fn bspline_test() {
 
     let control_points = vec![
-        Vector3::new(0.0, 0.0,  0.0),
-        Vector3::new(0.0, 4.0,  0.0),
-        Vector3::new(0.0, 8.0, -3.0),
-        Vector3::new(2.0, 0.0,  6.0),
-        Vector3::new(2.0, 4.0,  0.0),
-        Vector3::new(2.0, 8.0,  0.0),
-        Vector3::new(4.0, 0.0,  0.0),
-        Vector3::new(4.0, 4.0,  0.0),
-        Vector3::new(4.0, 8.0,  3.0),
-        Vector3::new(6.0, 0.0,  0.0),
-        Vector3::new(6.0, 4.0, -3.0),
-        Vector3::new(6.0, 8.0,  0.0),
+        Vector3f::new(0.0, 0.0,  0.0),
+        Vector3f::new(0.0, 4.0,  0.0),
+        Vector3f::new(0.0, 8.0, -3.0),
+        Vector3f::new(2.0, 0.0,  6.0),
+        Vector3f::new(2.0, 4.0,  0.0),
+        Vector3f::new(2.0, 8.0,  0.0),
+        Vector3f::new(4.0, 0.0,  0.0),
+        Vector3f::new(4.0, 4.0,  0.0),
+        Vector3f::new(4.0, 8.0,  3.0),
+        Vector3f::new(6.0, 0.0,  0.0),
+        Vector3f::new(6.0, 4.0, -3.0),
+        Vector3f::new(6.0, 8.0,  0.0),
     ];
     let knot_vector_u = vec![
         0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0,

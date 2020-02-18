@@ -1,4 +1,3 @@
-extern crate alga;
 use na::*;
 use na::allocator::Allocator;
 

@@ -5,28 +5,35 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b92580e9-e141-4d94-8411-f6c0c303c8ed" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/resource/header.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/geometry/bspline.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/tests/common.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/tests/mod.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/tests/trajectory_test.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/utils/common.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/utils/graph.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/utils/mod.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/utils/rotation.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/utils/trajectory.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/geometry/volint.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/robotics/dynamics.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/robotics/joint/free_joint.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/robotics/joint/joint.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/robotics/joint/mod.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/robotics/joint/revolute_joint.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/robotics/kinematics.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/robotics/motion.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/robotics/rigid_body.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/robotics/rigid_body_tree.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/robotics/sensor.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/tests/dynamics_test.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dictionaries/yuechuan.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/yuechuan.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/demo.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/demo.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/geometry/bezier.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/geometry/bezier.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/geometry/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/geometry/mod.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/math/matrix.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/math/matrix.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/math/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/math/mod.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/math/vector.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/math/matrix.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/robotics/joint.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/robotics/joint.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/robotics/joint.rs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/robotics/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/robotics/mod.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/robotics/robot.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/robotics/robot.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/kiss3d_tests.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/tests/kiss3d_tests.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/tests/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/trajectory_test.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/tests/trajectory_test.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/rotation.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/rotation.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/trajectory.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/trajectory.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,7 +77,7 @@
     <property name="project.structure.side.proportion" value="0.0" />
     <property name="settings.editor.selected.configurable" value="language.rust.cargo" />
   </component>
-  <component name="RunManager" selected="Cargo Command.Run">
+  <component name="RunManager" selected="Cargo Command.Doc">
     <configuration name="Build" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
       <option name="channel" value="DEFAULT" />
       <option name="command" value="build" />
@@ -120,33 +127,9 @@
       <option name="emulateTerminal" value="false" />
       <option name="backtrace" value="SHORT" />
       <option name="workingDirectory" value="file://$PROJECT_DIR$" />
-      <envs />
-      <method v="2">
-        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="Test tests::trajectory_test::from_trap_vel" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
-      <option name="channel" value="DEFAULT" />
-      <option name="command" value="test --package crobot --lib tests::trajectory_test::from_trap_vel -- --exact" />
-      <option name="allFeatures" value="false" />
-      <option name="nocapture" value="false" />
-      <option name="emulateTerminal" value="false" />
-      <option name="backtrace" value="SHORT" />
-      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
-      <envs />
-      <method v="2">
-        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="Test tests::trajectory_test::trap_vel_trajectory" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
-      <option name="channel" value="DEFAULT" />
-      <option name="command" value="test --package crobot --lib tests::trajectory_test::trap_vel_trajectory -- --exact" />
-      <option name="allFeatures" value="false" />
-      <option name="nocapture" value="false" />
-      <option name="emulateTerminal" value="false" />
-      <option name="backtrace" value="SHORT" />
-      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
-      <envs />
+      <envs>
+        <env name="RUSTFLAGS" value="$RUSTFLAGS - A dead_code unused_code" />
+      </envs>
       <method v="2">
         <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
       </method>
@@ -156,15 +139,7 @@
       <item itemvalue="Cargo Command.Run" />
       <item itemvalue="Cargo Command.Doc" />
       <item itemvalue="Cargo Command.Run demo" />
-      <item itemvalue="Cargo Command.Test tests::trajectory_test::trap_vel_trajectory" />
-      <item itemvalue="Cargo Command.Test tests::trajectory_test::from_trap_vel" />
     </list>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Cargo Command.Test tests::trajectory_test::from_trap_vel" />
-        <item itemvalue="Cargo Command.Test tests::trajectory_test::trap_vel_trajectory" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="RustProjectSettings">
     <option name="toolchainHomeDirectory" value="$USER_HOME$/.cargo/bin" />
@@ -199,6 +174,7 @@
       <workItem from="1581544810183" duration="16055000" />
       <workItem from="1581608761991" duration="8581000" />
       <workItem from="1581696176538" duration="1066000" />
+      <workItem from="1581989799643" duration="18511000" />
     </task>
     <servers />
   </component>
@@ -213,34 +189,38 @@
       <screen x="0" y="0" width="2194" height="1194" />
     </state>
     <state x="690" y="256" key="#Plugins/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1581544794055" />
-    <state x="552" y="252" width="1089" height="707" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1581566504566">
+    <state x="552" y="252" width="1089" height="707" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1582003441829">
       <screen x="0" y="0" width="2194" height="1194" />
     </state>
-    <state x="552" y="252" width="1089" height="707" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1581566504566" />
-    <state x="832" y="368" key="EnvironmentVariablesDialog" timestamp="1581566500776">
+    <state x="552" y="252" width="1089" height="707" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1582003441829" />
+    <state x="903" y="313" key="#com.intellij.ide.util.MemberChooser" timestamp="1582041673326">
       <screen x="0" y="0" width="2194" height="1194" />
     </state>
-    <state x="832" y="368" key="EnvironmentVariablesDialog/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1581566500776" />
-    <state width="2151" height="279" key="GridCell.Tab.0.bottom" timestamp="1581697243511">
+    <state x="903" y="313" key="#com.intellij.ide.util.MemberChooser/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1582041673326" />
+    <state x="832" y="368" key="EnvironmentVariablesDialog" timestamp="1581992044217">
       <screen x="0" y="0" width="2194" height="1194" />
     </state>
-    <state width="2151" height="279" key="GridCell.Tab.0.bottom/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1581697243511" />
-    <state width="2151" height="279" key="GridCell.Tab.0.center" timestamp="1581697243511">
+    <state x="832" y="368" key="EnvironmentVariablesDialog/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1581992044217" />
+    <state width="2151" height="279" key="GridCell.Tab.0.bottom" timestamp="1582044810735">
       <screen x="0" y="0" width="2194" height="1194" />
     </state>
-    <state width="2151" height="279" key="GridCell.Tab.0.center/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1581697243511" />
-    <state width="2151" height="279" key="GridCell.Tab.0.left" timestamp="1581697243511">
+    <state width="2151" height="279" key="GridCell.Tab.0.bottom/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1582044810735" />
+    <state width="2151" height="279" key="GridCell.Tab.0.center" timestamp="1582044810735">
       <screen x="0" y="0" width="2194" height="1194" />
     </state>
-    <state width="2151" height="279" key="GridCell.Tab.0.left/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1581697243511" />
-    <state width="2151" height="279" key="GridCell.Tab.0.right" timestamp="1581697243511">
+    <state width="2151" height="279" key="GridCell.Tab.0.center/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1582044810735" />
+    <state width="2151" height="279" key="GridCell.Tab.0.left" timestamp="1582044810735">
       <screen x="0" y="0" width="2194" height="1194" />
     </state>
-    <state width="2151" height="279" key="GridCell.Tab.0.right/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1581697243511" />
-    <state x="760" y="264" width="672" height="678" key="search.everywhere.popup" timestamp="1581544632865">
+    <state width="2151" height="279" key="GridCell.Tab.0.left/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1582044810735" />
+    <state width="2151" height="279" key="GridCell.Tab.0.right" timestamp="1582044810735">
       <screen x="0" y="0" width="2194" height="1194" />
     </state>
-    <state x="760" y="264" width="672" height="678" key="search.everywhere.popup/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1581544632865" />
+    <state width="2151" height="279" key="GridCell.Tab.0.right/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1582044810735" />
+    <state x="760" y="264" width="672" height="678" key="search.everywhere.popup" timestamp="1582044916869">
+      <screen x="0" y="0" width="2194" height="1194" />
+    </state>
+    <state x="760" y="264" width="672" height="678" key="search.everywhere.popup/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1582044916869" />
   </component>
   <component name="masterDetails">
     <states>

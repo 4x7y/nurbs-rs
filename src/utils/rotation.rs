@@ -1,9 +1,9 @@
 use crate::math::matrix::{Matrix3f, Vector3f};
 
-pub enum EulerSequence {
-    ZYX,
-    XYZ,
-    ZYZ,
+pub enum EulerAngle {
+    ZYX(Vector3f),
+    XYZ(Vector3f),
+    ZYZ(Vector3f),
 }
 
 /// Return Euler angle rates matrix $T$. Transform Euler angle rates to angular velocity
@@ -34,7 +34,7 @@ pub enum EulerSequence {
 ///
 /// * Representing Attitude: Euler Angles, Unit Quaternions, and Rotation Vectors
 ///   - Section 5.2: Euler Angle Rates and Angular Velocity
-pub fn matx_eulr_dot2omeg(eulr: &Vector3f, seq: EulerSequence) -> Matrix3f {
+pub fn matx_eulr_dot2omeg(eulr: &EulerAngle) -> Matrix3f {
     unimplemented!()
 }
 
@@ -51,10 +51,10 @@ pub fn matx_eulr_dot2omeg(eulr: &Vector3f, seq: EulerSequence) -> Matrix3f {
 ///
 /// * Representing Attitude: Euler Angles, Unit Quaternions, and Rotation Vectors
 ///   - Section 5.2: Euler Angle Rates and Angular Velocity
-pub fn matx_omeg2eulr_dot(eulr: &Vector3f, seq: EulerSequence) -> Matrix3f {
-    return match seq {
+pub fn matx_omeg2eulr_dot(eulr: &EulerAngle) -> Matrix3f {
+    return match eulr {
         // Eq. 457
-        EulerSequence::ZYX => {
+        EulerAngle::ZYX(eulr) => {
             let z = eulr[0];
             let y = eulr[1];
             let cy = y.cos();
@@ -66,7 +66,7 @@ pub fn matx_omeg2eulr_dot(eulr: &Vector3f, seq: EulerSequence) -> Matrix3f {
                                    -sz,           cz, 0f32,
                                cz / cy,      sz / cy, 0f32)
         },
-        EulerSequence::XYZ => {
+        EulerAngle::XYZ(eulr) => {
             let x = eulr[0];
             let y = eulr[1];
             let cx = x.cos();
@@ -78,7 +78,7 @@ pub fn matx_omeg2eulr_dot(eulr: &Vector3f, seq: EulerSequence) -> Matrix3f {
                           0f32,           cx,            sx,
                           0f32,     -sx / cy,       cx / cy)
         },
-        EulerSequence::ZYZ => {
+        EulerAngle::ZYZ(eulr) => {
             let z = eulr[0];
             let y = eulr[1];
             let cz = z.cos();

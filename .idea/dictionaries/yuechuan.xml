@@ -1,30 +1,40 @@
 <component name="ProjectDictionaryState">
   <dictionary name="yuechuan">
     <words>
+      <w>alph</w>
       <w>anglr</w>
+      <w>bimm</w>
+      <w>brot</w>
       <w>bspline</w>
       <w>casteljau</w>
       <w>coef</w>
       <w>coeff</w>
       <w>coeffs</w>
       <w>coord</w>
+      <w>crba</w>
       <w>crobot</w>
       <w>ctrlpts</w>
       <w>dcel</w>
       <w>ders</w>
       <w>eulr</w>
       <w>hfield</w>
+      <w>indx</w>
       <w>jacobian</w>
       <w>jcab</w>
+      <w>jnts</w>
       <w>knotvec</w>
+      <w>llmt</w>
       <w>lspb</w>
       <w>matx</w>
       <w>nalgebra</w>
+      <w>nbodies</w>
       <w>nbody</w>
       <w>ndof</w>
       <w>nurbs</w>
       <w>omeg</w>
       <w>piegl</w>
+      <w>pimm</w>
+      <w>prcp</w>
       <w>qacc</w>
       <w>qfrc</w>
       <w>qpos</w>
@@ -32,14 +42,22 @@
       <w>qvel</w>
       <w>rbound</w>
       <w>revolute</w>
+      <w>ulmt</w>
+      <w>urdf</w>
+      <w>vecs</w>
       <w>velocimeter</w>
       <w>waypoint</w>
       <w>waypoints</w>
+      <w>xacc</w>
       <w>xdir</w>
       <w>xfrc</w>
+      <w>ximm</w>
+      <w>xint</w>
       <w>xpos</w>
+      <w>xrot</w>
       <w>xvec</w>
       <w>xvel</w>
+      <w>zhat</w>
     </words>
   </dictionary>
 </component>
