@@ -5,35 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b92580e9-e141-4d94-8411-f6c0c303c8ed" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/geometry/volint.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/robotics/dynamics.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/robotics/joint/free_joint.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/robotics/joint/joint.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/robotics/joint/mod.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/robotics/joint/revolute_joint.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/robotics/kinematics.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/robotics/motion.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/robotics/rigid_body.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/robotics/rigid_body_tree.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/robotics/sensor.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/tests/dynamics_test.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/yuechuan.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/yuechuan.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/geometry/dcel/face.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/geometry/dcel/half_edge.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/geometry/dcel/mod.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/geometry/dcel/vertex.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/robotics/dynamics/forward_dynamics.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/robotics/dynamics/inverse_dynamics.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/robotics/dynamics/mod.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/demo.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/demo.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/geometry/bezier.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/geometry/bezier.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/geometry/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/geometry/mod.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/math/matrix.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/math/matrix.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/math/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/math/mod.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/robotics/joint.rs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/robotics/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/robotics/mod.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/robotics/robot.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/robotics/robot.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tests/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/tests/mod.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tests/trajectory_test.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/tests/trajectory_test.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/rotation.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/rotation.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/trajectory.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/trajectory.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/geometry/dcel.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/geometry/dcel/dcel.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/robotics/dynamics.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/robotics/dynamics/dynamics.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -76,6 +57,12 @@
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
     <property name="settings.editor.selected.configurable" value="language.rust.cargo" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\yuechuan\Develop\crobot\src\geometry\dcel" />
+      <recent name="C:\Users\yuechuan\Develop\crobot\src\robotics\dynamics" />
+    </key>
   </component>
   <component name="RunManager" selected="Cargo Command.Doc">
     <configuration name="Build" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
@@ -174,7 +161,8 @@
       <workItem from="1581544810183" duration="16055000" />
       <workItem from="1581608761991" duration="8581000" />
       <workItem from="1581696176538" duration="1066000" />
-      <workItem from="1581989799643" duration="18511000" />
+      <workItem from="1581989799643" duration="18750000" />
+      <workItem from="1582053905546" duration="2580000" />
     </task>
     <servers />
   </component>
@@ -201,22 +189,22 @@
       <screen x="0" y="0" width="2194" height="1194" />
     </state>
     <state x="832" y="368" key="EnvironmentVariablesDialog/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1581992044217" />
-    <state width="2151" height="279" key="GridCell.Tab.0.bottom" timestamp="1582044810735">
+    <state width="2151" height="279" key="GridCell.Tab.0.bottom" timestamp="1582057056042">
       <screen x="0" y="0" width="2194" height="1194" />
     </state>
-    <state width="2151" height="279" key="GridCell.Tab.0.bottom/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1582044810735" />
-    <state width="2151" height="279" key="GridCell.Tab.0.center" timestamp="1582044810735">
+    <state width="2151" height="279" key="GridCell.Tab.0.bottom/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1582057056042" />
+    <state width="2151" height="279" key="GridCell.Tab.0.center" timestamp="1582057056042">
       <screen x="0" y="0" width="2194" height="1194" />
     </state>
-    <state width="2151" height="279" key="GridCell.Tab.0.center/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1582044810735" />
-    <state width="2151" height="279" key="GridCell.Tab.0.left" timestamp="1582044810735">
+    <state width="2151" height="279" key="GridCell.Tab.0.center/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1582057056042" />
+    <state width="2151" height="279" key="GridCell.Tab.0.left" timestamp="1582057056042">
       <screen x="0" y="0" width="2194" height="1194" />
     </state>
-    <state width="2151" height="279" key="GridCell.Tab.0.left/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1582044810735" />
-    <state width="2151" height="279" key="GridCell.Tab.0.right" timestamp="1582044810735">
+    <state width="2151" height="279" key="GridCell.Tab.0.left/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1582057056042" />
+    <state width="2151" height="279" key="GridCell.Tab.0.right" timestamp="1582057056042">
       <screen x="0" y="0" width="2194" height="1194" />
     </state>
-    <state width="2151" height="279" key="GridCell.Tab.0.right/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1582044810735" />
+    <state width="2151" height="279" key="GridCell.Tab.0.right/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1582057056042" />
     <state x="760" y="264" width="672" height="678" key="search.everywhere.popup" timestamp="1582044916869">
       <screen x="0" y="0" width="2194" height="1194" />
     </state>
