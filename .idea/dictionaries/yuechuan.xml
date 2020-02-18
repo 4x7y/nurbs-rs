@@ -41,6 +41,7 @@
       <w>quat</w>
       <w>qvel</w>
       <w>rbound</w>
+      <w>rbtree</w>
       <w>revolute</w>
       <w>ulmt</w>
       <w>urdf</w>
