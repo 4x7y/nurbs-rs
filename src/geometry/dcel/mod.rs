@@ -1,10 +1,10 @@
 pub mod dcel;
-pub mod half_edge;
+pub mod halfedge;
 pub mod face;
 pub mod vertex;
 
 pub use dcel::*;
-pub use half_edge::*;
+pub use halfedge::*;
 pub use face::*;
 pub use vertex::*;
 

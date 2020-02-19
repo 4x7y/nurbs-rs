@@ -5,13 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b92580e9-e141-4d94-8411-f6c0c303c8ed" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/utils/rbtree.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/yuechuan.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/yuechuan.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/tests/dcel_test.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/geometry/dcel/dcel.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/geometry/dcel/dcel.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/geometry/dcel/face.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/geometry/dcel/face.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/geometry/dcel/half_edge.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/geometry/dcel/half_edge.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/geometry/dcel/half_edge.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/geometry/dcel/halfedge.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/geometry/dcel/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/geometry/dcel/mod.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/geometry/dcel/vertex.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/geometry/dcel/vertex.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/math/matrix.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/math/matrix.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/math/screw.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/math/screw.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/dynamics_test.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/tests/dynamics_test.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/tests/mod.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,7 +64,7 @@
       <recent name="C:\Users\yuechuan\Develop\crobot\src\robotics\dynamics" />
     </key>
   </component>
-  <component name="RunManager" selected="Cargo Command.Doc">
+  <component name="RunManager" selected="Cargo Command.Run demo">
     <configuration name="Build" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
       <option name="channel" value="DEFAULT" />
       <option name="command" value="build" />
@@ -158,7 +162,7 @@
       <workItem from="1581608761991" duration="8581000" />
       <workItem from="1581696176538" duration="1066000" />
       <workItem from="1581989799643" duration="18750000" />
-      <workItem from="1582053905546" duration="10103000" />
+      <workItem from="1582053905546" duration="18240000" />
     </task>
     <servers />
   </component>
@@ -173,34 +177,34 @@
       <screen x="0" y="0" width="2194" height="1194" />
     </state>
     <state x="690" y="256" key="#Plugins/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1581544794055" />
-    <state x="552" y="252" width="1089" height="707" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1582003441829">
+    <state x="552" y="252" width="1089" height="707" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1582081830895">
       <screen x="0" y="0" width="2194" height="1194" />
     </state>
-    <state x="552" y="252" width="1089" height="707" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1582003441829" />
-    <state x="903" y="313" key="#com.intellij.ide.util.MemberChooser" timestamp="1582041673326">
+    <state x="552" y="252" width="1089" height="707" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1582081830895" />
+    <state x="903" y="313" key="#com.intellij.ide.util.MemberChooser" timestamp="1582080199941">
       <screen x="0" y="0" width="2194" height="1194" />
     </state>
-    <state x="903" y="313" key="#com.intellij.ide.util.MemberChooser/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1582041673326" />
+    <state x="903" y="313" key="#com.intellij.ide.util.MemberChooser/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1582080199941" />
     <state x="832" y="368" key="EnvironmentVariablesDialog" timestamp="1581992044217">
       <screen x="0" y="0" width="2194" height="1194" />
     </state>
     <state x="832" y="368" key="EnvironmentVariablesDialog/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1581992044217" />
-    <state width="2151" height="382" key="GridCell.Tab.0.bottom" timestamp="1582065040376">
+    <state width="2151" height="382" key="GridCell.Tab.0.bottom" timestamp="1582081825202">
       <screen x="0" y="0" width="2194" height="1194" />
     </state>
-    <state width="2151" height="382" key="GridCell.Tab.0.bottom/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1582065040376" />
-    <state width="2151" height="382" key="GridCell.Tab.0.center" timestamp="1582065040376">
+    <state width="2151" height="382" key="GridCell.Tab.0.bottom/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1582081825202" />
+    <state width="2151" height="382" key="GridCell.Tab.0.center" timestamp="1582081825202">
       <screen x="0" y="0" width="2194" height="1194" />
     </state>
-    <state width="2151" height="382" key="GridCell.Tab.0.center/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1582065040376" />
-    <state width="2151" height="382" key="GridCell.Tab.0.left" timestamp="1582065040376">
+    <state width="2151" height="382" key="GridCell.Tab.0.center/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1582081825202" />
+    <state width="2151" height="382" key="GridCell.Tab.0.left" timestamp="1582081825202">
       <screen x="0" y="0" width="2194" height="1194" />
     </state>
-    <state width="2151" height="382" key="GridCell.Tab.0.left/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1582065040376" />
-    <state width="2151" height="382" key="GridCell.Tab.0.right" timestamp="1582065040376">
+    <state width="2151" height="382" key="GridCell.Tab.0.left/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1582081825202" />
+    <state width="2151" height="382" key="GridCell.Tab.0.right" timestamp="1582081825202">
       <screen x="0" y="0" width="2194" height="1194" />
     </state>
-    <state width="2151" height="382" key="GridCell.Tab.0.right/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1582065040376" />
+    <state width="2151" height="382" key="GridCell.Tab.0.right/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1582081825202" />
     <state x="760" y="264" width="672" height="678" key="search.everywhere.popup" timestamp="1582044916869">
       <screen x="0" y="0" width="2194" height="1194" />
     </state>

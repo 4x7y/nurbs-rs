@@ -12,6 +12,16 @@ pub struct DcelVertexPtr<V,E,F> {
 
 impl<V,E,F> DcelVertexPtr<V,E,F> {
 
+    pub fn new(element: V) -> Self {
+        let vertex = DoubleEdgeListVertex {
+            element,
+            leaving: DcelHalfEdgePtr::null(),
+        };
+        DcelVertexPtr {
+            ptr: Box::into_raw(Box::new(vertex)),
+        }
+    }
+
     #[inline]
     pub fn leaving(&self) -> DcelHalfEdgePtr<V,E,F> {
         if self.is_null() {
@@ -19,6 +29,16 @@ impl<V,E,F> DcelVertexPtr<V,E,F> {
         }
         unsafe {
             (*self.ptr).leaving.clone()
+        }
+    }
+
+    #[inline]
+    pub fn set_leaving(&self, leaving: DcelHalfEdgePtr<V,E,F>) {
+        if self.is_null() {
+            return;
+        }
+        unsafe {
+            (*self.ptr).leaving = leaving;
         }
     }
 
@@ -35,38 +55,32 @@ impl<V,E,F> DcelVertexPtr<V,E,F> {
     }
 }
 
-impl<V,E,F> Clone for DcelVertexPtr<V,E,F> {
-    fn clone(&self) -> DcelVertexPtr<V,E,F> {
-        DcelVertexPtr {
-            ptr: self.ptr
-        }
-    }
-}
-
 impl<V,E,F> PartialEq for DcelVertexPtr<V,E,F> {
     fn eq(&self, other: &DcelVertexPtr<V,E,F>) -> bool {
         self.ptr == other.ptr
     }
 }
 
-impl<V,E,F> DoubleEdgeListVertex<V,E,F> {
+impl<V,E,F> Copy for DcelVertexPtr<V,E,F> { }
 
-    /// Create an empty DCEL vertex
-    pub fn new(element: V) -> Self {
-        DoubleEdgeListVertex {
-            element,
-            leaving: DcelHalfEdgePtr::null(),
+impl<V,E,F> Clone for DcelVertexPtr<V,E,F> {
+    fn clone(&self) -> Self {
+        DcelVertexPtr {
+            ptr: self.ptr,
         }
     }
+}
+
+impl<V,E,F> DcelVertexPtr<V,E,F> {
 
     /// Get edge to a given vertex
-    pub unsafe fn get_edge_to(&self, node: DcelVertexPtr<V,E,F>) -> DcelHalfEdgePtr<V,E,F> {
-        if ! self.leaving.is_null() {
-            if self.leaving.twin().origin() == node {
-                return self.leaving.clone();
+    pub fn get_edge_to(&self, node: DcelVertexPtr<V,E,F>) -> DcelHalfEdgePtr<V,E,F> {
+        if ! self.leaving().is_null() {
+            if self.leaving().twin().origin() == node {
+                return self.leaving().clone();
             } else {
-                let mut edge = self.leaving.twin().next();
-                while edge != self.leaving {
+                let mut edge = self.leaving().twin().next();
+                while edge != self.leaving() {
                     if edge.twin().origin() == node {
                         return edge;
                     } else {

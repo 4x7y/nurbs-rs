@@ -10,7 +10,7 @@ fn create_robot() -> Robot {
 fn test_composite_rigid_body_algorithm() {
     let robot = create_robot();
     let q = VectorDf::zeros(5);
-    let mm = robot.ximm(&q);
+let mm = robot.ximm(&q);
 
-    println!("{}", mm);
+println!("{}", mm);
 }
