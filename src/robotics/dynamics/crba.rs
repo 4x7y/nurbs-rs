@@ -1,8 +1,8 @@
 use crate::math::*;
 use crate::robotics::*;
 
-/// Computes the upper triangular part of the joint space inertia matrix M by
-/// using the Composite Rigid Body Algorithm. It returns the joint space inertia
+/// Computes the upper triangular part of the tmp space inertia matrix M by
+/// using the Composite Rigid Body Algorithm. It returns the tmp space inertia
 /// matrix with only the upper triangular part computed.
 ///
 /// # Reference

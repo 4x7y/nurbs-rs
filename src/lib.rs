@@ -15,5 +15,8 @@ pub mod control;
 #[macro_use]
 extern crate approx;
 
+#[macro_use]
+extern crate failure;
+
 #[cfg(test)]
 mod tests;

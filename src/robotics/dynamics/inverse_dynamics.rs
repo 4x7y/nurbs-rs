@@ -2,7 +2,7 @@ use crate::math::*;
 use crate::robotics::*;
 use std::intrinsics::transmute;
 
-/// Computes the joint space inertia matrix by using the Composite Rigid Body Algorithm.
+/// Computes the tmp space inertia matrix by using the Composite Rigid Body Algorithm.
 ///
 /// # Arguments
 ///
@@ -13,10 +13,10 @@ use std::intrinsics::transmute;
 ///
 /// HandC  Calculate coefficients of equation of motion.
 /// `[H,C] = HandC(model,q,qd,f_ext,grav_accn)` calculates the coefficients of
-/// the joint-space equation of motion, `tau=H(q)qdd+C(d,qd,f_ext)`, where `q,`
-/// `qd and qdd` are the joint position, velocity and acceleration vectors, `H`
-/// is the joint-space inertia matrix, `C` is the vector of gravity,
-/// external-force and velocity-product terms, and tau is the joint force
+/// the tmp-space equation of motion, `tau=H(q)qdd+C(d,qd,f_ext)`, where `q,`
+/// `qd and qdd` are the tmp position, velocity and acceleration vectors, `H`
+/// is the tmp-space inertia matrix, `C` is the vector of gravity,
+/// external-force and velocity-product terms, and tau is the tmp force
 /// vector.
 ///
 /// Algorithm: recursive Newton-Euler for `C`, and Composite-Rigid-Body for `H`.

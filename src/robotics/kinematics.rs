@@ -1,7 +1,7 @@
 use crate::math::matrix::*;
 
 trait MotionModel {
-    fn joint_space_motion();                    // joint space motion
+    fn joint_space_motion();                    // tmp space motion
     fn task_space_motion();                     // task space motion
 }
 

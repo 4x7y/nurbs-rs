@@ -10,8 +10,8 @@ pub enum SensorType {
     Torque,                  // 3D torque between site's body and its parent body
 
     // sensors related to scalar joints, tendons, actuators
-    JointPos,                // scalar joint position (hinge and slide only)
-    JointVel,                // scalar joint velocity (hinge and slide only)
+    JointPos,                // scalar tmp position (hinge and slide only)
+    JointVel,                // scalar tmp velocity (hinge and slide only)
     TendonPos,               // scalar tendon position
     TendonVel,               // scalar tendon velocity
     ActuatorPos,             // scalar actuator position
@@ -19,13 +19,13 @@ pub enum SensorType {
     ActuatorFrc,             // scalar actuator force
 
     // sensors related to ball joints
-    BallQuat,                // 4D ball joint quaternion
-    BallAngleVel,            // 3D ball joint angular velocity
+    BallQuat,                // 4D ball tmp quaternion
+    BallAngleVel,            // 3D ball tmp angular velocity
 
-    // joint and tendon limit sensors, in constraint space
-    JointLimitPos,           // joint limit distance-margin
-    JointLimitVel,           // joint limit velocity
-    JointLimitFrc,           // joint limit force
+    // tmp and tendon limit sensors, in constraint space
+    JointLimitPos,           // tmp limit distance-margin
+    JointLimitVel,           // tmp limit velocity
+    JointLimitFrc,           // tmp limit force
     TendonLimitPos,          // tendon limit distance-margin
     TendonLimitVel,          // tendon limit velocity
     TendonLimitFrc,          // tendon limit force

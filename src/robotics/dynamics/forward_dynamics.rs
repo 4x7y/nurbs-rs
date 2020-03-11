@@ -3,7 +3,7 @@ use crate::math::*;
 
 /// Computes the mass matrix of an open chain robot based on the given
 /// configuration. It returns the numerical inertia matrix `M(qpos)` of
-/// an `n`-joint serial chain at the given configuration `qpos`.
+/// an `n`-tmp serial chain at the given configuration `qpos`.
 ///
 /// This function calls `rne` for `nv` times, each time passing a
 /// `qacc` vector with a single element equal to one and all other
@@ -30,8 +30,7 @@ pub fn mass_matrix(model: &RobotModel, state: &RobotState) -> MatrixDDf {
 /// an open chain robot. It returns the vector `C(qpos,qvel)` of Coriolis
 /// and centripetal terms for a given `qpos` and `qvel`.
 ///
-/// This function calls InverseDynamics with `g = 0`, `fext = 0`, and
-/// `qacc = 0`.
+/// This function calls `rne` with `g = 0`, `fext = 0`, and `qacc = 0`.
 pub fn velocity_product(robot: &RobotModel, state: &RobotState) -> VectorDf {
     let qacc_zero = VectorDf::zeros(robot.nv);
     let xfrc_zero = Vector6f::zeros();
@@ -39,8 +38,9 @@ pub fn velocity_product(robot: &RobotModel, state: &RobotState) -> VectorDf {
     return rne(robot, &state.qpos, &state.qvel, &qacc_zero, &gravity_zero, &xfrc_zero);
 }
 
-/// Computes the joint forces/torques an open chain robot requires to
-/// overcome gravity at its configuration
+/// Computes the tmp forces/torques an open chain robot requires to
+/// overcome gravity at its configuration. It returns the tmp torques
+/// required to overcome gravity at `qpos`.
 ///
 /// This function calls `rne` with `fext = 0`, `qvel = 0`, and `qacc = 0`.
 pub fn gravity_forces(robot: &RobotModel, state: &RobotState) -> VectorDf {
@@ -50,8 +50,10 @@ pub fn gravity_forces(robot: &RobotModel, state: &RobotState) -> VectorDf {
     return rne(robot, &state.qpos, &qvel, &qacc, &robot.gravity, &xfrc);
 }
 
-/// Computes the joint forces/torques an open chain robot requires only to
-/// create the end-effector force `fext`
+/// Computes the tmp forces/torques an open chain robot requires only to
+/// create the end-effector force `fext`.
+///
+/// This function calls `rne` with `g = 0`, `qvel = 0`, and `qacc = 0`.
 pub fn end_effector_forces(robot: &RobotModel, state: &RobotState, fext: &Vector6f) -> VectorDf {
     let qvel = VectorDf::zeros(robot.nv);
     let qacc = VectorDf::zeros(robot.nv);
@@ -59,7 +61,11 @@ pub fn end_effector_forces(robot: &RobotModel, state: &RobotState, fext: &Vector
     return rne(robot, &state.qpos, &qvel, &qacc, &gravity_zero, &fext);
 }
 
-/// Computes forward dynamics in the space frame for an open chain robot
+/// Computes forward dynamics in the space frame for an open chain robot. It
+/// returns the resulting tmp acceleration.
+///
+/// This function computes `qacc` by solving:
+///     `M(qpos) * qacc = tau - C(qpos,qvel) - G(qpos) - J(qpos)^T fext`
 pub fn forward_dynamics(robot: &RobotModel, state: &RobotState,
                         tau: &VectorDf, xfrc_tip: &Vector6f) -> VectorDf {
     let mass_matrix = mass_matrix(robot, state);

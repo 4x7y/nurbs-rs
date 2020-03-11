@@ -35,3 +35,8 @@ pub type MatrixSlice3f<'a> = MatrixSlice3<'a, Scalar>;
 
 // screw
 pub type Screw = Vector6f;
+
+
+pub type Isometry3f = Isometry3<Scalar>;
+
+pub type UnitVector3f = Unit<Vector3f>;
