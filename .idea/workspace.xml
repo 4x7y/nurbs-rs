@@ -5,17 +5,32 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b92580e9-e141-4d94-8411-f6c0c303c8ed" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/tests/dcel_test.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/control/mod.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/control/pid.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/robotics/dynamics/crba.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/tests/kinematics_test.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/yuechuan.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/yuechuan.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/geometry/dcel/dcel.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/geometry/dcel/dcel.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/geometry/dcel/face.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/geometry/dcel/face.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/geometry/dcel/half_edge.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/geometry/dcel/halfedge.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/geometry/dcel/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/geometry/dcel/mod.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/geometry/dcel/vertex.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/geometry/dcel/vertex.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.vscode/launch.json" beforeDir="false" afterPath="$PROJECT_DIR$/.vscode/launch.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/demo.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/demo.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/math/matrix.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/math/matrix.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/math/screw.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/math/screw.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/robotics/dynamics/dynamics.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/robotics/dynamics/dynamics.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/robotics/dynamics/forward_dynamics.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/robotics/dynamics/forward_dynamics.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/robotics/dynamics/inverse_dynamics.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/robotics/dynamics/inverse_dynamics.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/robotics/dynamics/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/robotics/dynamics/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/robotics/kinematics.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/robotics/kinematics.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/robotics/robot.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/robotics/robot.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/tests/dynamics_test.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/tests/dynamics_test.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/tests/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/tests/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/common.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/common.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/rotation.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/rotation.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/trajectory.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/trajectory.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,7 +79,7 @@
       <recent name="C:\Users\yuechuan\Develop\crobot\src\robotics\dynamics" />
     </key>
   </component>
-  <component name="RunManager" selected="Cargo Command.Run demo">
+  <component name="RunManager" selected="Cargo Command.Test tests::kinematics_test::test_axis_ang">
     <configuration name="Build" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
       <option name="channel" value="DEFAULT" />
       <option name="command" value="build" />
@@ -121,12 +136,91 @@
         <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
       </method>
     </configuration>
+    <configuration name="Test tests::dynamics_test::test_rne" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
+      <option name="channel" value="DEFAULT" />
+      <option name="command" value="test --package crobot --lib tests::dynamics_test::test_rne -- --exact" />
+      <option name="allFeatures" value="false" />
+      <option name="nocapture" value="false" />
+      <option name="emulateTerminal" value="false" />
+      <option name="backtrace" value="SHORT" />
+      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
+      <envs />
+      <method v="2">
+        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Test tests::kinematics_test::test_axis_ang" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
+      <option name="channel" value="DEFAULT" />
+      <option name="command" value="test --package crobot --lib tests::kinematics_test::test_axis_ang -- --exact" />
+      <option name="allFeatures" value="false" />
+      <option name="nocapture" value="false" />
+      <option name="emulateTerminal" value="false" />
+      <option name="backtrace" value="SHORT" />
+      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
+      <envs />
+      <method v="2">
+        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Test tests::kinematics_test::test_matrix_exp6" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
+      <option name="channel" value="DEFAULT" />
+      <option name="command" value="test --package crobot --lib tests::kinematics_test::test_matrix_exp6 -- --exact" />
+      <option name="allFeatures" value="false" />
+      <option name="nocapture" value="false" />
+      <option name="emulateTerminal" value="false" />
+      <option name="backtrace" value="SHORT" />
+      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
+      <envs />
+      <method v="2">
+        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Test tests::kinematics_test::test_trans_inv" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
+      <option name="channel" value="DEFAULT" />
+      <option name="command" value="test --package crobot --lib tests::kinematics_test::test_trans_inv -- --exact" />
+      <option name="allFeatures" value="false" />
+      <option name="nocapture" value="false" />
+      <option name="emulateTerminal" value="false" />
+      <option name="backtrace" value="SHORT" />
+      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
+      <envs />
+      <method v="2">
+        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Test tests::kinematics_test::test_vec2se3" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
+      <option name="channel" value="DEFAULT" />
+      <option name="command" value="test --package crobot --lib tests::kinematics_test::test_vec2se3 -- --exact" />
+      <option name="allFeatures" value="false" />
+      <option name="nocapture" value="false" />
+      <option name="emulateTerminal" value="false" />
+      <option name="backtrace" value="SHORT" />
+      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
+      <envs />
+      <method v="2">
+        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
+      </method>
+    </configuration>
     <list>
       <item itemvalue="Cargo Command.Build" />
       <item itemvalue="Cargo Command.Run" />
       <item itemvalue="Cargo Command.Doc" />
       <item itemvalue="Cargo Command.Run demo" />
+      <item itemvalue="Cargo Command.Test tests::kinematics_test::test_trans_inv" />
+      <item itemvalue="Cargo Command.Test tests::kinematics_test::test_vec2se3" />
+      <item itemvalue="Cargo Command.Test tests::kinematics_test::test_matrix_exp6" />
+      <item itemvalue="Cargo Command.Test tests::kinematics_test::test_axis_ang" />
+      <item itemvalue="Cargo Command.Test tests::dynamics_test::test_rne" />
     </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Cargo Command.Test tests::kinematics_test::test_axis_ang" />
+        <item itemvalue="Cargo Command.Test tests::kinematics_test::test_matrix_exp6" />
+        <item itemvalue="Cargo Command.Test tests::dynamics_test::test_rne" />
+        <item itemvalue="Cargo Command.Test tests::kinematics_test::test_vec2se3" />
+        <item itemvalue="Cargo Command.Test tests::kinematics_test::test_trans_inv" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="RustProjectSettings">
     <option name="toolchainHomeDirectory" value="$USER_HOME$/.cargo/bin" />
@@ -162,7 +256,12 @@
       <workItem from="1581608761991" duration="8581000" />
       <workItem from="1581696176538" duration="1066000" />
       <workItem from="1581989799643" duration="18750000" />
-      <workItem from="1582053905546" duration="18240000" />
+      <workItem from="1582053905546" duration="18411000" />
+      <workItem from="1582082401872" duration="231000" />
+      <workItem from="1582337005502" duration="5000" />
+      <workItem from="1583184804700" duration="4359000" />
+      <workItem from="1583189368258" duration="610000" />
+      <workItem from="1583690367973" duration="24973000" />
     </task>
     <servers />
   </component>
@@ -185,26 +284,34 @@
       <screen x="0" y="0" width="2194" height="1194" />
     </state>
     <state x="903" y="313" key="#com.intellij.ide.util.MemberChooser/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1582080199941" />
+    <state x="778" y="325" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1583189330986">
+      <screen x="0" y="0" width="2194" height="1194" />
+    </state>
+    <state x="778" y="325" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1583189330986" />
     <state x="832" y="368" key="EnvironmentVariablesDialog" timestamp="1581992044217">
       <screen x="0" y="0" width="2194" height="1194" />
     </state>
     <state x="832" y="368" key="EnvironmentVariablesDialog/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1581992044217" />
-    <state width="2151" height="382" key="GridCell.Tab.0.bottom" timestamp="1582081825202">
+    <state width="2151" height="382" key="GridCell.Tab.0.bottom" timestamp="1583900590587">
       <screen x="0" y="0" width="2194" height="1194" />
     </state>
-    <state width="2151" height="382" key="GridCell.Tab.0.bottom/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1582081825202" />
-    <state width="2151" height="382" key="GridCell.Tab.0.center" timestamp="1582081825202">
+    <state width="2151" height="382" key="GridCell.Tab.0.bottom/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1582082632267" />
+    <state width="2151" height="382" key="GridCell.Tab.0.bottom/3840.232.1200.1850/-1920.594.1920.1160/0.0.2194.1194@0.0.2194.1194" timestamp="1583900590587" />
+    <state width="2151" height="382" key="GridCell.Tab.0.center" timestamp="1583900590586">
       <screen x="0" y="0" width="2194" height="1194" />
     </state>
-    <state width="2151" height="382" key="GridCell.Tab.0.center/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1582081825202" />
-    <state width="2151" height="382" key="GridCell.Tab.0.left" timestamp="1582081825202">
+    <state width="2151" height="382" key="GridCell.Tab.0.center/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1582082632267" />
+    <state width="2151" height="382" key="GridCell.Tab.0.center/3840.232.1200.1850/-1920.594.1920.1160/0.0.2194.1194@0.0.2194.1194" timestamp="1583900590586" />
+    <state width="2151" height="382" key="GridCell.Tab.0.left" timestamp="1583900590586">
       <screen x="0" y="0" width="2194" height="1194" />
     </state>
-    <state width="2151" height="382" key="GridCell.Tab.0.left/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1582081825202" />
-    <state width="2151" height="382" key="GridCell.Tab.0.right" timestamp="1582081825202">
+    <state width="2151" height="382" key="GridCell.Tab.0.left/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1582082632267" />
+    <state width="2151" height="382" key="GridCell.Tab.0.left/3840.232.1200.1850/-1920.594.1920.1160/0.0.2194.1194@0.0.2194.1194" timestamp="1583900590586" />
+    <state width="2151" height="382" key="GridCell.Tab.0.right" timestamp="1583900590586">
       <screen x="0" y="0" width="2194" height="1194" />
     </state>
-    <state width="2151" height="382" key="GridCell.Tab.0.right/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1582081825202" />
+    <state width="2151" height="382" key="GridCell.Tab.0.right/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1582082632267" />
+    <state width="2151" height="382" key="GridCell.Tab.0.right/3840.232.1200.1850/-1920.594.1920.1160/0.0.2194.1194@0.0.2194.1194" timestamp="1583900590586" />
     <state x="760" y="264" width="672" height="678" key="search.everywhere.popup" timestamp="1582044916869">
       <screen x="0" y="0" width="2194" height="1194" />
     </state>

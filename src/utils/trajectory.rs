@@ -1,9 +1,9 @@
 use na::*;
 use na::allocator::Allocator;
-use crate::math::matrix::{VectorNf};
+use crate::math::matrix::{VectorNf, Scalar};
 
 pub struct JointSpaceTrajectory<D: Dim + DimName>
-    where DefaultAllocator: Allocator<f32, D> {
+    where DefaultAllocator: Allocator<Scalar, D> {
     pub qpos: Vec<VectorNf<D>>,
     pub qvel: Vec<VectorNf<D>>,
     pub qacc: Vec<VectorNf<D>>,

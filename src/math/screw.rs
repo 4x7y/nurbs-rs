@@ -1,21 +1,6 @@
 use crate::math::*;
 
-/// Converts a 3-vector to an so(3) representation
-pub fn vec_to_so3(omeg: &Vector3f) -> Matrix3f {
-    Matrix3f::new(
-        0.0, -omeg[2],  omeg[1],
-        omeg[2],      0.0, -omeg[0],
-        -omeg[1],  omeg[0],      0.0,
-    )
-}
 
-/// Converts an so(3) representation to a 3-vector
-pub fn so3_to_vec(so3mat: &Matrix3f) -> Vector3f {
-    Vector3f::new(
-        so3mat[(2, 1)],
-        so3mat[(0, 2)],
-        so3mat[(1, 0)])
-}
 //
 ///// Converts a spatial velocity vector into a 4x4 matrix in se3
 //pub fn vec_to_se3(vec: &Vector6f) -> Matrix4f {

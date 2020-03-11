@@ -5,7 +5,7 @@ use crate::robotics::*;
 use std::collections::HashMap;
 use rand::Rng;
 
-pub struct Robot {
+pub struct RobotModel {
     pub nq: usize,                    // dimension of generalized coordinates
     pub nv: usize,                    // dimension of generalized velocities
     pub nbody: usize,                 // number of bodies
@@ -23,15 +23,15 @@ pub struct Robot {
     pub brot_prcp: Vec<Matrix3f>,     // rotation matrices from principal frame to body
 
     // limits on the qpos, qvel, qacc
-    pub qpos_ulmt: Vec<f32>,          // upper limits of qpos
-    pub qpos_llmt: Vec<f32>,          // lower limits of qpos
-    pub qvel_ulmt: Vec<f32>,          // upper limits of qvel
-    pub qvel_llmt: Vec<f32>,          // lower limits of qvel
-    pub qacc_ulmt: Vec<f32>,          // upper limits of qacc
-    pub qacc_llmt: Vec<f32>,          // lower limits of qacc
+    pub qpos_ulmt: Vec<Scalar>,          // upper limits of qpos
+    pub qpos_llmt: Vec<Scalar>,          // lower limits of qpos
+    pub qvel_ulmt: Vec<Scalar>,          // upper limits of qvel
+    pub qvel_llmt: Vec<Scalar>,          // lower limits of qvel
+    pub qacc_ulmt: Vec<Scalar>,          // upper limits of qacc
+    pub qacc_llmt: Vec<Scalar>,          // lower limits of qacc
 
     // home configuration
-    pub qpos_home: Vec<f32>,          // home configuration
+    pub qpos_home: Vec<Scalar>,          // home configuration
 
     // names
     pub body_name2id: HashMap<String, usize>,
@@ -57,11 +57,11 @@ pub struct RobotState {
     pub xfrc_applied: VectorDf,       // applied Cartesian force/torque                     (nbody x 6)
 }
 
-impl Robot {
+impl RobotModel {
 
     /// Create an empty robot model
     pub fn new() -> Self {
-        Robot {
+        RobotModel {
             nq: 0,
             nv: 0,
             nbody: 0,
@@ -112,7 +112,7 @@ impl Robot {
     }
 }
 
-impl Dynamics for Robot {
+impl Dynamics for RobotModel {
     fn center_of_mass() {
         unimplemented!()
     }
@@ -138,13 +138,13 @@ impl Dynamics for Robot {
     }
 }
 
-impl Kinematics for Robot {
+impl Kinematics for RobotModel {
     /// Get transform matrix between body frames
     fn get_transform(&self, qpos: VectorDf, body_from: String, body_to: String) -> Matrix4f {
         unimplemented!()
     }
 
-    fn random_configuration(&self) -> Vec<f32> {
+    fn random_configuration(&self) -> Vec<Scalar> {
         let mut rng = rand::thread_rng();
         let mut qpos = self.home_configuration();
         for i in 0..self.nv {
@@ -153,7 +153,7 @@ impl Kinematics for Robot {
         return qpos;
     }
 
-    fn home_configuration(&self) -> Vec<f32> {
+    fn home_configuration(&self) -> Vec<Scalar> {
         return self.qpos_home.clone();
     }
 

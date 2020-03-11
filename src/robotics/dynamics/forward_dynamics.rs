@@ -1,6 +1,6 @@
-use crate::robotics::Robot;
+use crate::robotics::RobotModel;
 
-pub fn forward_dynamics(robot: &Robot) {
+pub fn forward_dynamics(robot: &RobotModel) {
 
 
     // Compute the body inertia and joint axes, in global frames centered at the centers

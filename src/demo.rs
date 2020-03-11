@@ -5,7 +5,7 @@
 
 extern crate nalgebra as na;
 
-use crobot::geometry::bspline;
+use crobot::geometry::{bspline, DoubleEdgeList};
 use kiss3d::light::Light;
 use kiss3d::window::Window;
 use kiss3d::resource::Mesh;
@@ -97,10 +97,32 @@ fn bspline_test() {
 }
 
 fn main() {
+
+    let mut dcel = DoubleEdgeList::<Vector2f, f32, String>::new();
+
+    let vertices = vec![
+        Vector2f::new(400., 150.),
+        Vector2f::new(350., 350.),
+        Vector2f::new(300., 250.),
+    ];
+
+    let edges = vec![
+        1., -1.,
+        2., -2.,
+        3., -3.,
+    ];
+
+    let face = String::from("Face");
+
+    dcel.initialize(vertices, edges, face);
+
+    
+
+    
     let vec = VectorNf::<U4>::zeros();
     let vech = vec.to_homogeneous();
     println!("{}", vec);
     println!("{}", vech);
 
-    bspline_test();
+    // bspline_test();
 }

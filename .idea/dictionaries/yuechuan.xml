@@ -1,6 +1,7 @@
 <component name="ProjectDictionaryState">
   <dictionary name="yuechuan">
     <words>
+      <w>adjoint</w>
       <w>alph</w>
       <w>anglr</w>
       <w>bimm</w>
@@ -17,6 +18,8 @@
       <w>dcel</w>
       <w>ders</w>
       <w>eulr</w>
+      <w>expc</w>
+      <w>featherstone</w>
       <w>hfield</w>
       <w>indx</w>
       <w>jacobian</w>
@@ -32,6 +35,7 @@
       <w>ndof</w>
       <w>nurbs</w>
       <w>omeg</w>
+      <w>omegmat</w>
       <w>piegl</w>
       <w>pimm</w>
       <w>prcp</w>
@@ -43,9 +47,14 @@
       <w>rbound</w>
       <w>rbtree</w>
       <w>revolute</w>
+      <w>rodrigues</w>
+      <w>rotm</w>
+      <w>tform</w>
+      <w>tvec</w>
       <w>ulmt</w>
       <w>urdf</w>
       <w>vecs</w>
+      <w>velc</w>
       <w>velocimeter</w>
       <w>waypoint</w>
       <w>waypoints</w>

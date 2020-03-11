@@ -1,8 +1,9 @@
 use na::*;
 use na::base::storage::Owned;
+pub use na::{U1, U2, U3, U4, U5, U6};
 
 // scalar
-pub type Scalar = f32;
+pub type Scalar = f64;
 
 // vector
 pub type Vector2f = Vector2<Scalar>;
@@ -25,6 +26,9 @@ pub type Matrix6f = Matrix6<Scalar>;
 pub type MatrixMNf<R, C> = MatrixMN<Scalar, R, C>;
 pub type MatrixDDf = DMatrix<Scalar>;
 pub type Matrix6Df = Matrix<Scalar, U6, Dynamic, Owned<Scalar, U6, Dynamic>>;
+
+// matrix slice
+pub type MatrixSlice3f<'a> = MatrixSlice3<'a, Scalar>;
 
 // screw
 pub type Screw = Vector6f;

@@ -62,9 +62,9 @@ pub fn matx_omeg2eulr_dot(eulr: &EulerAngle) -> Matrix3f {
             let cz = z.cos();
             let sz = z.sin();
 
-            Matrix3f::new(cz * sy / cy, sy * sz / cy, 1f32,
-                                   -sz,           cz, 0f32,
-                               cz / cy,      sz / cy, 0f32)
+            Matrix3f::new(cz * sy / cy, sy * sz / cy, 1.,
+                                   -sz,           cz, 0.,
+                               cz / cy,      sz / cy, 0.)
         },
         EulerAngle::XYZ(eulr) => {
             let x = eulr[0];
@@ -74,9 +74,9 @@ pub fn matx_omeg2eulr_dot(eulr: &EulerAngle) -> Matrix3f {
             let cy = y.cos();
             let sy = y.sin();
 
-            Matrix3f::new(1f32, sx * sy / cy, -cx * sy / cy,
-                          0f32,           cx,            sx,
-                          0f32,     -sx / cy,       cx / cy)
+            Matrix3f::new(1., sx * sy / cy, -cx * sy / cy,
+                          0.,           cx,            sx,
+                          0.,     -sx / cy,       cx / cy)
         },
         EulerAngle::ZYZ(eulr) => {
             let z = eulr[0];
@@ -86,9 +86,9 @@ pub fn matx_omeg2eulr_dot(eulr: &EulerAngle) -> Matrix3f {
             let cy = y.cos();
             let sy = y.sin();
 
-            Matrix3f::new(-cy * cz / sy, -cy * sz / sy, 1f32,
-                                    -sz,            cz, 0f32,
-                                cz / sy,       sz / sy, 0f32)
+            Matrix3f::new(-cy * cz / sy, -cy * sz / sy, 1.,
+                                    -sz,            cz, 0.,
+                                cz / sy,       sz / sy, 0.)
         },
     };
 }
