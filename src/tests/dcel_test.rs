@@ -3,12 +3,12 @@ use crate::math::Vector2f;
 
 #[test]
 fn test_dcel_init() {
-    let mut dcel = DoubleEdgeList::<Vector2f, f32, String>::new();
+    let mut dcel = DoubleEdgeList::<String, f32, String>::new();
 
     let vertices = vec![
-        Vector2f::new(400., 150.),
-        Vector2f::new(350., 350.),
-        Vector2f::new(300., 250.),
+        String::from("v1"),
+        String::from("v2"),
+        String::from("v3"),
     ];
 
     let edges = vec![
@@ -19,5 +19,7 @@ fn test_dcel_init() {
 
     let face = String::from("Face");
 
-    dcel.initialize(vertices, edges, face);
+    dcel.initialize(&vertices, &edges, &face);
+
+    print!("Hello");
 }

@@ -8,7 +8,7 @@ pub struct DoubleEdgeList<V, E, F> {
 }
 
 impl<V, E, F> DoubleEdgeList<V, E, F>
-    where V: Copy, E: Copy, {
+    where V: Clone, E: Clone, F: Clone {
     pub fn new() -> Self {
         DoubleEdgeList{
             vertices: Default::default(),
@@ -17,17 +17,17 @@ impl<V, E, F> DoubleEdgeList<V, E, F>
         }
     }
 
-    pub fn initialize(&mut self, vertex_element: Vec<V>, edge_element: Vec<E>, face_element: F) {
-        let face = DcelFacePtr::new(face_element);
+    pub fn initialize(&mut self, vertex_element: &Vec<V>, edge_element: &Vec<E>, face_element: &F) {
+        let face = DcelFacePtr::new(face_element.clone());
         self.faces.push(face);
 
         let mut prev_left_edge  = DcelHalfEdgePtr::null();
         let mut prev_right_edge = DcelHalfEdgePtr::null();
 
         for i in 0..vertex_element.len() {
-            let vertex = DcelVertexPtr::new(vertex_element[i]);
-            let mut left   = DcelHalfEdgePtr::new(edge_element[2 * i]);
-            let mut right  = DcelHalfEdgePtr::new(edge_element[2 * i + 1]);
+            let vertex = DcelVertexPtr::new(vertex_element[i].clone());
+            let mut left   = DcelHalfEdgePtr::new(edge_element[2 * i].clone());
+            let mut right  = DcelHalfEdgePtr::new(edge_element[2 * i + 1].clone());
 
             left.set_face(face);
             left.set_next(DcelHalfEdgePtr::null());

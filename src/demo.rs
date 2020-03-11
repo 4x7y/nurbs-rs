@@ -97,7 +97,6 @@ fn bspline_test() {
 }
 
 fn main() {
-
     let mut dcel = DoubleEdgeList::<Vector2f, f32, String>::new();
 
     let vertices = vec![
@@ -114,7 +113,7 @@ fn main() {
 
     let face = String::from("Face");
 
-    dcel.initialize(vertices, edges, face);
+    // dcel.initialize(vertices, edges, face);
 
     
 
@@ -124,5 +123,4 @@ fn main() {
     println!("{}", vec);
     println!("{}", vech);
 
-    // bspline_test();
 }
