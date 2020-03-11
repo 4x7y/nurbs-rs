@@ -48,14 +48,11 @@ pub fn crba(robot: &RobotModel, q: &VectorDf) -> MatrixDDf {
 }
 
 /// Compute inverse dynamics by using the Recursive Newton Euler Algorithm.
-pub fn rne(model: &RobotModel, state: &RobotState, fext: Vector6f) -> VectorDf {
-    let gravity = &model.gravity;
-    let zhat = Vector3f::new(0., 0., 1.);
-    let qpos = &state.qpos;
-    let qvel = &state.qvel;
-    let qacc = &state.qacc;
-    let screw = &model.screw;
-    let tform_to_prev = &model.adjacent_tform;
+pub fn rne(model: &RobotModel,
+           qpos: &VectorDf, qvel: &VectorDf, qacc: &VectorDf,
+           gravity: &Vector3f, fext: &Vector6f) -> VectorDf {
+    let screw           = &model.screw;
+    let tform_to_prev   = &model.tform_to_prev;
     let spatial_inertia = &model.spatial_inertia;
 
     let n  = model.nv;
@@ -70,22 +67,37 @@ pub fn rne(model: &RobotModel, state: &RobotState, fext: Vector6f) -> VectorDf {
     let mut xfrc = fext.clone();
     let mut tau = VectorDf::zeros(n);
 
+    // Forward Iteration
+    // The positions, velocities, and accelerations of each link are propagated from
+    // the base to the tip.
     for i in 0..n {
         tform = tform * tform_to_prev[i];
-        screw_axis[i]  = adjoint(trans_inv(tform)) * screw[i];
-        ad_tform[i]  = adjoint(
+        let tform_curr = trans_inv(tform);
+        screw_axis[i] = adjoint(tform_curr) * screw[i];
+        ad_tform[i]   = adjoint(
             matrix_exp6(vec_to_se3(- screw_axis[i] * qpos[i]))
                 * trans_inv(tform_to_prev[i]));
-        svel[i+1]  = ad_tform[i] * svel[i] + screw_axis[i] * qvel[i];
-        sacc[i+1] = ad_tform[i] * sacc[i] + screw_axis[i] * qacc[i] + ad(svel[i+1]) * screw_axis[i] * qvel[i];
+        svel[i+1] = ad_tform[i] * svel[i] + screw_axis[i] * qvel[i];
+        sacc[i+1] = ad_tform[i] * sacc[i] + screw_axis[i] * qacc[i]
+            + ad(svel[i+1]) * screw_axis[i] * qvel[i];
     }
 
+    // Backward Iteration
+    // The forces and moments experienced by each link are propagated from tip to the
+    // base.
     for i in (0..n).rev() {
         xfrc = ad_tform[i+1].transpose() * xfrc;
-        xfrc += spatial_inertia[i].component_mul(&sacc[i+1]);
-        xfrc -= ad(svel[i+1]).transpose() * spatial_inertia[i].component_mul(&svel[i+1]);
+        xfrc += spatial_inertia[i] * sacc[i+1];
+        xfrc -= ad(svel[i+1]).transpose() * spatial_inertia[i] * svel[i+1];
         tau[i] = xfrc.dot(&screw_axis[i]);
     }
 
     return tau;
 }
+
+/// Compute inverse dynamics by using the Recursive Newton Euler Algorithm.
+pub fn inverse_dynamics(model: &RobotModel, state: &RobotState, fext: &Vector6f) -> VectorDf {
+    return rne(model, &state.qpos, &state.qvel, &state.qacc, &model.gravity, fext);
+}
+
+

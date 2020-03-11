@@ -6,8 +6,10 @@ use std::collections::HashMap;
 use rand::Rng;
 
 pub struct RobotModel {
-    pub nq: usize,                        // dimension of generalized coordinates
-    pub nv: usize,                        // dimension of generalized velocities
+    pub nq: usize,                        // dimension of generalized coordinates = dim(qpos)
+    pub nv: usize,                        // dimension of generalized velocities = dim(qvel)
+    pub nu: usize,                        // number of actuators/controls = dim(ctrl)
+    pub na: usize,                        // number of activation states = dim(act)
     pub nbody: usize,                     // number of bodies
     pub gravity: Vector3f,                // gravitational acceleration experienced by robot
 
@@ -23,15 +25,15 @@ pub struct RobotModel {
     pub brot_prcp: Vec<Matrix3f>,         // rotation matrices from principal frame to body
 
     // limits on the qpos, qvel, qacc
-    pub qpos_ulmt: Vec<Scalar>,           // upper limits of qpos
-    pub qpos_llmt: Vec<Scalar>,           // lower limits of qpos
-    pub qvel_ulmt: Vec<Scalar>,           // upper limits of qvel
-    pub qvel_llmt: Vec<Scalar>,           // lower limits of qvel
-    pub qacc_ulmt: Vec<Scalar>,           // upper limits of qacc
-    pub qacc_llmt: Vec<Scalar>,           // lower limits of qacc
+    pub qpos_ulmt: VectorDf,              // upper limits of qpos
+    pub qpos_llmt: VectorDf,              // lower limits of qpos
+    pub qvel_ulmt: VectorDf,              // upper limits of qvel
+    pub qvel_llmt: VectorDf,              // lower limits of qvel
+    pub qacc_ulmt: VectorDf,              // upper limits of qacc
+    pub qacc_llmt: VectorDf,              // lower limits of qacc
 
     // home configuration
-    pub qpos_home: Vec<Scalar>,           // home configuration
+    pub qpos_home: VectorDf,              // home configuration
 
     // names
     pub body_name2id: HashMap<String, usize>,
@@ -40,9 +42,9 @@ pub struct RobotModel {
     pub jnts_id2name: Vec<String>,
 
     // screw
-    pub adjacent_tform: Vec<Matrix4f>,    // list of link frames {i} relative to {i-1} at the home
+    pub tform_to_prev: Vec<Matrix4f>,     // list of link frames {i} relative to {i-1} at the home
                                           // position
-    pub spatial_inertia: Vec<Vector6f>,   // spatial inertia matrices Gi of the links
+    pub spatial_inertia: Vec<Matrix6f>,   // spatial inertia matrices Gi of the links
     pub screw: Vec<Vector6f>,             // screw axes Si of the joints in a space frame,
                                           // in the format of a matrix with axes as the columns
 }
@@ -50,11 +52,13 @@ pub struct RobotModel {
 impl RobotModel {
 
     /// Create an empty robot model
-    pub fn new() -> Self {
+    pub fn new(nq: usize, nv: usize, nu: usize, na: usize, nbody: usize) -> Self {
         RobotModel {
-            nq: 0,
-            nv: 0,
-            nbody: 0,
+            nq: nq,
+            nv: nv,
+            nu: nu,
+            na: na,
+            nbody: nbody,
             gravity: Vector3f::new(0., 0., -9.81),
             bodies: vec![],
             parent: vec![],
@@ -63,18 +67,18 @@ impl RobotModel {
             bimm_mats: vec![],
             pimm_vecs: vec![],
             brot_prcp: vec![],
-            qpos_ulmt: vec![],
-            qpos_llmt: vec![],
-            qvel_ulmt: vec![],
-            qvel_llmt: vec![],
-            qacc_ulmt: vec![],
-            qacc_llmt: vec![],
-            qpos_home: vec![],
+            qpos_ulmt: VectorDf::repeat(nq, INFINITY),
+            qpos_llmt: VectorDf::repeat(nq, NEG_INFINITY),
+            qvel_ulmt: VectorDf::repeat(nv, INFINITY),
+            qvel_llmt: VectorDf::repeat(nv, NEG_INFINITY),
+            qacc_ulmt: VectorDf::repeat(nv, INFINITY),
+            qacc_llmt: VectorDf::repeat(nv, NEG_INFINITY),
+            qpos_home: VectorDf::zeros(nq),
             body_name2id: HashMap::new(),
             body_id2name: vec![],
             jnts_name2id: HashMap::new(),
             jnts_id2name: vec![],
-            adjacent_tform: vec![],
+            tform_to_prev: vec![],
             spatial_inertia: vec![],
             screw: vec![]
         }
@@ -137,7 +141,7 @@ impl Kinematics for RobotModel {
         unimplemented!()
     }
 
-    fn random_configuration(&self) -> Vec<Scalar> {
+    fn random_configuration(&self) -> VectorDf {
         let mut rng = rand::thread_rng();
         let mut qpos = self.home_configuration();
         for i in 0..self.nv {
@@ -146,7 +150,7 @@ impl Kinematics for RobotModel {
         return qpos;
     }
 
-    fn home_configuration(&self) -> Vec<Scalar> {
+    fn home_configuration(&self) -> VectorDf {
         return self.qpos_home.clone();
     }
 

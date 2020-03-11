@@ -10,10 +10,10 @@ pub(crate) trait Kinematics {
     fn get_transform(&self, qpos: VectorDf, body_from: String, body_to: String) -> Matrix4f;
 
     // get random configuration
-    fn random_configuration(&self) -> Vec<Scalar>;
+    fn random_configuration(&self) -> VectorDf;
 
     // get home configuration
-    fn home_configuration(&self) -> Vec<Scalar>;
+    fn home_configuration(&self) -> VectorDf;
 
     // get geometric jacobian matrix
     fn geometric_jacobian(&self) -> MatrixDDf;

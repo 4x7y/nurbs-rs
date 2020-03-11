@@ -1,9 +1,12 @@
 use na::*;
 use na::base::storage::Owned;
 pub use na::{U1, U2, U3, U4, U5, U6};
+use std::f64;
 
 // scalar
 pub type Scalar = f64;
+pub(crate) const INFINITY: Scalar = f64::INFINITY;
+pub(crate) const NEG_INFINITY: Scalar = f64::NEG_INFINITY;
 
 // vector
 pub type Vector2f = Vector2<Scalar>;

@@ -1,4 +1,5 @@
 use crate::math::*;
+use crate::robotics::*;
 
 pub struct RobotState {
     // state
@@ -31,5 +32,10 @@ impl RobotState {
             qfrc_applied: VectorDf::zeros(nv),
             xfrc_applied: vec![VectorDf::zeros(6); nbody],
         }
+    }
+
+    /// Create an empty robot state from a RobotModel instance
+    pub fn from_robot_model(model: &RobotModel) -> Self {
+        RobotState::new(model.nq, model.nv, model.na, model.nu, model.nbody)
     }
 }
