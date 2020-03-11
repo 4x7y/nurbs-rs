@@ -20,6 +20,7 @@
       <w>eulr</w>
       <w>expc</w>
       <w>featherstone</w>
+      <w>fext</w>
       <w>hfield</w>
       <w>indx</w>
       <w>jacobian</w>
@@ -49,6 +50,8 @@
       <w>revolute</w>
       <w>rodrigues</w>
       <w>rotm</w>
+      <w>sacc</w>
+      <w>svel</w>
       <w>tform</w>
       <w>tvec</w>
       <w>ulmt</w>

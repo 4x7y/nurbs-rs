@@ -59,10 +59,11 @@ fn bspline_test() {
     let mut indices = Vec::new();
     for i in 0u16..100 {
         for j in 0u16..100 {
-            let u = i as f32 / 100.0;
-            let v = j as f32 / 100.0;
+            let u = i as Scalar / 100.0;
+            let v = j as Scalar / 100.0;
             let coord = surface.evaluate_single(u, v);
-            vertices.push(Point3::from(coord));
+            vertices.push(Point3::new(
+                coord[0] as f32, coord[1] as f32, coord[2] as f32));
 
             if i > 0 && j > 0 {
                 let idx_1 = i * 100 + j;
@@ -97,7 +98,7 @@ fn bspline_test() {
 }
 
 fn main() {
-    let mut dcel = DoubleEdgeList::<Vector2f, f32, String>::new();
+    let mut dcel = DoubleEdgeList::<Vector2f, Scalar, String>::new();
 
     let vertices = vec![
         Vector2f::new(400., 150.),
@@ -113,10 +114,7 @@ fn main() {
 
     let face = String::from("Face");
 
-    // dcel.initialize(vertices, edges, face);
-
-    
-
+    dcel.initialize(&vertices, &edges, &face);
     
     let vec = VectorNf::<U4>::zeros();
     let vech = vec.to_homogeneous();

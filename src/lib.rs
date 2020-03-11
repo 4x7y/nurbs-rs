@@ -5,14 +5,15 @@
 
 extern crate nalgebra as na;
 extern crate kiss3d;
-#[macro_use]
-extern crate approx;
 
 pub mod math;
 pub mod geometry;
 pub mod robotics;
 pub mod utils;
 pub mod control;
+
+#[macro_use]
+extern crate approx;
 
 #[cfg(test)]
 mod tests;

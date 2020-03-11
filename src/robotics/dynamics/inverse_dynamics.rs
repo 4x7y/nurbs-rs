@@ -48,41 +48,43 @@ pub fn crba(robot: &RobotModel, q: &VectorDf) -> MatrixDDf {
 }
 
 /// Compute inverse dynamics by using the Recursive Newton Euler Algorithm.
-pub fn rne(robot: &RobotModel, Mlist: Vec<Matrix4f>, Glist: Vec<Vector6f>, Ftip: Vector6f, Slist: Vec<Vector6f>, qpos: VectorDf, qvel: VectorDf, qacc: VectorDf) -> VectorDf {
-    let gravity = robot.gravity.clone();
+pub fn rne(model: &RobotModel, state: &RobotState, fext: Vector6f) -> VectorDf {
+    let gravity = &model.gravity;
     let zhat = Vector3f::new(0., 0., 1.);
+    let qpos = &state.qpos;
+    let qvel = &state.qvel;
+    let qacc = &state.qacc;
+    let screw = &model.screw;
+    let tform_to_prev = &model.adjacent_tform;
+    let spatial_inertia = &model.spatial_inertia;
 
-    let n  = robot.nv;
-    let mut Mi   = Matrix4f::identity();
-    let mut Ai   = vec![Vector6f::zeros(); n];
-    let mut AdTi = vec![Matrix6f::zeros(); n+1];
-    let mut Vi   = vec![Vector6f::zeros(); n+1];
-    let mut Vdi  = vec![Vector6f::zeros(); n+1];
-    Vdi[0].fixed_slice_mut::<U3, U1>(3, 0).copy_from(&-gravity);
-    AdTi[n] = adjoint(trans_inv(Mlist[n]));
+    let n  = model.nv;
+    let mut tform = Matrix4f::identity();
+    let mut screw_axis = vec![Vector6f::zeros(); n];
+    let mut ad_tform = vec![Matrix6f::zeros(); n+1];
+    let mut svel = vec![Vector6f::zeros(); n+1];
+    let mut sacc = vec![Vector6f::zeros(); n+1];
+    sacc[0].fixed_slice_mut::<U3, U1>(3, 0).copy_from(&-gravity);
+    ad_tform[n] = adjoint(trans_inv(tform_to_prev[n]));
 
-    let mut Fi = Ftip.clone();
+    let mut xfrc = fext.clone();
     let mut tau = VectorDf::zeros(n);
 
     for i in 0..n {
-        Mi       = Mi * Mlist[i];
-        Ai[i]    = adjoint(trans_inv(Mi)) * Slist[i];
-        AdTi[i]  = adjoint(
-                matrix_exp6(vec_to_se3(- Ai[i] * qpos[i]))
-                    * trans_inv(Mlist[i]));
-        Vi[i+1]  = AdTi[i] * Vi[i] + Ai[i] * qvel[i];
-        Vdi[i+1] = AdTi[i] * Vdi[i] + Ai[i] * qacc[i] + ad(Vi[i+1]) * Ai[i] * qvel[i];
+        tform = tform * tform_to_prev[i];
+        screw_axis[i]  = adjoint(trans_inv(tform)) * screw[i];
+        ad_tform[i]  = adjoint(
+            matrix_exp6(vec_to_se3(- screw_axis[i] * qpos[i]))
+                * trans_inv(tform_to_prev[i]));
+        svel[i+1]  = ad_tform[i] * svel[i] + screw_axis[i] * qvel[i];
+        sacc[i+1] = ad_tform[i] * sacc[i] + screw_axis[i] * qacc[i] + ad(svel[i+1]) * screw_axis[i] * qvel[i];
     }
 
-    println!("Vi {:?}", Vi);
-    println!("Vdi {:?}", Vdi);
-    println!("AdTi {:?}", AdTi);
-
     for i in (0..n).rev() {
-        Fi = AdTi[i+1].transpose() * Fi;
-        Fi += Glist[i].component_mul(&Vdi[i+1]);
-        Fi -= ad(Vi[i+1]).transpose() * Glist[i].component_mul(&Vi[i+1]);
-        tau[i] = Fi.dot(&Ai[i]);
+        xfrc = ad_tform[i+1].transpose() * xfrc;
+        xfrc += spatial_inertia[i].component_mul(&sacc[i+1]);
+        xfrc -= ad(svel[i+1]).transpose() * spatial_inertia[i].component_mul(&svel[i+1]);
+        tau[i] = xfrc.dot(&screw_axis[i]);
     }
 
     return tau;

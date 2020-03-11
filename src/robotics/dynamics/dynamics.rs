@@ -1,5 +1,5 @@
 use crate::math::matrix::*;
-use crate::robotics::robot::RobotModel;
+use crate::robotics::*;
 
 pub(crate) trait Dynamics {
     fn center_of_mass();                        // get center of mass

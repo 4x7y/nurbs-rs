@@ -22,7 +22,7 @@ pub(crate) trait Kinematics {
 
 /// Determines whether a scalar is small enough to be treated as zero
 pub fn near_zero(value: Scalar) ->bool {
-    return value.abs() < 1e-6;
+    return value.abs() < 1.0e-6;
 }
 
 
@@ -135,11 +135,11 @@ pub fn ad(v: Vector6f) -> Matrix6f {
 }
 
 
-/// Rodrigues's formula
+/// Rodrigues's rotation formula
 pub fn rodrigues(theta: Scalar, omegmat: Matrix3f) -> Matrix3f {
-    return Matrix3f::identity() * theta
-        + (1. - theta.cos()) * omegmat
-        + (theta - theta.sin()) * omegmat * omegmat;
+    return Matrix3f::identity()
+        + theta.sin() * omegmat
+        + (1. - theta.cos()) * omegmat * omegmat;
 }
 
 /// Computes the matrix exponential of a matrix in so(3)
@@ -171,8 +171,11 @@ pub fn matrix_exp6(se3mat: Matrix4f) -> Matrix4f {
         let omegmat = se3mat.fixed_slice::<U3, U3>(0, 0) / theta;
         let tmp = matrix_exp3(Matrix3f::from(se3mat.fixed_slice::<U3, U3>(0, 0)));
         tform.fixed_slice_mut::<U3, U3>(0, 0).copy_from(&tmp);
-        let tmp = rodrigues(theta, omegmat) * se3mat.fixed_slice::<U3, U1>(0, 3);
-        tform.fixed_slice_mut::<U3, U1>(0, 0).copy_from(&tmp);
+        let tmp = Matrix3f::identity() * theta
+                + (1. - theta.cos()) * omegmat
+                + (theta - theta.sin()) * omegmat * omegmat;
+        let tmp = tmp * se3mat.fixed_slice::<U3, U1>(0, 3) / theta;
+        tform.fixed_slice_mut::<U3, U1>(0, 3).copy_from(&tmp);
         tform[(3, 3)] = 1.;
     }
 

@@ -1,19 +1,20 @@
 use na::*;
 use na::allocator::Allocator;
+use crate::math::Scalar;
 
 pub struct BSplineCurve<D: Dim + DimName>
-    where DefaultAllocator: Allocator<f32, D> {
-    pub ctrlpts: Vec<VectorN<f32, D>>,
+    where DefaultAllocator: Allocator<Scalar, D> {
+    pub ctrlpts: Vec<VectorN<Scalar, D>>,
     pub size: usize,
-    pub knotvec: Vec<f32>,
+    pub knotvec: Vec<Scalar>,
     pub degree: usize,
 }
 
 pub struct BSplineSurface<D: Dim + DimName>
-    where DefaultAllocator: Allocator<f32, D> {
-    pub ctrlpts: Vec<VectorN<f32, D>>,
-    pub knot_vector_u: Vec<f32>,
-    pub knot_vector_v: Vec<f32>,
+    where DefaultAllocator: Allocator<Scalar, D> {
+    pub ctrlpts: Vec<VectorN<Scalar, D>>,
+    pub knot_vector_u: Vec<Scalar>,
+    pub knot_vector_v: Vec<Scalar>,
     pub degree_u: usize,
     pub degree_v: usize,
     pub size_u: usize,
@@ -22,10 +23,10 @@ pub struct BSplineSurface<D: Dim + DimName>
 
 
 impl <D: Dim + DimName> BSplineCurve<D>
-    where DefaultAllocator: Allocator<f32, D> {
+    where DefaultAllocator: Allocator<Scalar, D> {
 
     /// Create a B-Spline curve given knots
-    pub fn new(degree: usize, control_points: Vec<VectorN<f32, D>>, knot_vector: Vec<f32>) -> Self {
+    pub fn new(degree: usize, control_points: Vec<VectorN<Scalar, D>>, knot_vector: Vec<Scalar>) -> Self {
         BSplineCurve {
             size: control_points.len(),
             degree,
@@ -42,8 +43,8 @@ impl <D: Dim + DimName> BSplineCurve<D>
     /// * `p` - basis function degree
     /// * `u` - parameter
     /// * `knot_vec` - knot vector
-    pub fn find_span(n: usize, p: usize, u: f32, knot_vec: &Vec<f32>) -> usize {
-        if (u as f32 - knot_vec[n+1]).abs() < 1e-6 {
+    pub fn find_span(n: usize, p: usize, u: Scalar, knot_vec: &Vec<Scalar>) -> usize {
+        if (u as Scalar - knot_vec[n+1]).abs() < 1e-6 {
             return n;
         }
 
@@ -76,12 +77,12 @@ impl <D: Dim + DimName> BSplineCurve<D>
     /// * `u` - parameter
     /// * `p` - basis function degree
     /// * `knot_vec` - knot vector
-    pub fn basis_functions(i: usize, u: f32, p: usize, knot_vec: &Vec<f32>) -> Vec<f32> {
-        let mut basis: Vec<f32> = vec![0f32; p+1];
-        let mut  left: Vec<f32> = vec![0f32; p+1];
-        let mut right: Vec<f32> = vec![0f32; p+1];
+    pub fn basis_functions(i: usize, u: Scalar, p: usize, knot_vec: &Vec<Scalar>) -> Vec<Scalar> {
+        let mut basis: Vec<Scalar> = vec![0.; p+1];
+        let mut  left: Vec<Scalar> = vec![0.; p+1];
+        let mut right: Vec<Scalar> = vec![0.; p+1];
 
-        basis[0] = 1f32;
+        basis[0] = 1.;
         for j in 1..=p {
             left[j]  = u - knot_vec[i+1-j];
             right[j] = knot_vec[i+j] - u;
@@ -109,24 +110,24 @@ impl <D: Dim + DimName> BSplineCurve<D>
     /// * `n` - order of the derivatives
     /// * `knotvec` - knot vector
     pub fn basis_function_derivatives(&self,
-                                      i: usize, p: usize, u: f32,
-                                      n: usize, knotvec: Vec<f32>) -> Vec<Vec<f32>> {
-        let mut left  = vec![1f32; p+1];
-        let mut right = vec![1f32; p+1];
+                                      i: usize, p: usize, u: Scalar,
+                                      n: usize, knotvec: Vec<Scalar>) -> Vec<Vec<Scalar>> {
+        let mut left  = vec![1.; p+1];
+        let mut right = vec![1.; p+1];
         // `ndu` stores the basis functions and knot differences
         // ndu[0][0] = 1.0 by definition
-        let mut ndu   = vec![vec![1f32; p+1]; p+1];
+        let mut ndu   = vec![vec![1.; p+1]; p+1];
         // `a` store the two most recently computed rows a_{k, j} and a_{k-1, j} in
         // an alternating fashion
-        let mut a     = vec![vec![0f32; 2]; p+1];
+        let mut a     = vec![vec![0.; 2]; p+1];
         // derivatives, ders[k][j] is the k-th derivative of the function N_{i-p+j, p}
         // where 0 <= k <= n, 0 <= j <= p.
-        let mut ders  = vec![vec![0f32; p+1]; min(p, n)+1];
+        let mut ders  = vec![vec![0.; p+1]; min(p, n)+1];
 
         for j in 1..=p {
             left[j]  = u - knotvec[i+1-j];
             right[j] = knotvec[i+1] - u;
-            let mut saved = 0f32;
+            let mut saved = 0.;
             for r in 0..j {
                 // lower triangle
                 ndu[j][r] = right[r+1] + left[j-r];
@@ -150,10 +151,10 @@ impl <D: Dim + DimName> BSplineCurve<D>
             let mut s1 = 0usize;
             let mut s2 = 0usize;
 
-            a[0][0] = 1f32;
+            a[0][0] = 1.;
             // loop to compute the k-th derivative
             for k in 1..=n {
-                let mut d = 0f32;
+                let mut d = 0.;
                 let r_k = r - k;
                 let p_k = p - k;
 
@@ -184,7 +185,7 @@ impl <D: Dim + DimName> BSplineCurve<D>
         let mut r = p;
         for k in 1..=n {
             for j in 0..=p {
-                ders[k][j] *= r as f32;
+                ders[k][j] *= r as Scalar;
             }
             r *= p - k;
         }
@@ -198,10 +199,10 @@ impl <D: Dim + DimName> BSplineCurve<D>
     /// # Arguments
     ///
     /// * `u` - parameter
-    pub fn curve_point(&self, u: f32) -> VectorN<f32, D> {
+    pub fn curve_point(&self, u: Scalar) -> VectorN<Scalar, D> {
         let span = BSplineCurve::find_span(self.size, self.degree, u, &self.knotvec);
         let basis = BSplineCurve::basis_functions(span, u, self.degree, &self.knotvec);
-        let mut point: VectorN<f32, D> = VectorN::zeros();
+        let mut point: VectorN<Scalar, D> = VectorN::zeros();
         for i in 0..=self.degree {
             point = point + basis[i] * &self.ctrlpts[span-self.degree+i];
         }
@@ -210,7 +211,7 @@ impl <D: Dim + DimName> BSplineCurve<D>
 }
 
 impl <D: Dim + DimName> BSplineSurface<D>
-    where DefaultAllocator: Allocator<f32, D> {
+    where DefaultAllocator: Allocator<Scalar, D> {
 
     /// Create a B-Spline surface
     ///
@@ -223,9 +224,9 @@ impl <D: Dim + DimName> BSplineSurface<D>
     /// * `degree_v` - degree for parameter v
     /// * `size_u` - number of control points along u
     /// * `size_v` - number of control points along v
-    pub fn new(control_points: Vec<VectorN<f32, D>>,
-               knot_vector_u: Vec<f32>,
-               knot_vector_v: Vec<f32>,
+    pub fn new(control_points: Vec<VectorN<Scalar, D>>,
+               knot_vector_u: Vec<Scalar>,
+               knot_vector_v: Vec<Scalar>,
                degree_u: usize,
                degree_v: usize,
                size_u: usize,
@@ -251,16 +252,16 @@ impl <D: Dim + DimName> BSplineSurface<D>
     ///
     /// * `u` - the first parameter
     /// * `v` - the second parameter
-    pub fn evaluate_single(&self, u: f32, v: f32) -> VectorN<f32, D> {
+    pub fn evaluate_single(&self, u: Scalar, v: Scalar) -> VectorN<Scalar, D> {
         let span_u = BSplineCurve::find_span(self.size_u, self.degree_u, u, &self.knot_vector_u);
         let span_v = BSplineCurve::find_span(self.size_v, self.degree_v, v, &self.knot_vector_v);
         let basis_u = BSplineCurve::basis_functions(span_u, u, self.degree_u, &self.knot_vector_u);
         let basis_v = BSplineCurve::basis_functions(span_v, v, self.degree_v, &self.knot_vector_v);
 
         let index_u = span_u - self.degree_u;
-        let mut point: VectorN<f32, D> = VectorN::zeros();
+        let mut point: VectorN<Scalar, D> = VectorN::zeros();
         for j in 0..=self.degree_v {
-            let mut temp: VectorN<f32, D> = VectorN::zeros();
+            let mut temp: VectorN<Scalar, D> = VectorN::zeros();
             let index_v = span_v - self.degree_v + j;
             for k in 0..=self.degree_u {
                 let index_ctrl_point = (index_u + k) * self.size_v + index_v;
