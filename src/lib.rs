@@ -5,6 +5,7 @@
 
 extern crate nalgebra as na;
 extern crate kiss3d;
+extern crate petgraph;
 
 pub mod math;
 pub mod geometry;
@@ -14,9 +15,10 @@ pub mod control;
 
 #[macro_use]
 extern crate approx;
-
 #[macro_use]
 extern crate failure;
+#[macro_use]
+extern crate log;
 
 #[cfg(test)]
 mod tests;

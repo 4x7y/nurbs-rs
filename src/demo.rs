@@ -15,6 +15,7 @@ use std::cell::RefCell;
 use std::rc::Rc;
 use crobot::utils::trajectory::JointSpaceTrajectory;
 use crobot::math::*;
+use crobot::robotics::RigidBodyTree;
 
 
 fn sleep(millis: u64) {
@@ -97,7 +98,7 @@ fn bspline_test() {
     }
 }
 
-fn main() {
+fn dcel_test() {
     let mut dcel = DoubleEdgeList::<Vector2f, Scalar, String>::new();
 
     let vertices = vec![
@@ -115,10 +116,14 @@ fn main() {
     let face = String::from("Face");
 
     dcel.initialize(&vertices, &edges, &face);
-    
+
     let vec = VectorNf::<U4>::zeros();
     let vech = vec.to_homogeneous();
     println!("{}", vec);
     println!("{}", vech);
+}
 
+fn main() {
+    let model: RigidBodyTree = RigidBodyTree::from_urdf_file("resource/sample.urdf").unwrap();
+    println!("{}", model);
 }

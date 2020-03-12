@@ -1,4 +1,6 @@
 use crate::math::*;
+use std::fmt;
+use failure::_core::fmt::{Formatter, Error};
 
 /// abstract geom
 pub struct Geom {
@@ -35,6 +37,12 @@ impl Default for Link {
             visuals: Vec::new(),
             collisions: Vec::new(),
         }
+    }
+}
+
+impl fmt::Display for Link {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.name)
     }
 }
 

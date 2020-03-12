@@ -6,8 +6,6 @@ use std::path::Path;
 use crate::math::*;
 use crate::robotics::*;
 
-pub const ROOT_JOINT_NAME: &str = "root";
-
 impl<'a> From<&'a urdf_rs::Color> for Color {
     fn from(urdf_color: &urdf_rs::Color) -> Self {
         Color {
@@ -147,7 +145,7 @@ impl From<urdf_rs::Geometry> for Geometry {
 impl From<urdf_rs::Link> for Link {
     fn from(urdf_link: urdf_rs::Link) -> Self {
         Link {
-            name:       urdf_link.name,
+            name:       urdf_link.name.to_string(),
             inertial:   urdf_link.inertial.into(),
             visuals:    urdf_link.visual.into_iter().map(|v| v.into()).collect(),
             collisions: urdf_link.collision.into_iter().map(|v| v.into()).collect(),

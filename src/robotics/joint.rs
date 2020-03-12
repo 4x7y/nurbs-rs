@@ -1,6 +1,7 @@
 use crate::math::*;
 use na::geometry::{Translation3, UnitQuaternion};
 use crate::robotics::Range;
+use std::fmt;
 
 #[derive(Copy, Debug, Clone)]
 pub enum JointType {
@@ -149,6 +150,12 @@ impl Joint {
             JointType::Fixed => false,
             _ => true,
         }
+    }
+}
+
+impl fmt::Display for Joint {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.name)
     }
 }
 
