@@ -48,12 +48,17 @@ pub fn vec_to_so3(omeg: Vector3f) -> Matrix3f {
     )
 }
 
+/// Return skew symmetric matrix of a 3-Vector
+pub fn skew(omeg: Vector3f) -> Matrix3f {
+    vec_to_so3(omeg)
+}
+
 /// Computes the adjoint representation of a homogeneous transformation
 /// matrix
 ///
 /// # Arguments
 ///
-/// - `trans`: A 4x4 homogeneous transformation matr  ix
+/// - `trans`: A 4x4 homogeneous transformation matrix
 ///
 /// # Return
 ///
@@ -66,8 +71,8 @@ pub fn adjoint(trans: Matrix4f) -> Matrix6f {
 
     let mut adt = Matrix6f::zeros();
     adt.fixed_slice_mut::<U3, U3>(0, 0).copy_from(&rotm);
-    adt.fixed_slice_mut::<U3, U3>(3, 3).copy_from(&rotm);
     adt.fixed_slice_mut::<U3, U3>(3, 0).copy_from(&tmp);
+    adt.fixed_slice_mut::<U3, U3>(3, 3).copy_from(&rotm);
 
     return adt;
 }
@@ -180,4 +185,20 @@ pub fn matrix_exp6(se3mat: Matrix4f) -> Matrix4f {
     }
 
     return tform;
+}
+
+
+/// Convert homogeneous transformation (4x4) to its adjoint spatial
+/// transformation (6x6).
+pub fn tform_to_spatial_xform(tform: Matrix4f) -> Matrix6f {
+    let rotm = tform.fixed_slice::<U3, U3>(0, 0);
+    let tvec = tform.fixed_slice::<U3, U1>(0, 3);
+    let tvec_skew = skew(Vector3f::from(tvec));
+
+    let mut xform = Matrix6f::zeros();
+    xform.fixed_slice_mut::<U3, U3>(0, 0).copy_from(&rotm);
+    xform.fixed_slice_mut::<U3, U3>(3, 0).copy_from(&(tvec_skew * rotm));
+    xform.fixed_slice_mut::<U3, U3>(3, 3).copy_from(&rotm);
+
+    return xform;
 }

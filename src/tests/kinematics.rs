@@ -128,6 +128,8 @@ fn test_matrix_exp6() {
     ), epsilon=1e-6);
 }
 
+
+
 #[test]
 fn test_near_zero_smaller() {
     assert_eq!(true, near_zero(1.0e-7));

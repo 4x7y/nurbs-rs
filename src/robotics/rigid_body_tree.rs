@@ -8,6 +8,7 @@ use std::fmt;
 use petgraph::dot::{Dot, Config};
 use log::{info, error};
 use crate::utils;
+use crate::math::*;
 
 #[derive(Clone, Debug)]
 pub struct RigidBodyTree {
@@ -16,6 +17,10 @@ pub struct RigidBodyTree {
     graph: Graph<Link, Joint>,                  // graph based representation
     jnts_name2hdl: HashMap<String, EdgeIndex>,  // mapping from joint name to its graph handler
     link_name2hdl: HashMap<String, NodeIndex>,  // mapping from link name to its graph handler
+    num_fixed_body: usize,
+    num_non_fixed_body: usize,
+    qpos_dof_map: HashMap<String, usize>,
+    qvel_dof_map: HashMap<String, usize>,
 }
 
 impl RigidBodyTree {
@@ -34,6 +39,10 @@ impl RigidBodyTree {
             graph: Graph::new(),
             jnts_name2hdl: HashMap::new(),
             link_name2hdl: HashMap::new(),
+            num_fixed_body: 0,
+            num_non_fixed_body: 0,
+            qpos_dof_map: HashMap::new(),
+            qvel_dof_map: HashMap::new(),
         }
     }
 
@@ -72,6 +81,32 @@ impl RigidBodyTree {
     fn add_rigid_body_subtree(&mut self) {
         unimplemented!()
     }
+
+    /// Number of links
+    pub fn num_link(&self) -> usize {
+        return self.graph.node_count();
+    }
+
+    /// Number of joints
+    pub fn num_joint(&self) -> usize {
+        return self.graph.edge_count();
+    }
+
+    /// Compute the mass matrix, `M`, of the robot in the configuration `q`
+    pub fn mass_matrix(&self, qpos: &VectorDf) -> MatrixDDf {
+        let nb = self.num_link();
+        let mut crb_inertia = vec![Matrix6f::zeros(); nb]; // composite-rigid-body inertia
+        let mut xforms      = vec![Matrix4f::zeros(); nb]; // spatial transform from parent of body i to body i
+        let nv = self.num_joint();
+        let mass_matrix = MatrixDDf::zeros(nv, nv);
+        let lambda_ = vec![0.; nb];
+        let lambda  = vec![0.; nv];
+
+        // preparation
+        unimplemented!();
+
+        return mass_matrix;
+    }
 }
 
 impl From<urdf_rs::Robot> for RigidBodyTree {
@@ -83,13 +118,7 @@ impl From<urdf_rs::Robot> for RigidBodyTree {
 impl<'a> From<&'a urdf_rs::Robot> for RigidBodyTree {
 
     fn from(robot: &urdf_rs::Robot) -> Self {
-        let mut model = RigidBodyTree {
-            name: robot.name.clone(),
-            dof: 0,
-            graph: Graph::new(),
-            jnts_name2hdl: HashMap::new(),
-            link_name2hdl: HashMap::new(),
-        };
+        let mut model = RigidBodyTree::new(&robot.name);
 
         for link in &robot.links {
             let handler = model.graph.add_node(Link::from(link.clone()));

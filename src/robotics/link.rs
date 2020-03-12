@@ -1,6 +1,7 @@
 use crate::math::*;
 use std::fmt;
 use failure::_core::fmt::{Formatter, Error};
+use crate::robotics::{skew, spatial_inertia};
 
 /// abstract geom
 pub struct Geom {
@@ -86,8 +87,9 @@ pub struct Material {
 #[derive(Debug, Clone)]
 pub struct Inertial {
     origin: Isometry3f,
-    pub mass: Scalar,
-    pub inertia: Matrix3f,
+    pub mass: Scalar,                    // mass
+    pub body_inertia: Matrix3f,          // 3x3 inertia tensor of the rigid body relative to body frame
+    pub spatial_inertia: Matrix6f,       // 6x6 spatial inertia matrix
 }
 
 
@@ -96,14 +98,16 @@ impl Inertial {
         Self {
             origin: Isometry3f::identity(),
             mass: mass,
-            inertia: Matrix3f::identity(),
+            body_inertia: Matrix3f::identity(),
+            spatial_inertia: Matrix6f::identity(),
         }
     }
     pub fn new(origin: Isometry3f, mass: Scalar, inertia: Matrix3f) -> Self {
         Self {
             origin: origin,
             mass: mass,
-            inertia: inertia,
+            body_inertia: inertia,
+            spatial_inertia: spatial_inertia(mass, origin.translation.vector, inertia),
         }
     }
     pub fn set_origin(&mut self, origin: Isometry3f) {

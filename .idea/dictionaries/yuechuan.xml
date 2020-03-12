@@ -65,6 +65,7 @@
       <w>waypoints</w>
       <w>xacc</w>
       <w>xdir</w>
+      <w>xform</w>
       <w>xfrc</w>
       <w>ximm</w>
       <w>xint</w>
