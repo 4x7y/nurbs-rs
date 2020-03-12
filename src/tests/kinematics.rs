@@ -129,17 +129,6 @@ fn test_matrix_exp6() {
 }
 
 #[test]
-#[should_panic]
-fn test_relative_eq_panic() {
-    assert_relative_eq!(1.0f32, 2.0f32, epsilon=1.0e-7);
-}
-
-#[test]
-fn test_relative_eq_pass() {
-    assert_relative_eq!(1.01f32, 1.0f32, epsilon=0.1f32);
-}
-
-#[test]
 fn test_near_zero_smaller() {
     assert_eq!(true, near_zero(1.0e-7));
 }

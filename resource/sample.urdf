@@ -1,4 +1,4 @@
-<robot name="crobot" xmlns:xacro="http://ros.org/wiki/xacro">
+<robot name="crobot">
     <link name="base_link">
         <visual>
             <geometry>
