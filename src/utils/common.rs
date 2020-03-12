@@ -27,3 +27,5 @@ pub fn limit_range<T>(min: T, max: T, value: T) -> T
         value
     }
 }
+
+pub(crate) const ERROR_CODE_URDF_PARSING: i32 = 1;

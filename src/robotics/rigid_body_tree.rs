@@ -6,6 +6,8 @@ use petgraph::Graph;
 use petgraph::graph::NodeIndex;
 use std::fmt;
 use petgraph::dot::{Dot, Config};
+use log::{info, error};
+use crate::utils;
 
 #[derive(Clone, Debug)]
 pub struct RigidBodyTree {
@@ -26,28 +28,10 @@ trait RigidBodyTreeModel {
 }
 
 impl RigidBodyTree {
-
     pub fn from_urdf_file<P>(path: P) -> Result<Self, urdf_rs::UrdfError>
     where P: AsRef<Path> {
         Ok(urdf_rs::read_file(path)?.into())
     }
-
-    // #[allow(clippy::needless_pass_by_value)]
-    // pub fn from_root(root_joint: Node<T>) -> Self {
-    //     let contained_joints = root_joint.iter_descendants().collect::<Vec<_>>();
-    //     let movable_joints = contained_joints
-    //         .iter()
-    //         .filter(|joint| joint.joint().is_movable())
-    //         .cloned()
-    //         .collect::<Vec<_>>();
-    //
-    //     Self {
-    //         name: "".to_string(),
-    //         dof: movable_joints.len(),
-    //         contained_joints: contained_joints,
-    //         movable_joints: movable_joints,
-    //     }
-    // }
 }
 
 impl From<urdf_rs::Robot> for RigidBodyTree {
@@ -56,14 +40,10 @@ impl From<urdf_rs::Robot> for RigidBodyTree {
     }
 }
 
-pub const ROOT_JOINT_NAME: &str = "root";
-
 impl<'a> From<&'a urdf_rs::Robot> for RigidBodyTree {
+
     fn from(robot: &urdf_rs::Robot) -> Self {
-
         let mut link_name2handler = HashMap::new();
-
-
         let mut model = RigidBodyTree {
             name: robot.name.clone(),
             dof: 0,
@@ -77,16 +57,26 @@ impl<'a> From<&'a urdf_rs::Robot> for RigidBodyTree {
 
         for joint in &robot.joints {
             let parent = match link_name2handler.get(&joint.parent.link) {
-                None => panic!("joint {}'s parent link not found.", joint.name),
-                Some(handler) => handler.clone(),
+                None => {
+                    error!("joint {}'s parent link not found.", joint.name);
+                    None
+                },
+                Some(handler) => Some(handler.clone()),
             };
 
             let child = match link_name2handler.get(&joint.child.link) {
-                None => panic!("joint {}'s child link not found.", joint.name),
-                Some(handler) => handler.clone(),
+                None => {
+                    error!("joint {}'s child link not found.", joint.name);
+                    None
+                },
+                Some(handler) => Some(handler.clone()),
             };
 
-            model.graph.add_edge(parent, child, Joint::from(joint));
+            if parent.is_none() || child.is_none() {
+                std::process::exit(utils::ERROR_CODE_URDF_PARSING);
+            }
+
+            model.graph.add_edge(parent.unwrap(), child.unwrap(), Joint::from(joint));
         }
 
         return model;

@@ -17,8 +17,9 @@ pub mod control;
 extern crate approx;
 #[macro_use]
 extern crate failure;
-#[macro_use]
-extern crate log;
+
+extern crate log4rs;
+use log::{error, info, warn};
 
 #[cfg(test)]
 mod tests;

@@ -13,6 +13,7 @@ use na::{Point3, Vector3, VectorN, U4};
 use std::{thread, time};
 use std::cell::RefCell;
 use std::rc::Rc;
+use log::{info, error};
 use crobot::utils::trajectory::JointSpaceTrajectory;
 use crobot::math::*;
 use crobot::robotics::RigidBodyTree;
@@ -124,6 +125,9 @@ fn dcel_test() {
 }
 
 fn main() {
+    log4rs::init_file("resource/log4rs.yaml", Default::default()).unwrap();
+    info!("booting up...");
+
     let model: RigidBodyTree = RigidBodyTree::from_urdf_file("resource/sample.urdf").unwrap();
     println!("{}", model);
 }
