@@ -26,32 +26,33 @@ impl JointBuilder {
         }
     }
     /// Set the name of the `Link`
-    pub fn name(mut self, name: &str) -> JointBuilder {
+    pub fn name(mut self, name: &str) -> Self {
         self.name = name.to_string();
         self
     }
     /// Set the tmp which is connected to this link
-    pub fn joint_type(mut self, joint_type: JointType) -> JointBuilder {
+    pub fn joint_type(mut self, joint_type: JointType) -> Self {
         self.joint_type = joint_type;
         self
     }
+
     /// Set tmp limits
-    pub fn limits(mut self, limits: Option<Range>) -> JointBuilder {
+    pub fn limits(mut self, limits: Option<Range>) -> Self {
         self.limits = limits;
         self
     }
     /// Set the origin transform of this tmp
-    pub fn origin(mut self, origin: Isometry3f) -> JointBuilder {
+    pub fn origin(mut self, origin: Isometry3f) -> Self {
         self.origin = origin;
         self
     }
     /// Set the translation of the origin transform of this tmp
-    pub fn translation(mut self, translation: Translation3<Scalar>) -> JointBuilder {
+    pub fn translation(mut self, translation: Translation3<Scalar>) -> Self {
         self.origin.translation = translation;
         self
     }
     /// Set the rotation of the origin transform of this tmp
-    pub fn rotation(mut self, rotation: UnitQuaternion<Scalar>) -> JointBuilder {
+    pub fn rotation(mut self, rotation: UnitQuaternion<Scalar>) -> Self {
         self.origin.rotation = rotation;
         self
     }
@@ -60,12 +61,15 @@ impl JointBuilder {
         let mut joint = Joint::new(&self.name, self.joint_type);
         joint.set_origin(self.origin);
         joint.limits = self.limits;
+        joint.screw_axis = match joint.joint_type {
+            JointType::Prismatic { axis } =>
+                Vector6f::new(0., 0., 0., axis[0], axis[1], axis[2]),
+            JointType::Revolute { axis } =>
+                Vector6f::new(axis[0], axis[1], axis[2], 0., 0., 0.),
+            JointType::Fixed => Vector6f::zeros(),
+        };
         joint
     }
-    // Create `Node` instead of `Joint` as output
-    // pub fn into_node(self) -> Node {
-    //     self.finalize().into()
-    // }
 }
 
 /// Information for copying tmp state of other tmp

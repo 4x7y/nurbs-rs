@@ -43,12 +43,15 @@ pub enum JointError {
 /// Joint with type
 #[derive(Debug, Clone)]
 pub struct Joint {
-    pub name: String,                            // name of the tmp
-    pub joint_type: JointType,                   // type of the tmp
-    pub position: Scalar,                        // position (angle) of this tmp
-    pub velocity: Scalar,                        // velocity of the tmp
-    pub limits: Option<Range>,                   // limits of the tmp
-    pub origin: Isometry3f,                      // local origin transform of tmp
+    pub name: String,                            // name
+    pub joint_type: JointType,                   // type of the joint
+    pub screw_axis: Vector6f,                    // screw axis
+    pub position: Scalar,                        // position (angle)
+    pub velocity: Scalar,                        // velocity
+    pub limits: Option<Range>,                   // limits
+    pub origin: Isometry3f,                      // local origin transform
+    pub qpos_dof: (usize, usize),                // position DoF mapping ( <= 7 )
+    pub qvel_dof: (usize, usize),                // velocity DoF mapping ( <= 6 )
 }
 
 
@@ -57,10 +60,13 @@ impl Joint {
         Joint {
             name: name.to_string(),
             joint_type: joint_type,
+            screw_axis: Vector6f::zeros(),
             position: 0.,
             velocity: 0.,
             limits: None,
             origin: Isometry3f::identity(),
+            qpos_dof: (0, 0),
+            qvel_dof: (0, 0)
         }
     }
 

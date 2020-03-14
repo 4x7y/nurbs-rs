@@ -190,6 +190,8 @@ pub fn matrix_exp6(se3mat: Matrix4f) -> Matrix4f {
 
 /// Convert homogeneous transformation (4x4) to its adjoint spatial
 /// transformation (6x6).
+///
+/// This function should have the same implementation as `adjoint`
 pub fn tform_to_spatial_xform(tform: Matrix4f) -> Matrix6f {
     let rotm = tform.fixed_slice::<U3, U3>(0, 0);
     let tvec = tform.fixed_slice::<U3, U1>(0, 3);
