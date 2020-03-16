@@ -19,7 +19,7 @@ extern crate approx;
 extern crate failure;
 #[macro_use]
 extern crate prettytable;
-use prettytable::{Table, Row, Cell};
+extern crate byteorder;
 
 extern crate log4rs;
 use log::{error, info, warn};

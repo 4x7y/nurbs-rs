@@ -17,6 +17,7 @@ use log::{info, error};
 use crobot::utils::trajectory::JointSpaceTrajectory;
 use crobot::math::*;
 use crobot::robotics::RigidBodyTree;
+use crobot::utils::read_stl;
 
 
 fn sleep(millis: u64) {
@@ -124,6 +125,8 @@ fn dcel_test() {
     println!("{}", vech);
 }
 
+
+
 fn main() {
     log4rs::init_file("resource/log4rs.yaml", Default::default()).unwrap();
     info!("booting up...");
@@ -133,5 +136,4 @@ fn main() {
 
     let joint = model.get_joint(&String::from("ee_fixed_joint"));
     joint.show_details();
-
 }

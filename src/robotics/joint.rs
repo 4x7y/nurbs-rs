@@ -86,8 +86,6 @@ pub struct Joint {
     pub safe_ctrl: Option<JointSafetyController>, // joint safety controller
     pub tform_jnt2parent: Matrix4f,               // fixed transform from joint to parent frame
     pub tform_child2jnt: Matrix4f,                // fixed transform from child to joint frame
-    pub qpos_dof: (usize, usize),                 // position DoF mapping ( <= 7 )
-    pub qvel_dof: (usize, usize),                 // velocity DoF mapping ( <= 6 )
 }
 
 
@@ -105,8 +103,6 @@ impl Joint {
             safe_ctrl: None,
             tform_jnt2parent: Matrix4f::identity(),
             tform_child2jnt: Matrix4f::identity(),
-            qpos_dof: (0, 0),
-            qvel_dof: (0, 0)
         }
     }
 

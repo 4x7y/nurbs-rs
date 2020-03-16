@@ -21,6 +21,9 @@ pub struct RigidBodyTree {
     num_non_fixed_body: usize,
     qpos_dof_map: HashMap<String, usize>,
     qvel_dof_map: HashMap<String, usize>,
+
+    // pub qpos_dof: (usize, usize),                 // position DoF mapping ( <= 7 )
+    // pub qvel_dof: (usize, usize),                 // velocity DoF mapping ( <= 6 )
 }
 
 impl RigidBodyTree {
@@ -107,18 +110,18 @@ impl RigidBodyTree {
 
     /// Compute the mass matrix, `M`, of the robot in the configuration `q`
     pub fn mass_matrix(&self, qpos: &VectorDf) -> MatrixDDf {
-        let nb = self.num_link();
-        let mut crb_inertia = vec![Matrix6f::zeros(); nb]; // composite-rigid-body inertia
-        let mut xforms      = vec![Matrix4f::zeros(); nb]; // spatial transform from parent of body i to body i
-        let nv = self.num_joint();
-        let mass_matrix = MatrixDDf::zeros(nv, nv);
-        let lambda_ = vec![0.; nb];
-        let lambda  = vec![0.; nv];
+        // let nb = self.num_link();
+        // let mut crb_inertia = vec![Matrix6f::zeros(); nb]; // composite-rigid-body inertia
+        // let mut xforms      = vec![Matrix4f::zeros(); nb]; // spatial transform from parent of body i to body i
+        // let nv = self.num_joint();
+        // let mass_matrix = MatrixDDf::zeros(nv, nv);
+        // let lambda_ = vec![0.; nb];
+        // let lambda  = vec![0.; nv];
 
         // preparation
         unimplemented!();
 
-        return mass_matrix;
+        // return mass_matrix;
     }
 }
 
