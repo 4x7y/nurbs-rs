@@ -17,6 +17,9 @@ pub mod control;
 extern crate approx;
 #[macro_use]
 extern crate failure;
+#[macro_use]
+extern crate prettytable;
+use prettytable::{Table, Row, Cell};
 
 extern crate log4rs;
 use log::{error, info, warn};

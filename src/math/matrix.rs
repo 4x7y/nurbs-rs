@@ -17,6 +17,12 @@ pub type Vector6f = Vector6<Scalar>;
 pub type VectorNf<D> = VectorN<Scalar, D>;
 pub type VectorDf = DVector<Scalar>;
 
+pub type VectorSlice2f<'a> = VectorSlice2<'a, Scalar>;
+pub type VectorSlice3f<'a> = VectorSlice3<'a, Scalar>;
+pub type VectorSlice4f<'a> = VectorSlice4<'a, Scalar>;
+pub type VectorSlice5f<'a> = VectorSlice5<'a, Scalar>;
+pub type VectorSlice6f<'a> = VectorSlice6<'a, Scalar>;
+
 // point
 pub type Point2f = Point2<Scalar>;
 pub type Point3f = Point3<Scalar>;
@@ -32,6 +38,8 @@ pub type Matrix6Df = Matrix<Scalar, U6, Dynamic, Owned<Scalar, U6, Dynamic>>;
 
 // matrix slice
 pub type MatrixSlice3f<'a> = MatrixSlice3<'a, Scalar>;
+
+
 
 // screw
 pub type Screw = Vector6f;

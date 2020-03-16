@@ -11,6 +11,7 @@ pub mod rigid_body_tree;
 pub mod joint;
 pub mod range;
 pub mod joint_builder;
+pub mod inertia;
 
 pub use self::rigid_body::*;
 pub use self::rigid_body_tree::*;
@@ -22,3 +23,4 @@ pub use self::joint::*;
 pub use self::link::*;
 pub use self::range::*;
 pub use self::joint_builder::*;
+pub use self::inertia::*;

@@ -129,5 +129,9 @@ fn main() {
     info!("booting up...");
 
     let model: RigidBodyTree = RigidBodyTree::from_urdf_file("resource/sample.urdf").unwrap();
-    println!("{}", model);
+    // println!("{}", model);
+
+    let joint = model.get_joint(&String::from("ee_fixed_joint"));
+    joint.show_details();
+
 }

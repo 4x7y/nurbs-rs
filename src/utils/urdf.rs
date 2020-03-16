@@ -5,6 +5,7 @@ use std::collections::HashMap;
 use std::path::Path;
 use crate::math::*;
 use crate::robotics::*;
+use crate::utils::*;
 
 impl<'a> From<&'a urdf_rs::Color> for Color {
     fn from(urdf_color: &urdf_rs::Color) -> Self {
@@ -163,7 +164,6 @@ impl<'a> From<&'a urdf_rs::Mimic> for Mimic {
 }
 
 impl<'a> From<&'a urdf_rs::Joint> for Joint {
-
     fn from(joint: &urdf_rs::Joint) -> Joint {
         let limit = if (joint.limit.upper - joint.limit.lower) == 0.0 {
             None
@@ -185,11 +185,19 @@ impl<'a> From<&'a urdf_rs::Joint> for Joint {
                 urdf_rs::JointType::Prismatic => JointType::Prismatic {
                     axis: axis_from(joint.axis.xyz),
                 },
-                _ => JointType::Fixed,
+                urdf_rs::JointType::Fixed => JointType::Fixed,
+                _ => panic!("Joint types floating and planar are not supported."),
             })
             .limits(limit)
-            .rotation(quaternion_from(&joint.origin.rpy))
-            .translation(translation_from(&joint.origin.xyz))
+            .safety_controller(joint.safety_controller.soft_upper_limit,
+                               joint.safety_controller.soft_lower_limit,
+                               joint.safety_controller.k_position,
+                               joint.safety_controller.k_velocity)
+            .dynamics(joint.dynamics.damping,
+                      joint.dynamics.friction,
+                      joint.limit.effort)
+            .tform_jnt2parent(Vector3f::from_column_slice(&joint.origin.xyz),
+                              Vector3f::from_column_slice(&joint.origin.rpy))
             .finalize()
     }
 }

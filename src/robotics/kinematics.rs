@@ -53,6 +53,7 @@ pub fn skew(omeg: Vector3f) -> Matrix3f {
     vec_to_so3(omeg)
 }
 
+
 /// Computes the adjoint representation of a homogeneous transformation
 /// matrix
 ///
@@ -203,4 +204,28 @@ pub fn tform_to_spatial_xform(tform: Matrix4f) -> Matrix6f {
     xform.fixed_slice_mut::<U3, U3>(3, 3).copy_from(&rotm);
 
     return xform;
+}
+
+
+/// Spatial cross product for motion vectors.
+pub fn cross_motion(v1: Vector6f, v_motion: Vector6f) -> Vector6f {
+    let sc1 = skew(Vector3f::from(v1.fixed_rows::<U3>(0)));
+    let sc2 = skew(Vector3f::from(v1.fixed_rows::<U3>(3)));
+    let mut mat = Matrix6f::zeros();
+    mat.fixed_slice_mut::<U3, U3>(0, 0).copy_from(&sc1);
+    mat.fixed_slice_mut::<U3, U3>(3, 0).copy_from(&sc2);
+    mat.fixed_slice_mut::<U3, U3>(3, 3).copy_from(&sc1);
+    return mat * v_motion;
+}
+
+/// Spatial cross product for force vectors. The forceVec is moving
+/// with spatial velocity v
+pub fn cross_force(v1: Vector6f, v_force: Vector6f) -> Vector6f {
+    let sc1 = skew(Vector3f::from(v1.fixed_rows::<U3>(0)));
+    let sc2 = skew(Vector3f::from(v1.fixed_rows::<U3>(3)));
+    let mut mat = Matrix6f::zeros();
+    mat.fixed_slice_mut::<U3, U3>(0, 0).copy_from(&sc1);
+    mat.fixed_slice_mut::<U3, U3>(0, 3).copy_from(&sc2);
+    mat.fixed_slice_mut::<U3, U3>(3, 3).copy_from(&sc1);
+    return mat * v_force;
 }

@@ -1,13 +1,18 @@
 use crate::robotics::*;
 use crate::math::*;
 use na::geometry::{Translation3, UnitQuaternion};
+use crate::utils::*;
 
 #[derive(Debug, Clone)]
 pub struct JointBuilder {
     name: String,
     joint_type: JointType,
-    limits: Option<Range>,
-    origin: Isometry3f,
+    qpos_limit: Option<Range>,
+    effort: Option<Scalar>,                   // joint effort
+    dynamics: Option<JointDynamics>,          // joint dynamics coefficients (damping, friction)
+    safe_ctrl: Option<JointSafetyController>, // joint safety controller
+    tform_jnt2parent: Matrix4f,               // fixed transform from joint to parent frame
+    tform_child2jnt: Matrix4f,                // fixed transform from child to joint frame
 }
 
 impl Default for JointBuilder {
@@ -21,8 +26,12 @@ impl JointBuilder {
         JointBuilder {
             name: "".to_string(),
             joint_type: JointType::Fixed,
-            limits: None,
-            origin: Isometry3f::identity(),
+            qpos_limit: None,
+            effort: None,
+            safe_ctrl: None,
+            dynamics: None,
+            tform_jnt2parent: Matrix4f::identity(),
+            tform_child2jnt: Matrix4f::identity(),
         }
     }
     /// Set the name of the `Link`
@@ -38,29 +47,62 @@ impl JointBuilder {
 
     /// Set tmp limits
     pub fn limits(mut self, limits: Option<Range>) -> Self {
-        self.limits = limits;
+        self.qpos_limit = limits;
         self
     }
-    /// Set the origin transform of this tmp
-    pub fn origin(mut self, origin: Isometry3f) -> Self {
-        self.origin = origin;
-        self
-    }
+    // /// Set the origin transform of this tmp
+    // pub fn origin(mut self, origin: Isometry3f) -> Self {
+    //     self.origin = origin;
+    //     self
+    // }
     /// Set the translation of the origin transform of this tmp
-    pub fn translation(mut self, translation: Translation3<Scalar>) -> Self {
-        self.origin.translation = translation;
+    ///
+    /// # Arguments
+    /// - `xyz`: Represents the $$x,y,z$$ offset. All positions are
+    ///          specified in meters.
+    /// - `rpy`: Represents the rotation around fixed axis:
+    ///          first roll around x, then pitch around y and finally
+    ///          yaw around z. All angles are specified in radians.
+    pub fn tform_jnt2parent(mut self, xyz: Vector3f, rpy: Vector3f) -> Self {
+        let mut tform = Matrix4f::zeros();
+        let ypr  = EulerAngle::ZYX(Vector3f::new(rpy[2], rpy[1], rpy[0]));
+        let rotm = eul2rotm(ypr);
+        tform.fixed_slice_mut::<U3, U3>(0, 0).copy_from(&rotm);
+        tform.fixed_slice_mut::<U3, U1>(0, 3).copy_from(&xyz);
+        tform[(3, 3)] = 1.;
+        self.tform_jnt2parent = tform;
+
         self
     }
-    /// Set the rotation of the origin transform of this tmp
-    pub fn rotation(mut self, rotation: UnitQuaternion<Scalar>) -> Self {
-        self.origin.rotation = rotation;
+
+    pub fn safety_controller(mut self,
+                             soft_lower_limit: Scalar,
+                             soft_upper_limit: Scalar,
+                             k_position: Scalar,
+                             k_velocity: Scalar,) -> Self {
+        self.safe_ctrl = Some(JointSafetyController {
+            soft_lower_limit: soft_lower_limit,
+            soft_upper_limit: soft_upper_limit,
+            k_position: k_position,
+            k_velocity: k_velocity,
+        });
         self
     }
+
+    pub fn dynamics(mut self, damping: Scalar, friction: Scalar, effort_limit: Scalar) -> Self {
+        self.dynamics = Some(JointDynamics{
+            damping: damping,
+            friction: friction,
+            effort_limit: effort_limit,
+        });
+        self
+    }
+
     /// Create `Joint` instance
     pub fn finalize(self) -> Joint {
         let mut joint = Joint::new(&self.name, self.joint_type);
-        joint.set_origin(self.origin);
-        joint.limits = self.limits;
+        joint.tform_jnt2parent = self.tform_jnt2parent;
+        joint.qpos_limit = self.qpos_limit;
         joint.screw_axis = match joint.joint_type {
             JointType::Prismatic { axis } =>
                 Vector6f::new(0., 0., 0., axis[0], axis[1], axis[2]),

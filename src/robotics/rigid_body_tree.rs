@@ -77,6 +77,19 @@ impl RigidBodyTree {
         return self.graph.node_weight(handler).unwrap().clone();
     }
 
+    /// Get joint from RigidBodyTree by name
+    pub fn get_joint(&self, name: &String) -> Joint {
+        let handler = match self.jnts_name2hdl.get(name) {
+            None => {
+                error!("joint '{}' not found.", name);
+                std::process::exit(utils::ERROR_CODE_RIGID_BODY_TREE);
+            },
+            Some(handler) => handler.clone(),
+        };
+
+        return self.graph.edge_weight(handler).unwrap().clone();
+    }
+
     /// Add a subtree to RigidBodyTree
     fn add_rigid_body_subtree(&mut self) {
         unimplemented!()
