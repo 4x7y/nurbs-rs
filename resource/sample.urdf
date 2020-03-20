@@ -100,7 +100,7 @@
         <inertial>
             <mass value="2.275"/>
             <origin rpy="0 0 0" xyz="0.0 0.0 0.25"/>
-            <inertia ixx="0.049443313556" ixy="0.0" ixz="0.0" iyy="0.049443313556" iyz="0.0" izz="0.004095"/>
+            <inertia ixx="0.049443313556" ixy="0.0" ixz="0.0" iyy="0.049443313556" iyz="0.0" izz="0.004095" />
         </inertial>
     </link>
     <joint name="wrist_1_joint" type="revolute">

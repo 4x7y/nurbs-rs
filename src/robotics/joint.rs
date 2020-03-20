@@ -14,8 +14,6 @@ pub enum JointType {
     Revolute { axis: UnitVector3f, },
     // fixed                                        (ndof 0)
     Fixed,
-    // temp
-    Unspecified,
 }
 
 impl fmt::Display for JointType {
@@ -28,10 +26,8 @@ impl fmt::Display for JointType {
                 write!(f, "Revolute ({:.2}, {:.2}, {:.2})", axis[0], axis[1], axis[2])
             },
             JointType::Fixed => {
-                write!(f, "Fixed")},
-            JointType::Unspecified => {
-                write!(f, "Unspecified")
-            }
+                write!(f, "Fixed")
+            },
         }
     }
 }
@@ -198,18 +194,10 @@ impl Joint {
             _ => true,
         }
     }
+}
 
-    pub fn show_details(&self) {
-        // name: name.to_string(),
-        // joint_type: joint_type,
-        // screw_axis: Vector6f::zeros(),
-        // position: 0.,
-        // velocity: 0.,
-        // limits: None,
-        // origin: Isometry3f::identity(),
-        // qpos_dof: (0, 0),
-        // qvel_dof: (0, 0)
-
+impl fmt::Display for Joint {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let mut table = Table::new();
         table.add_row(row!["name", "type", "screw_axis", "limits", "ypr"]);
         let rpy = rotm2eul(Matrix3f::from(self.tform_jnt2parent.fixed_slice::<U3, U3>(0, 0)),
@@ -225,17 +213,9 @@ impl Joint {
                 None => "None".to_string()
             }.as_ref()),
             Cell::new(format!("{}", rpy).as_ref()),
-            // Cell::new(self.origin),
-            // Cell::new(self.position),
-            // Cell::new(self.velocity),
         ]);
-        table.printstd();
-    }
-}
 
-impl fmt::Display for Joint {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.name)
+        write!(f, "{}", table.to_string())
     }
 }
 

@@ -109,7 +109,6 @@ impl JointBuilder {
             JointType::Revolute { axis } =>
                 Vector6f::new(axis[0], axis[1], axis[2], 0., 0., 0.),
             JointType::Fixed => Vector6f::zeros(),
-            JointType::Unspecified => Vector6f::zeros(),
         };
         joint
     }

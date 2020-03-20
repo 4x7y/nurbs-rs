@@ -13,21 +13,20 @@ use crate::simulation::sim_model::RenderableObject;
 use std::cell::RefCell;
 use std::rc::Rc;
 use prettytable::{Cell, Row, Table, format};
-use crate::robotics::joint::JointType::Unspecified;
+
 
 #[derive(Clone, Debug)]
 pub struct RigidBodyTree {
-    pub name: String,                           // name
-    dof: usize,                                 // degree of freedom
-    num_fixed_body: usize,
-    num_non_fixed_body: usize,
+    pub name: String,                                   // name
+    dof: usize,                                         // degree of freedom
+    num_fixed_body: usize,                              // number of bodies with fixed joint
+    num_non_fixed_body: usize,                          // number of bodies with non fixed joint
     base: Option<Rc<RefCell<RigidBody>>>,               // root of the tree
     bodies: HashMap<String, Rc<RefCell<RigidBody>>>,    // rigid bodies
     parent: HashMap<String, String>,                    // name of the parent rigid body
     children: HashMap<String, Vec<String>>,             // name of the child rigid bodies
     joint: HashMap<String, Rc<RefCell<RigidBody>>>,     // mapping from joint name to rigid body
-    // pub qpos_dof: (usize, usize),                      // position DoF mapping ( <= 7 )
-    // pub qvel_dof: (usize, usize),                      // velocity DoF mapping ( <= 6 )
+    body_id2ptr: Vec<Rc<RefCell<RigidBody>>>,           // mapping from id to rigid body
 }
 
 impl RigidBodyTree {
@@ -50,29 +49,17 @@ impl RigidBodyTree {
             parent: HashMap::new(),
             children: HashMap::new(),
             joint: HashMap::new(),
+            body_id2ptr: Vec::new(),
         }
     }
 
-    // /// Add link to RigidBodyTree
-    // pub fn add_link(&mut self, link: &Link, joint: &Joint, parent: &String) {
-    //     let parent = match self.link_name2hdl.get(parent) {
-    //         None => {
-    //             error!("parent link '{}' not found.", parent);
-    //             std::process::exit(utils::ERROR_CODE_RIGID_BODY_TREE);
-    //         },
-    //         Some(handler) => handler.clone(),
-    //     };
-    //     let child = self.graph.add_node(link.clone());
-    //     let edge  = self.graph.add_edge(parent, child, joint.clone());
-    //
-    //     {
-    //         self.link_name2hdl.insert(link.name.clone(), child);
-    //         self.jnts_name2hdl.insert(joint.name.clone(), edge);
-    //     }
-    // }
+    /// Add body to RigidBodyTree
+    pub fn add_link(&mut self, link: &Link, joint: &Joint, parent: &String) {
+        unimplemented!();
+    }
 
     /// Get body from RigidBodyTree
-    pub fn get_body(&self, name: &String) -> RigidBody {
+    pub fn get_body(&self, name: &str) -> RigidBody {
         if let Some(body) = self.bodies.get(name) {
             let body = body.borrow();
             return body.clone();
@@ -83,7 +70,7 @@ impl RigidBodyTree {
     }
 
     /// Get joint from RigidBodyTree by name
-    pub fn get_joint(&self, name: &String) -> Joint {
+    pub fn get_joint(&self, name: &str) -> Joint {
         if let Some(body) = self.joint.get(name) {
             let body = body.borrow();
             return body.joint.clone();
@@ -176,11 +163,20 @@ impl<'a> From<&'a urdf_rs::Robot> for RigidBodyTree {
         }
 
         for body in model.bodies.values() {
+            // Specify the base body of the rigid body tree.
+            // Basically, the base body is the only one that does not have
+            // a parent body.
+            if model.parent.get(&body.borrow().link.name).is_none() {
+                // if more than one body are base candidates
+                if model.base.is_some() {
+                    error!("multiple base link detected.");
+                    std::process::exit(utils::ERROR_CODE_URDF_PARSING);
+                }
+                model.base = Some(Rc::clone(body));
+            }
+
+            // Update DoF and num_fixed_body, num_non_fixed_body
             match body.borrow().joint.joint_type {
-                JointType::Unspecified => {
-                    model.base = Some(Rc::clone(body));
-                    model.num_fixed_body += 1;
-                },
                 JointType::Fixed => {
                     model.num_fixed_body += 1;
                 },
@@ -195,6 +191,28 @@ impl<'a> From<&'a urdf_rs::Robot> for RigidBodyTree {
             }
         }
 
+        // perform DFS to obtain the topological sort of the rigid bodies
+        // and store the order in `body_id2ptr`
+        match &model.base {
+            None => {},
+            Some(base) => {
+                model.body_id2ptr.push(Rc::clone(base));
+                let mut stack = Vec::new();
+                stack.push(Rc::clone(base));
+                while !stack.is_empty() {
+                    let parent = stack.pop().unwrap();
+                    if let Some(children_name_vec) = model.children.get(&parent.borrow().link.name) {
+                        for child_name in children_name_vec {
+                            if let Some(child_body) = model.bodies.get(child_name) {
+                                stack.push(Rc::clone(child_body));
+                                model.body_id2ptr.push(Rc::clone(child_body));
+                            }
+                        }
+                    };
+                }
+            },
+        }
+
         return model;
     }
 }
@@ -203,9 +221,13 @@ impl fmt::Display for RigidBodyTree {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let mut table = Table::new();
         table.set_format(*format::consts::FORMAT_NO_LINESEP_WITH_TITLE);
-        table.set_titles(row!["Body Name", "Joint Name", "Joint Type", "Parent Name", "Children Name(s)"]);
+        table.set_titles(row![
+        "Idx",
+        format!("Body Name ({} + {})", self.num_fixed_body, self.num_non_fixed_body),
+        "Joint Name", "Joint Type", "Parent Name", "Children Name(s)"]);
 
-        for body in self.bodies.values() {
+        let mut index = 0;
+        for body in &self.body_id2ptr {
             let body = body.borrow();
             let name = &body.link.name;
             let none = "None".to_string();
@@ -221,12 +243,14 @@ impl fmt::Display for RigidBodyTree {
                 },
             };
             table.add_row(row![
+                Cell::new(format!("{}", index).as_ref()),
                 Cell::new(&body.link.name),
                 Cell::new(&body.joint.name),
                 Cell::new(&body.joint.joint_type.to_string()),
                 Cell::new(parent_name),
                 Cell::new(&children_names),
             ]);
+            index += 1;
         }
 
         write!(f, "{}", table.to_string())

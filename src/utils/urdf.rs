@@ -73,20 +73,32 @@ pub fn isometry_from(origin_element: &urdf_rs::Pose) -> Isometry3f {
 impl From<urdf_rs::Inertial> for Inertial {
     fn from(urdf_inertial: urdf_rs::Inertial) -> Self {
         let i = urdf_inertial.inertia;
+        let mass = na::convert(urdf_inertial.mass.value);
+        let inertia_com = Matrix3f::new(
+            na::convert(i.ixx),
+            na::convert(i.ixy),
+            na::convert(i.ixz),
+            na::convert(i.ixy),
+            na::convert(i.iyy),
+            na::convert(i.iyz),
+            na::convert(i.ixz),
+            na::convert(i.iyz),
+            na::convert(i.izz),
+        );
+        let bvec_com = Vector3f::from_column_slice(&urdf_inertial.origin.xyz);
+        let rpy = Vector3f::from_column_slice(&urdf_inertial.origin.rpy);
+        let ypr = Vector3f::new(rpy[2], rpy[1], rpy[0]);
+        let ypr = EulerAngle::ZYX(ypr);
+        let rotm_com2body = eul2rotm(ypr);
+        let inertia_body = inertia_com2body_with_rot(
+            mass, bvec_com, rotm_com2body, inertia_com
+        );
+
         Inertial::new(
-            isometry_from(&urdf_inertial.origin),
-            na::convert(urdf_inertial.mass.value),
-            Matrix3::new(
-                na::convert(i.ixx),
-                na::convert(i.ixy),
-                na::convert(i.ixz),
-                na::convert(i.ixy),
-                na::convert(i.iyy),
-                na::convert(i.iyz),
-                na::convert(i.ixz),
-                na::convert(i.iyz),
-                na::convert(i.izz),
-            ),
+            bvec_com,
+            mass,
+            inertia_com,
+            inertia_body,
         )
     }
 }

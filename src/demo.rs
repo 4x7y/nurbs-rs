@@ -134,8 +134,11 @@ fn main() {
     let model: RigidBodyTree = RigidBodyTree::from_urdf_file("resource/sample.urdf").unwrap();
     println!("{}", model);
 
-    let joint = model.get_joint(&String::from("ee_fixed_joint"));
-    joint.show_details();
+    let joint = model.get_joint("ee_fixed_joint");
+    println!("{}", joint);
+
+    let body = model.get_body("forearm_link");
+    println!("{}", body);
 
     let mut meshes = Vec::new();
     meshes.push(load_mesh("resource/meshes/universal/base.stl"));

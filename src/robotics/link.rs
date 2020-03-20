@@ -2,6 +2,7 @@ use crate::math::*;
 use std::fmt;
 use failure::_core::fmt::{Formatter, Error};
 use crate::robotics::{skew, spatial_inertia};
+use std::fmt::Display;
 
 /// abstract geom
 pub struct Geom {
@@ -34,7 +35,7 @@ impl Default for Link {
     fn default() -> Self {
         Self {
             name: "".to_owned(),
-            inertial: Inertial::new(Isometry3f::identity(), 0., Matrix3f::identity()),
+            inertial: Inertial::from_mass(0.),
             visuals: Vec::new(),
             collisions: Vec::new(),
         }
@@ -54,6 +55,28 @@ pub enum Geometry {
     Capsule  { radius: Scalar, length: Scalar },
     Sphere   { radius: Scalar },
     Mesh     { filename: String, scale: Vector3f },
+}
+
+impl Display for Geometry {
+    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+        match self {
+            Geometry::Box { depth, width, height } => {
+                write!(f, "Box (w: {}, h:{}, d: {})", width, height, depth)
+            },
+            Geometry::Cylinder { radius, length } => {
+                write!(f, "Cylinder (r: {}, len:{})", radius, length)
+            },
+            Geometry::Capsule { radius, length } => {
+                write!(f, "Capsule (r: {}, len:{})", radius, length)
+            },
+            Geometry::Sphere { radius } => {
+                write!(f, "Sphere (r: {})", radius)
+            },
+            Geometry::Mesh { filename, scale } => {
+                write!(f, "Mesh (file: {}, scale: [{:.1}, {:.1}, {:.1}])",
+                       filename, scale[0], scale[1], scale[2])},
+        }
+    }
 }
 
 #[derive(Debug, Default, Clone)]
@@ -86,35 +109,49 @@ pub struct Material {
 
 #[derive(Debug, Clone)]
 pub struct Inertial {
-    origin: Isometry3f,
+    pub bvec_com: Vector3f,              // center of mass
     pub mass: Scalar,                    // mass
-    pub body_inertia: Matrix3f,          // 3x3 inertia tensor of the rigid body relative to body frame
+    pub inertia_body: Matrix3f,          // 3x3 inertia tensor of the rigid body relative to body frame
+    pub inertia_com: Matrix3f,           // 3x3 inertia tensor of the rigid body relative to inertia frame
     pub spatial_inertia: Matrix6f,       // 6x6 spatial inertia matrix
 }
 
+impl Display for Inertial {
+    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+        write!(f, "mass: {:.2}, com: [{:.3} {:.3} {:.3}], \
+                   \nbody_inertia: [{:.6} {:.6} {:.6} {:.6} {:.6} {:.6}]",
+               self.mass,
+               self.bvec_com[0], self.bvec_com[1], self.bvec_com[2],
+               self.inertia_body[(0, 0)], self.inertia_body[(1, 1)], self.inertia_body[(2, 2)],
+               self.inertia_body[(0, 1)], self.inertia_body[(0, 2)], self.inertia_body[(1, 2)])
+    }
+}
 
 impl Inertial {
     pub fn from_mass(mass: Scalar) -> Self {
         Self {
-            origin: Isometry3f::identity(),
+            bvec_com: Vector3f::identity(),
             mass: mass,
-            body_inertia: Matrix3f::identity(),
+            inertia_body: Matrix3f::identity(),
+            inertia_com: Matrix3f::identity(),
             spatial_inertia: Matrix6f::identity(),
         }
     }
-    pub fn new(origin: Isometry3f, mass: Scalar, inertia: Matrix3f) -> Self {
+    pub fn new(bvec_com: Vector3f, mass: Scalar,
+               inertia_com: Matrix3f, inertia_body: Matrix3f) -> Self {
         Self {
-            origin: origin,
+            bvec_com: bvec_com,
             mass: mass,
-            body_inertia: inertia,
-            spatial_inertia: spatial_inertia(mass, origin.translation.vector, inertia),
+            inertia_body: inertia_body,
+            inertia_com: inertia_com,
+            spatial_inertia: spatial_inertia(mass, bvec_com, inertia_com),
         }
     }
-    pub fn set_origin(&mut self, origin: Isometry3f) {
-        self.origin = origin;
+    pub fn set_com(&mut self, origin: Vector3f) {
+        self.bvec_com = origin;
     }
-    pub fn origin(&self) -> &Isometry3f {
-        &self.origin
+    pub fn com(&self) -> &Vector3f {
+        &self.bvec_com
     }
 }
 
@@ -127,7 +164,6 @@ pub struct Visual {
 }
 
 impl Visual {
-    
     pub fn new(name: String, origin: Isometry3f, geometry: Geometry, material: Material) -> Self {
         Self {
             name: name,
