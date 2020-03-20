@@ -17,6 +17,7 @@
       <w>coord</w>
       <w>crba</w>
       <w>crobot</w>
+      <w>cspace</w>
       <w>ctrlpts</w>
       <w>dcel</w>
       <w>ders</w>
@@ -54,6 +55,8 @@
       <w>qvel</w>
       <w>rbound</w>
       <w>rbtree</w>
+      <w>rbtrees</w>
+      <w>renderable</w>
       <w>revolute</w>
       <w>rodrigues</w>
       <w>rotm</w>
@@ -68,6 +71,7 @@
       <w>velocimeter</w>
       <w>waypoint</w>
       <w>waypoints</w>
+      <w>wspace</w>
       <w>xacc</w>
       <w>xdir</w>
       <w>xform</w>

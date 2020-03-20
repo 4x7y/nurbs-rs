@@ -12,6 +12,7 @@ pub mod geometry;
 pub mod robotics;
 pub mod utils;
 pub mod control;
+pub mod simulation;
 
 #[macro_use]
 extern crate approx;

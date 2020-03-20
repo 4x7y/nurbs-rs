@@ -17,8 +17,8 @@ use log::{info, error};
 use crobot::utils::trajectory::JointSpaceTrajectory;
 use crobot::math::*;
 use crobot::robotics::RigidBodyTree;
-use crobot::utils::read_stl;
-
+use crobot::utils::{read_stl, load_mesh};
+use std::fs::OpenOptions;
 
 fn sleep(millis: u64) {
     let duration = time::Duration::from_millis(millis);
@@ -132,8 +132,35 @@ fn main() {
     info!("booting up...");
 
     let model: RigidBodyTree = RigidBodyTree::from_urdf_file("resource/sample.urdf").unwrap();
-    // println!("{}", model);
+    println!("{}", model);
 
     let joint = model.get_joint(&String::from("ee_fixed_joint"));
     joint.show_details();
+
+    let mut meshes = Vec::new();
+    meshes.push(load_mesh("resource/meshes/universal/base.stl"));
+    meshes.push(load_mesh("resource/meshes/universal/forearm.stl"));
+    // meshes.push(load_mesh("resource/meshes/universal/driver.stl"));
+    // meshes.push(load_mesh("resource/meshes/universal/link_0.STL"));
+    // meshes.push(load_mesh("resource/meshes/universal/link_1.STL"));
+    // meshes.push(load_mesh("resource/meshes/universal/link_2.STL"));
+    // meshes.push(load_mesh("resource/meshes/universal/link_3.STL"));
+    // meshes.push(load_mesh("resource/meshes/universal/shoulder.stl"));
+    // meshes.push(load_mesh("resource/meshes/universal/upperarm.stl"));
+    // meshes.push(load_mesh("resource/meshes/universal/wrist1.stl"));
+    // meshes.push(load_mesh("resource/meshes/universal/wrist2.stl"));
+    // meshes.push(load_mesh("resource/meshes/universal/wrist3.stl"));
+
+    // let mut window = Window::new("Mesh Rendering");
+    // window.set_light(Light::StickToCamera);
+    //
+    // for mesh in meshes {
+    //     let mut c = window.add_mesh(mesh, Vector3::new(1.0, 1.0, 1.0));
+    //     c.set_color(0.5, 0.5, 0.5);
+    //     c.enable_backface_culling(true);
+    // }
+    //
+    // while window.render() {
+    //     sleep(30);
+    // }
 }

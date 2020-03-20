@@ -100,43 +100,34 @@ impl IndexedMesh {
     }
 }
 
-/// Write to std::io::Write as documented in
-/// [Wikipedia](https://en.wikipedia.org/wiki/STL_(file_format)#Binary_STL).
-///
-/// ```
-/// let mesh = [stl_io::Triangle { normal: [1.0, 0.0, 0.0],
-///                                vertices: [[0.0, -1.0, 0.0],
-///                                           [0.0, 1.0, 0.0],
-///                                           [0.0, 0.0, 0.5]]}];
-/// let mut binary_stl = Vec::<u8>::new();
-/// stl_io::write_stl(&mut binary_stl, mesh.iter()).unwrap();
-/// ```
-pub fn write_stl<'a, W, I>(writer: &mut W, mesh: I) -> Result<()>
-    where
-        W: ::std::io::Write,
-        I: ::std::iter:: <Item = &'a Triangle>,
-{
-    let mut writer = BufWriter::new(writer);
+// /// Write to std::io::Write as documented in
+// /// [Wikipedia](https://en.wikipedia.org/wiki/STL_(file_format)#Binary_STL).
+// pub fn write_stl<'a, W, I>(writer: &mut W, mesh: I) -> Result<()>
+//     where
+//         W: ::std::io::Write,
+//         I: ::std::iter:: <Item = &'a Triangle>,
+// {
+//     let mut writer = BufWriter::new(writer);
+//
+//     // Write 80 byte header
+//     writer.write_all(&[0u8; 80])?;
+//     writer.write_u32::<LittleEndian>(mesh.len() as u32)?;
+//     for t in mesh {
+//         for f in &t.normal {
+//             writer.write_f32::<LittleEndian>(*f as f32)?;
+//         }
+//         for &p in &t.vertices {
+//             for c in &p {
+//                 writer.write_f32::<LittleEndian>(*c as f32)?;
+//             }
+//         }
+//         // Attribute byte count
+//         writer.write_u16::<LittleEndian>(0)?;
+//     }
+//     writer.flush()
+// }
 
-    // Write 80 byte header
-    writer.write_all(&[0u8; 80])?;
-    writer.write_u32::<LittleEndian>(mesh.len() as u32)?;
-    for t in mesh {
-        for f in &t.normal {
-            writer.write_f32::<LittleEndian>(*f as f32)?;
-        }
-        for &p in &t.vertices {
-            for c in &p {
-                writer.write_f32::<LittleEndian>(*c as f32)?;
-            }
-        }
-        // Attribute byte count
-        writer.write_u16::<LittleEndian>(0)?;
-    }
-    writer.flush()
-}
-
-/// Attempts to read either ascci or binary STL from std::io::Read.
+/// Attempts to read either ascii or binary STL from std::io::Read.
 pub fn read_stl<R>(read: &mut R) -> Result<IndexedMesh>
     where
         R: ::std::io::Read + ::std::io::Seek,
@@ -409,4 +400,38 @@ impl<'a> AsciiStlReader<'a> {
         }
         Ok(())
     }
+}
+
+use std::cell::RefCell;
+use std::rc::Rc;
+use kiss3d::resource::Mesh;
+use std::path::Path;
+use std::fs::OpenOptions;
+use na::{Point3, Vector3};
+use std::collections::LinkedList;
+
+pub fn load_mesh<P>(path: P) -> Rc<RefCell<Mesh>>
+where P: AsRef<Path> {
+    let mut file = OpenOptions::new().read(true).open(path).unwrap();
+    let stl = read_stl(&mut file).unwrap();
+
+    let mut coords: Vec<Point3<f32>> = Vec::new();
+    let mut indices: Vec<Point3<u16>> = Vec::new();
+    let mut normals: Vec<Vector3<f32>> = Vec::new();
+
+    for vertex in stl.vertices.iter() {
+        coords.push(Point3::from_slice(vertex));
+    }
+    for face in stl.faces.iter() {
+        indices.push(Point3::new(
+            face.vertices[0] as u16, face.vertices[1] as u16, face.vertices[2] as u16));
+        normals.push(Vector3::new(
+            face.normal[0], face.normal[1], face.normal[2]));
+    }
+
+    let mesh = Rc::new(RefCell::new(Mesh::new(
+        coords, indices, Some(normals), None, false,
+    )));
+
+    return mesh;
 }

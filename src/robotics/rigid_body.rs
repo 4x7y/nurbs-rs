@@ -1,13 +1,25 @@
 use crate::math::matrix::*;
+use crate::robotics::{Link, Joint};
+use crate::robotics::JointType::Unspecified;
 
+#[derive(Debug, Clone)]
 pub struct RigidBody {
-    pub mass: f32,                              // mass
-    pub mm: Matrix3f,                           // inertia tensor
-    pub mm_vec: Vector6f,                       // inertia vector
-    pub com:  Vector3f,                         // center of mass
-    pub name: String,                           // name
+    pub link: Link,                             // link
+    pub joint: Joint,                           // joint
 }
 
+
+impl RigidBody {
+    pub fn from_link(link: Link) -> Self {
+        RigidBody {
+            link: link,
+            joint: Joint::new("", Unspecified),
+        }
+    }
+}
+
+
+#[derive(Debug, Clone)]
 pub struct RigidBodyState {
     pub xpos: Vector3f,                         // position in the world frame
     pub xvel: Vector3f,                         // velocity in the world frame

@@ -14,19 +14,24 @@ pub enum JointType {
     Revolute { axis: UnitVector3f, },
     // fixed                                        (ndof 0)
     Fixed,
+    // temp
+    Unspecified,
 }
 
 impl fmt::Display for JointType {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         match self {
             JointType::Prismatic { axis } => {
-                write!(f, "Prismatic ({}, {}, {})", axis[0], axis[1], axis[2])
+                write!(f, "Prismatic ({:.2}, {:.2}, {:.2})", axis[0], axis[1], axis[2])
             },
             JointType::Revolute { axis } => {
-                write!(f, "Revolute ({}, {}, {})", axis[0], axis[1], axis[2])
+                write!(f, "Revolute ({:.2}, {:.2}, {:.2})", axis[0], axis[1], axis[2])
             },
             JointType::Fixed => {
                 write!(f, "Fixed")},
+            JointType::Unspecified => {
+                write!(f, "Unspecified")
+            }
         }
     }
 }
