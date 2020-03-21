@@ -4,6 +4,7 @@
       <w>adjoint</w>
       <w>alph</w>
       <w>anglr</w>
+      <w>axang</w>
       <w>bimm</w>
       <w>bmat</w>
       <w>brot</w>
@@ -46,12 +47,14 @@
       <w>petgraph</w>
       <w>piegl</w>
       <w>pimm</w>
+      <w>pnum</w>
       <w>prcp</w>
       <w>prettytable</w>
       <w>qacc</w>
       <w>qfrc</w>
       <w>qpos</w>
       <w>quat</w>
+      <w>quaternionf</w>
       <w>qvel</w>
       <w>rbound</w>
       <w>rbtree</w>
@@ -64,6 +67,8 @@
       <w>sacc</w>
       <w>svel</w>
       <w>tform</w>
+      <w>tforms</w>
+      <w>trvec</w>
       <w>tvec</w>
       <w>ulmt</w>
       <w>urdf</w>

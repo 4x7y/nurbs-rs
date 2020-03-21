@@ -2,7 +2,10 @@ use crate::math::*;
 use std::fmt;
 use failure::_core::fmt::{Formatter, Error};
 use crate::robotics::{skew, spatial_inertia};
-use std::fmt::Display;
+use std::fmt::{Display, Debug};
+use kiss3d::resource::Mesh;
+use std::cell::RefCell;
+use std::rc::Rc;
 
 /// abstract geom
 pub struct Geom {
@@ -48,13 +51,19 @@ impl fmt::Display for Link {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub enum Geometry {
     Box      { depth: Scalar, width: Scalar, height: Scalar },
     Cylinder { radius: Scalar, length: Scalar },
     Capsule  { radius: Scalar, length: Scalar },
     Sphere   { radius: Scalar },
-    Mesh     { filename: String, scale: Vector3f },
+    Mesh     { filename: String, scale: Vector3f32, mesh: Rc<RefCell<Mesh>> },
+}
+
+impl Debug for Geometry {
+    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+        write!(f, "{}", &self.to_string())
+    }
 }
 
 impl Display for Geometry {
@@ -72,7 +81,7 @@ impl Display for Geometry {
             Geometry::Sphere { radius } => {
                 write!(f, "Sphere (r: {})", radius)
             },
-            Geometry::Mesh { filename, scale } => {
+            Geometry::Mesh { filename, scale, .. } => {
                 write!(f, "Mesh (file: {}, scale: [{:.1}, {:.1}, {:.1}])",
                        filename, scale[0], scale[1], scale[2])},
         }
@@ -81,10 +90,10 @@ impl Display for Geometry {
 
 #[derive(Debug, Default, Clone)]
 pub struct Color {
-    pub r: Scalar,
-    pub g: Scalar,
-    pub b: Scalar,
-    pub a: Scalar,
+    pub r: f32,
+    pub g: f32,
+    pub b: f32,
+    pub a: f32,
 }
 
 #[derive(Debug, Clone)]

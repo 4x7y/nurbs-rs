@@ -14,11 +14,12 @@ use std::{thread, time};
 use std::cell::RefCell;
 use std::rc::Rc;
 use log::{info, error};
-use crobot::utils::trajectory::JointSpaceTrajectory;
+use crobot::utils::JointSpaceTrajectory;
 use crobot::math::*;
 use crobot::robotics::RigidBodyTree;
 use crobot::utils::{read_stl, load_mesh};
 use std::fs::OpenOptions;
+use crobot::simulation::sim_model::SimScene;
 
 fn sleep(millis: u64) {
     let duration = time::Duration::from_millis(millis);
@@ -54,8 +55,8 @@ fn bspline_test() {
         knot_vector_v,
         3,               // degree_u
         2,               // degree_v
-        4,                 // size_u
-        3,                 // size_v
+        4,               // size_u
+        3,               // size_v
     );
 
     let mut vertices = Vec::new();
@@ -131,7 +132,7 @@ fn main() {
     log4rs::init_file("resource/log4rs.yaml", Default::default()).unwrap();
     info!("booting up...");
 
-    let model: RigidBodyTree = RigidBodyTree::from_urdf_file("resource/sample.urdf").unwrap();
+    let mut model: RigidBodyTree = RigidBodyTree::from_urdf_file("resource/sample.urdf").unwrap();
     println!("{}", model);
 
     let joint = model.get_joint("ee_fixed_joint");
@@ -140,19 +141,16 @@ fn main() {
     let body = model.get_body("forearm_link");
     println!("{}", body);
 
-    let mut meshes = Vec::new();
-    meshes.push(load_mesh("resource/meshes/universal/base.stl"));
-    meshes.push(load_mesh("resource/meshes/universal/forearm.stl"));
-    // meshes.push(load_mesh("resource/meshes/universal/driver.stl"));
-    // meshes.push(load_mesh("resource/meshes/universal/link_0.STL"));
-    // meshes.push(load_mesh("resource/meshes/universal/link_1.STL"));
-    // meshes.push(load_mesh("resource/meshes/universal/link_2.STL"));
-    // meshes.push(load_mesh("resource/meshes/universal/link_3.STL"));
-    // meshes.push(load_mesh("resource/meshes/universal/shoulder.stl"));
-    // meshes.push(load_mesh("resource/meshes/universal/upperarm.stl"));
-    // meshes.push(load_mesh("resource/meshes/universal/wrist1.stl"));
-    // meshes.push(load_mesh("resource/meshes/universal/wrist2.stl"));
-    // meshes.push(load_mesh("resource/meshes/universal/wrist3.stl"));
+    let mut scene = SimScene::new("Demo");
+    scene.window.set_background_color(1., 1., 1.);
+    model.register_scene(&mut scene);
+
+    let qpos_home = model.home_configuration();
+    model.render(&qpos_home);
+
+    while scene.window.render() {
+        sleep(30);
+    }
 
     // let mut window = Window::new("Mesh Rendering");
     // window.set_light(Light::StickToCamera);

@@ -1,7 +1,7 @@
 use std::path::Path;
 use urdf_rs::Robot;
 use std::collections::HashMap;
-use crate::robotics::{JointBuilder, Link, Joint, RigidBody, JointType};
+use crate::robotics::{JointBuilder, Link, Joint, RigidBody, JointType, Geometry, tform2rotm, tform2quat};
 use petgraph::Graph;
 use petgraph::graph::{NodeIndex, EdgeIndex};
 use std::fmt;
@@ -9,13 +9,14 @@ use petgraph::dot::{Dot, Config};
 use log::{info, error};
 use crate::utils;
 use crate::math::*;
-use crate::simulation::sim_model::RenderableObject;
+use crate::simulation::sim_model::{RenderableObject, SimScene};
 use std::cell::RefCell;
 use std::rc::Rc;
 use prettytable::{Cell, Row, Table, format};
+use kiss3d::scene::SceneNode;
 
 
-#[derive(Clone, Debug)]
+#[derive(Clone)]
 pub struct RigidBodyTree {
     pub name: String,                                   // name
     dof: usize,                                         // degree of freedom
@@ -27,6 +28,7 @@ pub struct RigidBodyTree {
     children: HashMap<String, Vec<String>>,             // name of the child rigid bodies
     joint: HashMap<String, Rc<RefCell<RigidBody>>>,     // mapping from joint name to rigid body
     body_id2ptr: Vec<Rc<RefCell<RigidBody>>>,           // mapping from id to rigid body
+    scene_id2ptr: Vec<Vec<SceneNode>>,                  // mapping from id to rigid body scene node
 }
 
 impl RigidBodyTree {
@@ -50,6 +52,7 @@ impl RigidBodyTree {
             children: HashMap::new(),
             joint: HashMap::new(),
             body_id2ptr: Vec::new(),
+            scene_id2ptr: Vec::new(),
         }
     }
 
@@ -116,9 +119,73 @@ impl RigidBodyTree {
         // return mass_matrix;
     }
 
+    pub fn home_configuration(&self) -> VectorDf {
+        let qpos = VectorDf::zeros(self.dof);
+        return qpos;
+    }
 
-    pub fn renderable_objects(&self) -> Vec<RenderableObject> {
-        unimplemented!();
+    pub fn body_name(&self, id: usize) -> String {
+        self.body_id2ptr[id].borrow().link.name.to_string()
+    }
+
+    pub fn render(&mut self, qpos: &VectorDf) {
+        let tforms = self.forward_kinematics(qpos);
+        for (i, scene_nodes) in self.scene_id2ptr.iter_mut().enumerate() {
+            let name = self.body_id2ptr[i].borrow().link.name.to_string();
+            println!("{}\t{}\n{}", i, name, tforms[i]);
+            for node in scene_nodes.iter_mut() {
+                let tvec = Translation3f32::new(
+                    tforms[i][(0, 3)] as f32, tforms[i][(1, 3)] as f32, tforms[i][(2, 3)] as f32);
+                let rotm = Rotation3f32::from_matrix_unchecked(Matrix3f32::new(
+                    tforms[i][(0, 0)] as f32, tforms[i][(0, 1)] as f32, tforms[i][(0, 2)] as f32,
+                    tforms[i][(1, 0)] as f32, tforms[i][(1, 1)] as f32, tforms[i][(1, 2)] as f32,
+                    tforms[i][(2, 0)] as f32, tforms[i][(2, 1)] as f32, tforms[i][(2, 2)] as f32,
+                ));
+                let quat = UnitQuat4f32::from_rotation_matrix(&rotm);
+                let isometry = Isometry3f32::from_parts(tvec, quat);
+                node.set_local_transformation(isometry);
+            }
+        }
+    }
+
+    pub fn forward_kinematics(&self, qpos: &VectorDf) -> Vec<Matrix4f> {
+        let n = self.num_body();
+        let mut tforms = vec![Matrix4f::identity(); n];
+        let mut k = 0;
+
+        for i in 0..n {
+            let body = self.body_id2ptr[i].borrow();
+            let pnum = body.joint.qpos_dof();
+            let qi = body.joint.get_qpos_from_vec(qpos, k);
+            tforms[i] = body.joint.tform_body2parent(qi);
+
+            k = k + pnum;
+            if let Some(parent_idx) = body.parent_index {
+                tforms[i] = tforms[parent_idx] * tforms[i];
+            }
+        }
+
+        return tforms;
+    }
+
+    pub fn register_scene(&mut self, scene: &mut SimScene) {
+        self.scene_id2ptr = vec![Vec::new(); self.bodies.len()];
+
+        for (i, body) in self.body_id2ptr.iter().enumerate() {
+            for visual in &body.borrow().link.visuals {
+                match &visual.geometry {
+                    Geometry::Mesh { filename, scale, mesh } => {
+                        let mut h = scene.window.add_mesh(Rc::clone(mesh), scale.clone_owned());
+                        h.set_color(visual.material.color.r,
+                                    visual.material.color.g,
+                                    visual.material.color.b);
+                        h.enable_backface_culling(false);
+                        self.scene_id2ptr[i].push(h.clone());
+                    },
+                    _ => {},
+                }
+            }
+        }
     }
 }
 
@@ -193,24 +260,28 @@ impl<'a> From<&'a urdf_rs::Robot> for RigidBodyTree {
 
         // perform DFS to obtain the topological sort of the rigid bodies
         // and store the order in `body_id2ptr`
-        match &model.base {
-            None => {},
-            Some(base) => {
-                model.body_id2ptr.push(Rc::clone(base));
-                let mut stack = Vec::new();
-                stack.push(Rc::clone(base));
-                while !stack.is_empty() {
-                    let parent = stack.pop().unwrap();
-                    if let Some(children_name_vec) = model.children.get(&parent.borrow().link.name) {
-                        for child_name in children_name_vec {
-                            if let Some(child_body) = model.bodies.get(child_name) {
-                                stack.push(Rc::clone(child_body));
-                                model.body_id2ptr.push(Rc::clone(child_body));
-                            }
+        if let Some(base) = &model.base {
+            model.body_id2ptr.push(Rc::clone(base));
+            base.borrow_mut().index = Some(0);
+            base.borrow_mut().parent_index = None;
+
+            let mut stack = Vec::new();
+            stack.push(Rc::clone(base));
+            while !stack.is_empty() {
+                let parent = stack.pop().unwrap();
+                if let Some(children_name_vec) = model.children.get(&parent.borrow().link.name) {
+                    for child_name in children_name_vec {
+                        if let Some(child_body) = model.bodies.get(child_name) {
+                            stack.push(Rc::clone(child_body));
+                            let index = model.body_id2ptr.len();
+                            model.body_id2ptr.push(Rc::clone(child_body));
+                            let mut child_body = child_body.borrow_mut();
+                            child_body.parent_index = Some(parent.borrow().index.unwrap());
+                            child_body.index = Some(index);
                         }
-                    };
-                }
-            },
+                    }
+                };
+            }
         }
 
         return model;

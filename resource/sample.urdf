@@ -2,7 +2,7 @@
     <link name="base_link">
         <visual>
             <geometry>
-                <mesh filename="./ur_description/meshes/base.stl"/>
+                <mesh filename="./resource/mesh/universal/base.stl"/>
             </geometry>
             <material name="LightGrey">
                 <color rgba="0.7 0.7 0.7 1.0"/>
@@ -10,7 +10,7 @@
         </visual>
         <collision>
             <geometry>
-                <mesh filename="./ur_description/meshes/base.stl"/>
+                <mesh filename="./resource/mesh/universal/base.stl"/>
             </geometry>
         </collision>
         <inertial>
@@ -30,7 +30,7 @@
     <link name="shoulder_link">
         <visual>
             <geometry>
-                <mesh filename="./ur_description/meshes/shoulder.stl"/>
+                <mesh filename="./resource/mesh/universal/shoulder.stl"/>
             </geometry>
             <material name="LightGrey">
                 <color rgba="0.7 0.7 0.7 1.0"/>
@@ -38,7 +38,7 @@
         </visual>
         <collision>
             <geometry>
-                <mesh filename="./ur_description/meshes/shoulder.stl"/>
+                <mesh filename="./resource/mesh/universal/shoulder.stl"/>
             </geometry>
         </collision>
         <inertial>
@@ -58,7 +58,7 @@
     <link name="upper_arm_link">
         <visual>
             <geometry>
-                <mesh filename="./ur_description/meshes/upperarm.stl"/>
+                <mesh filename="./resource/mesh/universal/upperarm.stl"/>
             </geometry>
             <material name="LightGrey">
                 <color rgba="0.7 0.7 0.7 1.0"/>
@@ -66,7 +66,7 @@
         </visual>
         <collision>
             <geometry>
-                <mesh filename="./ur_description/meshes/upperarm.stl"/>
+                <mesh filename="./resource/mesh/universal/upperarm.stl"/>
             </geometry>
         </collision>
         <inertial>
@@ -86,7 +86,7 @@
     <link name="forearm_link">
         <visual>
             <geometry>
-                <mesh filename="./ur_description/meshes/forearm.stl"/>
+                <mesh filename="./resource/mesh/universal/forearm.stl"/>
             </geometry>
             <material name="LightGrey">
                 <color rgba="0.7 0.7 0.7 1.0"/>
@@ -94,7 +94,7 @@
         </visual>
         <collision>
             <geometry>
-                <mesh filename="./ur_description/meshes/forearm.stl"/>
+                <mesh filename="./resource/mesh/universal/forearm.stl"/>
             </geometry>
         </collision>
         <inertial>
@@ -114,7 +114,7 @@
     <link name="wrist_1_link">
         <visual>
             <geometry>
-                <mesh filename="./ur_description/meshes/wrist1.stl"/>
+                <mesh filename="./resource/mesh/universal/wrist1.stl"/>
             </geometry>
             <material name="LightGrey">
                 <color rgba="0.7 0.7 0.7 1.0"/>
@@ -122,7 +122,7 @@
         </visual>
         <collision>
             <geometry>
-                <mesh filename="./ur_description/meshes/wrist1.stl"/>
+                <mesh filename="./resource/mesh/universal/wrist1.stl"/>
             </geometry>
         </collision>
         <inertial>
@@ -142,7 +142,7 @@
     <link name="wrist_2_link">
         <visual>
             <geometry>
-                <mesh filename="./ur_description/meshes/wrist2.stl"/>
+                <mesh filename="./resource/mesh/universal/wrist2.stl"/>
             </geometry>
             <material name="LightGrey">
                 <color rgba="0.7 0.7 0.7 1.0"/>
@@ -150,7 +150,7 @@
         </visual>
         <collision>
             <geometry>
-                <mesh filename="./ur_description/meshes/wrist2.stl"/>
+                <mesh filename="./resource/mesh/universal/wrist2.stl"/>
             </geometry>
         </collision>
         <inertial>
@@ -170,7 +170,7 @@
     <link name="wrist_3_link">
         <visual>
             <geometry>
-                <mesh filename="./ur_description/meshes/wrist3.stl"/>
+                <mesh filename="./resource/mesh/universal/wrist3.stl"/>
             </geometry>
             <material name="LightGrey">
                 <color rgba="0.7 0.7 0.7 1.0"/>
@@ -178,7 +178,7 @@
         </visual>
         <collision>
             <geometry>
-                <mesh filename="./ur_description/meshes/wrist3.stl"/>
+                <mesh filename="./resource/mesh/universal/wrist3.stl"/>
             </geometry>
         </collision>
         <inertial>
@@ -243,7 +243,7 @@
         <visual>
             <origin rpy="0 0 0" xyz="0 0 0"/>
             <geometry name="rh_forearm_visual">
-                <mesh filename="./sr_description/meshes/forearm.stl" scale="0.001 0.001 0.001"/>
+                <mesh filename="./resource/mesh/shadow/forearm.stl" scale="0.001 0.001 0.001"/>
             </geometry>
             <material name="light_grey"/>
         </visual>
@@ -276,7 +276,7 @@
         <visual>
             <origin rpy="0 0 0" xyz="0 0 0"/>
             <geometry name="rh_wrist_visual">
-                <mesh filename="./sr_description/meshes/wrist.stl" scale="0.001 0.001 0.001"/>
+                <mesh filename="./resource/mesh/shadow/wrist.stl" scale="0.001 0.001 0.001"/>
             </geometry>
             <material name="LightGrey"/>
         </visual>
@@ -346,7 +346,7 @@
         <visual>
             <origin rpy="0 0 0" xyz="0 0 0"/>
             <geometry name="rh_palm_visual">
-                <mesh filename="./sr_description/meshes/palm.stl" scale="0.001 0.001 0.001"/>
+                <mesh filename="./resource/mesh/shadow/palm.stl" scale="0.001 0.001 0.001"/>
             </geometry>
             <material name="Grey"/>
         </visual>
@@ -468,7 +468,7 @@
         <visual>
             <origin rpy="0 0 0" xyz="0 0 0.0005"/>
             <geometry name="rh_ffknuckle_visual">
-                <mesh filename="./sr_description/meshes/knuckle.stl" scale="0.001 0.001 0.001"/>
+                <mesh filename="./resource/mesh/shadow/knuckle.stl" scale="0.001 0.001 0.001"/>
             </geometry>
             <material name="LightGrey"/>
         </visual>
@@ -529,7 +529,7 @@
         <visual>
             <origin rpy="0 0 0" xyz="0 0 0"/>
             <geometry name="rh_ffproximal_visual">
-                <mesh filename="./sr_description/meshes/F3.stl" scale="0.001 0.001 0.001"/>
+                <mesh filename="./resource/mesh/shadow/F3.stl" scale="0.001 0.001 0.001"/>
             </geometry>
             <material name="Grey"/>
         </visual>
@@ -589,7 +589,7 @@
         <visual>
             <origin rpy="0 0 0" xyz="0 0 0"/>
             <geometry name="rh_ffmiddle_visual">
-                <mesh filename="./sr_description/meshes/F2.stl" scale="0.001 0.001 0.001"/>
+                <mesh filename="./resource/mesh/shadow/F2.stl" scale="0.001 0.001 0.001"/>
             </geometry>
             <material name="Grey"/>
         </visual>
@@ -663,7 +663,7 @@
             <origin rpy="0 0 0" xyz="0 0 0"/>
             <geometry name="rh_ffdistal_visual">
                 <!-- Standard distal  -->
-                <mesh filename="./sr_description/meshes/F1.stl" scale="0.001 0.001 0.001"/>
+                <mesh filename="./resource/mesh/shadow/F1.stl" scale="0.001 0.001 0.001"/>
             </geometry>
             <material name="Grey"/>
         </visual>
@@ -671,7 +671,7 @@
             <origin rpy="0 0 0" xyz="0 0 0"/>
             <geometry name="rh_ffdistal_collision_geom">
                 <!-- Standard distal  -->
-                <mesh filename="./sr_description/meshes/F1.stl" scale="0.001 0.001 0.001"/>
+                <mesh filename="./resource/mesh/shadow/F1.stl" scale="0.001 0.001 0.001"/>
             </geometry>
         </collision>
     </link>
@@ -730,7 +730,7 @@
         <visual>
             <origin rpy="0 0 0" xyz="0 0 0.0005"/>
             <geometry name="rh_mfknuckle_visual">
-                <mesh filename="./sr_description/meshes/knuckle.stl" scale="0.001 0.001 0.001"/>
+                <mesh filename="./resource/mesh/shadow/knuckle.stl" scale="0.001 0.001 0.001"/>
             </geometry>
             <material name="LightGrey"/>
         </visual>
@@ -791,7 +791,7 @@
         <visual>
             <origin rpy="0 0 0" xyz="0 0 0"/>
             <geometry name="rh_mfproximal_visual">
-                <mesh filename="./sr_description/meshes/F3.stl" scale="0.001 0.001 0.001"/>
+                <mesh filename="./resource/mesh/shadow/F3.stl" scale="0.001 0.001 0.001"/>
             </geometry>
             <material name="Grey"/>
         </visual>
@@ -851,7 +851,7 @@
         <visual>
             <origin rpy="0 0 0" xyz="0 0 0"/>
             <geometry name="rh_mfmiddle_visual">
-                <mesh filename="./sr_description/meshes/F2.stl" scale="0.001 0.001 0.001"/>
+                <mesh filename="./resource/mesh/shadow/F2.stl" scale="0.001 0.001 0.001"/>
             </geometry>
             <material name="Grey"/>
         </visual>
@@ -925,7 +925,7 @@
             <origin rpy="0 0 0" xyz="0 0 0"/>
             <geometry name="rh_mfdistal_visual">
                 <!-- Standard distal  -->
-                <mesh filename="./sr_description/meshes/F1.stl" scale="0.001 0.001 0.001"/>
+                <mesh filename="./resource/mesh/shadow/F1.stl" scale="0.001 0.001 0.001"/>
             </geometry>
             <material name="Grey"/>
         </visual>
@@ -933,7 +933,7 @@
             <origin rpy="0 0 0" xyz="0 0 0"/>
             <geometry name="rh_mfdistal_collision_geom">
                 <!-- Standard distal  -->
-                <mesh filename="./sr_description/meshes/F1.stl" scale="0.001 0.001 0.001"/>
+                <mesh filename="./resource/mesh/shadow/F1.stl" scale="0.001 0.001 0.001"/>
             </geometry>
         </collision>
     </link>
@@ -992,7 +992,7 @@
         <visual>
             <origin rpy="0 0 0" xyz="0 0 0.0005"/>
             <geometry name="rh_rfknuckle_visual">
-                <mesh filename="./sr_description/meshes/knuckle.stl" scale="0.001 0.001 0.001"/>
+                <mesh filename="./resource/mesh/shadow/knuckle.stl" scale="0.001 0.001 0.001"/>
             </geometry>
             <material name="LightGrey"/>
         </visual>
@@ -1053,7 +1053,7 @@
         <visual>
             <origin rpy="0 0 0" xyz="0 0 0"/>
             <geometry name="rh_rfproximal_visual">
-                <mesh filename="./sr_description/meshes/F3.stl" scale="0.001 0.001 0.001"/>
+                <mesh filename="./resource/mesh/shadow/F3.stl" scale="0.001 0.001 0.001"/>
             </geometry>
             <material name="Grey"/>
         </visual>
@@ -1113,7 +1113,7 @@
         <visual>
             <origin rpy="0 0 0" xyz="0 0 0"/>
             <geometry name="rh_rfmiddle_visual">
-                <mesh filename="./sr_description/meshes/F2.stl" scale="0.001 0.001 0.001"/>
+                <mesh filename="./resource/mesh/shadow/F2.stl" scale="0.001 0.001 0.001"/>
             </geometry>
             <material name="Grey"/>
         </visual>
@@ -1187,7 +1187,7 @@
             <origin rpy="0 0 0" xyz="0 0 0"/>
             <geometry name="rh_rfdistal_visual">
                 <!-- Standard distal  -->
-                <mesh filename="./sr_description/meshes/F1.stl" scale="0.001 0.001 0.001"/>
+                <mesh filename="./resource/mesh/shadow/F1.stl" scale="0.001 0.001 0.001"/>
             </geometry>
             <material name="Grey"/>
         </visual>
@@ -1195,7 +1195,7 @@
             <origin rpy="0 0 0" xyz="0 0 0"/>
             <geometry name="rh_rfdistal_collision_geom">
                 <!-- Standard distal  -->
-                <mesh filename="./sr_description/meshes/F1.stl" scale="0.001 0.001 0.001"/>
+                <mesh filename="./resource/mesh/shadow/F1.stl" scale="0.001 0.001 0.001"/>
             </geometry>
         </collision>
     </link>
@@ -1254,7 +1254,7 @@
         <visual>
             <origin rpy="0 0 0" xyz="0 0 0"/>
             <geometry name="rh_lfmetacarpal_visual">
-                <mesh filename="./sr_description/meshes/lfmetacarpal.stl" scale="0.001 0.001 0.001"/>
+                <mesh filename="./resource/mesh/shadow/lfmetacarpal.stl" scale="0.001 0.001 0.001"/>
             </geometry>
             <material name="Grey"/>
         </visual>
@@ -1314,7 +1314,7 @@
         <visual>
             <origin rpy="0 0 0" xyz="0 0 0.0005"/>
             <geometry name="rh_lfknuckle_visual">
-                <mesh filename="./sr_description/meshes/knuckle.stl" scale="0.001 0.001 0.001"/>
+                <mesh filename="./resource/mesh/shadow/knuckle.stl" scale="0.001 0.001 0.001"/>
             </geometry>
             <material name="LightGrey"/>
         </visual>
@@ -1375,7 +1375,7 @@
         <visual>
             <origin rpy="0 0 0" xyz="0 0 0"/>
             <geometry name="rh_lfproximal_visual">
-                <mesh filename="./sr_description/meshes/F3.stl" scale="0.001 0.001 0.001"/>
+                <mesh filename="./resource/mesh/shadow/F3.stl" scale="0.001 0.001 0.001"/>
             </geometry>
             <material name="Grey"/>
         </visual>
@@ -1435,7 +1435,7 @@
         <visual>
             <origin rpy="0 0 0" xyz="0 0 0"/>
             <geometry name="rh_lfmiddle_visual">
-                <mesh filename="./sr_description/meshes/F2.stl" scale="0.001 0.001 0.001"/>
+                <mesh filename="./resource/mesh/shadow/F2.stl" scale="0.001 0.001 0.001"/>
             </geometry>
             <material name="Grey"/>
         </visual>
@@ -1509,7 +1509,7 @@
             <origin rpy="0 0 0" xyz="0 0 0"/>
             <geometry name="rh_lfdistal_visual">
                 <!-- Standard distal  -->
-                <mesh filename="./sr_description/meshes/F1.stl" scale="0.001 0.001 0.001"/>
+                <mesh filename="./resource/mesh/shadow/F1.stl" scale="0.001 0.001 0.001"/>
             </geometry>
             <material name="Grey"/>
         </visual>
@@ -1517,7 +1517,7 @@
             <origin rpy="0 0 0" xyz="0 0 0"/>
             <geometry name="rh_lfdistal_collision_geom">
                 <!-- Standard distal  -->
-                <mesh filename="./sr_description/meshes/F1.stl" scale="0.001 0.001 0.001"/>
+                <mesh filename="./resource/mesh/shadow/F1.stl" scale="0.001 0.001 0.001"/>
             </geometry>
         </collision>
     </link>
@@ -1638,7 +1638,7 @@
         <visual>
             <origin rpy="0 0 0" xyz="0 0 0"/>
             <geometry name="rh_thproximal_visual">
-                <mesh filename="./sr_description/meshes/TH3_z.stl" scale="0.001 0.001 0.001"/>
+                <mesh filename="./resource/mesh/shadow/TH3_z.stl" scale="0.001 0.001 0.001"/>
             </geometry>
             <material name="shadow_thproximal_material">
                 <color rgba="0.2 0.2 0.2 1.0"/>
@@ -1762,7 +1762,7 @@
         <visual>
             <origin rpy="0 0 0" xyz="0 0 0"/>
             <geometry name="rh_thmiddle_visual">
-                <mesh filename="./sr_description/meshes/TH2_z.stl" scale="0.001 0.001 0.001"/>
+                <mesh filename="./resource/mesh/shadow/TH2_z.stl" scale="0.001 0.001 0.001"/>
             </geometry>
             <material name="shadow_thmiddle_material">
                 <color rgba="0.2 0.2 0.2 1.0"/>
@@ -1832,7 +1832,7 @@
             <origin rpy="0 0 0" xyz="0 0 0"/>
             <geometry name="rh_thdistal_visual">
                 <!-- Standard distal  -->
-                <mesh filename="./sr_description/meshes/TH1_z.stl" scale="0.001 0.001 0.001"/>
+                <mesh filename="./resource/mesh/shadow/TH1_z.stl" scale="0.001 0.001 0.001"/>
             </geometry>
             <material name="shadow_thmiddle_material">
                 <color rgba="0.2 0.2 0.2 1.0"/>
@@ -1842,7 +1842,7 @@
             <origin rpy="0 0 0" xyz="0 0 0"/>
             <geometry name="rh_thmiddle_collision_geom">
                 <!-- Standard distal  -->
-                <mesh filename="./sr_description/meshes/TH1_z.stl" scale="0.001 0.001 0.001"/>
+                <mesh filename="./resource/mesh/shadow/TH1_z.stl" scale="0.001 0.001 0.001"/>
                 <!--      <box size="0.015 0.015 0.015" /> -->
             </geometry>
         </collision>

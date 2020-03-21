@@ -1,4 +1,5 @@
 use crate::math::matrix::*;
+use crate::utils::rotm2quat;
 
 trait MotionModel {
     fn joint_space_motion();                    // tmp space motion
@@ -228,4 +229,57 @@ pub fn cross_force(v1: Vector6f, v_force: Vector6f) -> Vector6f {
     mat.fixed_slice_mut::<U3, U3>(0, 3).copy_from(&sc2);
     mat.fixed_slice_mut::<U3, U3>(3, 3).copy_from(&sc1);
     return mat * v_force;
+}
+
+/// Transform a vector from Cartesian space to Homogeneous space
+pub fn cart2hom(p: Vector3f) -> Vector4f {
+    Vector4f::new(p[0], p[1], p[2], 1.)
+}
+
+/// Transform a vector from Homogeneous space to Cartesian space
+pub fn hom2cart(p: Vector4f) -> Vector3f {
+    if near_zero(p[3]) {
+        Vector3f::new(p[0], p[1], p[2])
+    } else {
+        Vector3f::new(p[0] / p[3], p[1] / p[3], p[2] / p[3])
+    }
+}
+
+/// Convert axis-angle rotation representation to rotation matrix
+pub fn axang2rotm(ax: Vector3f, ang: Scalar) -> Matrix3f {
+    matrix_exp3(vec_to_so3(ax * ang))
+}
+
+/// Convert rotation matrix to homogeneous transform
+pub fn rotm2tform(rotm: Matrix3f) -> Matrix4f {
+    let mut tform = Matrix4f::identity();
+    tform.fixed_slice_mut::<U3, U3>(0, 0).copy_from(&rotm);
+    return tform;
+}
+
+/// Convert axis-angle rotation representation to homogeneous
+/// transform
+pub fn axang2tform(ax: Vector3f, ang: Scalar) -> Matrix4f {
+    // Convert the axis-angle input into a rotation matrix
+    let rotm = axang2rotm(ax, ang);
+    // Convert the rotation matrix into a homogeneous transform
+    return rotm2tform(rotm);
+}
+
+/// Convert translation vector to homogeneous transformation
+pub fn trvec2tform(trvec: Vector3f) -> Matrix4f {
+    let mut tform = Matrix4f::identity();
+    tform.fixed_slice_mut::<U3, U1>(0, 3).copy_from(&trvec);
+    return tform;
+}
+
+/// Extract rotation matrix from homogeneous transformation
+pub fn tform2rotm(tform: Matrix4f) -> Matrix3f {
+    Matrix3f::from(tform.fixed_slice::<U3, U3>(0, 0))
+}
+
+/// Extract quaternion from homogeneous transformation
+pub fn tform2quat(tform: Matrix4f) -> Vector4f {
+    let rotm = tform2rotm(tform);
+    rotm2quat(rotm)
 }

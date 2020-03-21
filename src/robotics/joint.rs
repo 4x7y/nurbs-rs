@@ -1,17 +1,20 @@
 use crate::math::*;
 use na::geometry::{Translation3, UnitQuaternion};
-use crate::robotics::Range;
+use crate::robotics::{Range, axang2tform, trvec2tform};
 use std::fmt;
 use failure::_core::fmt::{Formatter, Error};
 use crate::utils::*;
 use prettytable::{Cell, Row, Table};
+use crate::robotics::sensor::SensorType::JointPos;
+use crate::utils;
+use log::{info, error};
 
 #[derive(Copy, Debug, Clone)]
 pub enum JointType {
     // sliding distance along body-fixed axis       (ndof 1)
-    Prismatic{ axis: UnitVector3f, },
+    Prismatic{ axis: Vector3f, },
     // rotation angle (rad) around body-fixed axis  (ndof 1)
-    Revolute { axis: UnitVector3f, },
+    Revolute { axis: Vector3f, },
     // fixed                                        (ndof 0)
     Fixed,
 }
@@ -45,6 +48,13 @@ pub struct JointSafetyController {
     pub soft_upper_limit: Scalar,
     pub k_position: Scalar,
     pub k_velocity: Scalar,
+}
+
+#[derive(Debug, Clone)]
+pub enum JointPosition {
+    Prismatic(Scalar),
+    Revolute(Scalar),
+    Fixed,
 }
 
 /// The reason of joint error
@@ -105,6 +115,56 @@ impl Joint {
             tform_jnt2parent: Matrix4f::identity(),
             tform_child2jnt: Matrix4f::identity(),
         }
+    }
+
+    pub fn qpos_dof(&self) -> usize {
+        match self.joint_type {
+            JointType::Prismatic { .. } => { 1 },
+            JointType::Revolute { .. } => { 1 },
+            JointType::Fixed => { 0 },
+        }
+    }
+
+    pub fn get_qpos_from_vec(&self, qpos: &VectorDf, start: usize) -> JointPosition {
+        match self.joint_type {
+            JointType::Prismatic { .. } => {
+                JointPosition::Prismatic(qpos[start])
+            },
+            JointType::Revolute { .. } => {
+                JointPosition::Revolute(qpos[start])
+            },
+            JointType::Fixed => {
+                JointPosition::Fixed
+            },
+        }
+    }
+
+    pub fn tform_joint(&self, qpos: JointPosition) -> Matrix4f {
+        match self.joint_type {
+            JointType::Prismatic { axis } => {
+                if let JointPosition::Prismatic(q) = qpos {
+                    trvec2tform(axis * q)
+                } else {
+                    error!("Joint type not match in tform_joint.");
+                    std::process::exit(utils::ERROR_CODE_JOINT_TYPE_NOT_MATCH);
+                }
+            },
+            JointType::Revolute { axis } => {
+                if let JointPosition::Revolute(q) = qpos {
+                    axang2tform(axis, q)
+                } else {
+                    error!("Joint type not match in tform_joint.");
+                    std::process::exit(utils::ERROR_CODE_JOINT_TYPE_NOT_MATCH);
+                }
+            },
+            JointType::Fixed => {
+                Matrix4f::identity()
+            },
+        }
+    }
+
+    pub fn tform_body2parent(&self, qpos: JointPosition) -> Matrix4f {
+        self.tform_jnt2parent * self.tform_joint(qpos) * self.tform_child2jnt
     }
 
     // pub fn set_joint_position(&mut self, position: Scalar) -> Result<(), JointError> {

@@ -9,6 +9,8 @@ use std::fmt;
 pub struct RigidBody {
     pub link: Link,                             // link
     pub joint: Joint,                           // joint
+    pub index: Option<usize>,                   // index in the RBTree
+    pub parent_index: Option<usize>,            // index of the parent in the RBTree
 }
 
 
@@ -17,6 +19,8 @@ impl RigidBody {
         RigidBody {
             link: link,
             joint: Joint::new("", JointType::Fixed),
+            index: None,
+            parent_index: None,
         }
     }
 }
@@ -31,9 +35,10 @@ impl Display for RigidBody {
             col += &collision.geometry.to_string();
             col += "\n";
         }
-        table.add_row(row!["Body Name", "Geometry Type", "Inertial", "limits", "ypr"]);
+        table.add_row(row!["Body Name", "Joint", "Geometry Type", "Inertial"]);
         table.add_row(row![
             Cell::new(&self.link.name),
+            Cell::new(&self.joint.name),
             Cell::new(&col),
             Cell::new(&self.link.inertial.to_string()),
         ]);

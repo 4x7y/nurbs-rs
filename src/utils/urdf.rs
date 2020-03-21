@@ -6,6 +6,7 @@ use std::path::Path;
 use crate::math::*;
 use crate::robotics::*;
 use crate::utils::*;
+use kiss3d::resource::Mesh;
 
 impl<'a> From<&'a urdf_rs::Color> for Color {
     fn from(urdf_color: &urdf_rs::Color) -> Self {
@@ -48,12 +49,12 @@ pub fn translation_from(array3: &[f64; 3]) -> na::Translation3<Scalar> {
 }
 
 /// Returns nalgebra::Unit<nalgebra::Vector3> from f64 array
-fn axis_from(array3: [f64; 3]) -> na::Unit<Vector3f> {
-    na::Unit::<_>::new_normalize(na::Vector3::new(
+fn axis_from(array3: [f64; 3]) -> Vector3f {
+    Vector3f::new(
         na::convert(array3[0]),
         na::convert(array3[1]),
         na::convert(array3[2]),
-    ))
+    )
 }
 
 /// Returns nalgebra::UnitQuaternion from f64 array
@@ -140,12 +141,13 @@ impl From<urdf_rs::Geometry> for Geometry {
                 radius: na::convert(radius),
             },
             urdf_rs::Geometry::Mesh { filename, scale } => Geometry::Mesh {
-                filename,
+                filename: filename.clone(),
                 scale: na::Vector3::new(
                     na::convert(scale[0]),
                     na::convert(scale[1]),
                     na::convert(scale[2]),
                 ),
+                mesh: load_mesh(filename),
             },
             urdf_rs::Geometry::Capsule { radius, length } => Geometry::Capsule {
                 radius: na::convert(radius),
