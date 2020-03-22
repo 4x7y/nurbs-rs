@@ -133,35 +133,21 @@ fn main() {
     info!("booting up...");
 
     let mut model: RigidBodyTree = RigidBodyTree::from_urdf_file("resource/sample.urdf").unwrap();
-    println!("{}", model);
-
-    let joint = model.get_joint("ee_fixed_joint");
-    println!("{}", joint);
-
-    let body = model.get_body("forearm_link");
-    println!("{}", body);
+    info!("\n{}", model);
 
     let mut scene = SimScene::new("Demo");
-    scene.window.set_background_color(1., 1., 1.);
     model.register_scene(&mut scene);
 
     let qpos_home = model.home_configuration();
-    model.render(&qpos_home);
+    let mut qpos_incs = VectorDf::zeros(model.num_dof());
+    qpos_incs[0] = 0.01;
+    qpos_incs[1] = -0.01;
+    qpos_incs[2] = 0.01;
+    let mut qpos = qpos_home;
 
     while scene.window.render() {
+        qpos = qpos + &qpos_incs;
+        model.render(&qpos);
         sleep(30);
     }
-
-    // let mut window = Window::new("Mesh Rendering");
-    // window.set_light(Light::StickToCamera);
-    //
-    // for mesh in meshes {
-    //     let mut c = window.add_mesh(mesh, Vector3::new(1.0, 1.0, 1.0));
-    //     c.set_color(0.5, 0.5, 0.5);
-    //     c.enable_backface_culling(true);
-    // }
-    //
-    // while window.render() {
-    //     sleep(30);
-    // }
 }

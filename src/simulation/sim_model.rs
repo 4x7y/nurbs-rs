@@ -20,6 +20,7 @@ impl SimScene {
             node_name2ptr: HashMap::new(),
         };
         scene.window.set_light(Light::StickToCamera);
+        scene.window.set_background_color(1., 1., 1.);
 
         return scene;
     }

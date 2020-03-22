@@ -1,11 +1,8 @@
 use std::path::Path;
 use urdf_rs::Robot;
 use std::collections::HashMap;
-use crate::robotics::{JointBuilder, Link, Joint, RigidBody, JointType, Geometry, tform2rotm, tform2quat};
-use petgraph::Graph;
-use petgraph::graph::{NodeIndex, EdgeIndex};
+use crate::robotics::*;
 use std::fmt;
-use petgraph::dot::{Dot, Config};
 use log::{info, error};
 use crate::utils;
 use crate::math::*;
@@ -132,7 +129,6 @@ impl RigidBodyTree {
         let tforms = self.forward_kinematics(qpos);
         for (i, scene_nodes) in self.scene_id2ptr.iter_mut().enumerate() {
             let name = self.body_id2ptr[i].borrow().link.name.to_string();
-            println!("{}\t{}\n{}", i, name, tforms[i]);
             for node in scene_nodes.iter_mut() {
                 let tvec = Translation3f32::new(
                     tforms[i][(0, 3)] as f32, tforms[i][(1, 3)] as f32, tforms[i][(2, 3)] as f32);

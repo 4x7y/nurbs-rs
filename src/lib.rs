@@ -5,7 +5,6 @@
 
 extern crate nalgebra as na;
 extern crate kiss3d;
-extern crate petgraph;
 
 pub mod math;
 pub mod geometry;
