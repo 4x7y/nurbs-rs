@@ -6,6 +6,7 @@ use std::fmt::{Display, Debug};
 use kiss3d::resource::Mesh;
 use std::cell::RefCell;
 use std::rc::Rc;
+use crate::utils::Color;
 
 /// abstract geom
 pub struct Geom {
@@ -88,13 +89,7 @@ impl Display for Geometry {
     }
 }
 
-#[derive(Debug, Default, Clone)]
-pub struct Color {
-    pub r: f32,
-    pub g: f32,
-    pub b: f32,
-    pub a: f32,
-}
+
 
 #[derive(Debug, Clone)]
 pub struct Texture {

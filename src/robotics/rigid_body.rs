@@ -1,5 +1,5 @@
 use crate::math::matrix::*;
-use crate::robotics::{Link, Joint, JointType};
+use crate::robotics::{Link, Joint, JointType, JointPosition};
 use std::fmt::Display;
 use failure::_core::fmt::{Formatter, Error};
 use prettytable::{Cell, Table};
@@ -8,7 +8,7 @@ use std::fmt;
 #[derive(Debug, Clone)]
 pub struct RigidBody {
     pub link: Link,                             // link
-    pub joint: Joint,                           // joint
+    pub joint: Option<Joint>,                   // joint
     pub index: Option<usize>,                   // index in the RBTree
     pub parent_index: Option<usize>,            // index of the parent in the RBTree
 }
@@ -18,11 +18,58 @@ impl RigidBody {
     pub fn from_link(link: Link) -> Self {
         RigidBody {
             link: link,
-            joint: Joint::new("", JointType::Fixed),
+            joint: None,
             index: None,
             parent_index: None,
         }
     }
+
+    pub fn joint_name(&self) -> String {
+        match &self.joint {
+            None => "None".to_string(),
+            Some(joint) => joint.name.clone(),
+        }
+    }
+
+    pub fn name(&self) -> String {
+        self.link.name.clone()
+    }
+
+    pub fn qpos_dof(&self) -> usize {
+        match &self.joint {
+            None => { 0 },
+            Some(joint) => { joint.qpos_dof() },
+        }
+    }
+
+    pub fn get_qpos_from_vec(&self, qpos: &VectorDf, start: usize) -> JointPosition {
+        match &self.joint {
+            None => JointPosition::Fixed,
+            Some(joint) => joint.get_qpos_from_vec(qpos, start)
+        }
+    }
+
+    pub fn joint_type(&self) -> Option<JointType> {
+        match &self.joint {
+            None => None,
+            Some(joint) => Some(joint.joint_type.clone()),
+        }
+    }
+
+    pub fn joint_type_name(&self) -> String {
+        match &self.joint {
+            None => "None".to_string(),
+            Some(joint) => joint.joint_type.to_string(),
+        }
+    }
+
+    pub fn tform_body2parent(&self, qpos: JointPosition) -> Matrix4f {
+        match &self.joint {
+            None => Matrix4f::identity(),
+            Some(joint) => joint.tform_body2parent(qpos),
+        }
+    }
+
 }
 
 impl Display for RigidBody {
@@ -38,7 +85,7 @@ impl Display for RigidBody {
         table.add_row(row!["Body Name", "Joint", "Geometry Type", "Inertial"]);
         table.add_row(row![
             Cell::new(&self.link.name),
-            Cell::new(&self.joint.name),
+            Cell::new(&self.joint_name()),
             Cell::new(&col),
             Cell::new(&self.link.inertial.to_string()),
         ]);

@@ -7,14 +7,14 @@ pub mod kinematics;
 pub mod sensor;
 pub mod motion;
 pub mod rigid_body;
-pub mod rigid_body_tree;
+pub mod rbtree;
 pub mod joint;
 pub mod range;
 pub mod joint_builder;
 pub mod inertia;
 
 pub use self::rigid_body::*;
-pub use self::rigid_body_tree::*;
+pub use self::rbtree::*;
 pub use self::dynamics::*;
 pub use self::kinematics::*;
 pub use self::robot_model::*;

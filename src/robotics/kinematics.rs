@@ -34,7 +34,7 @@ pub fn normalize(vec: Vector3f) -> Vector3f {
 
 /// Converts a homogeneous transformation matrix into a rotation matrix
 /// and position vector
-pub fn trans_to_rp(trans: Matrix4f) -> (Matrix3f, Vector3f) {
+pub fn tform2rp(trans: Matrix4f) -> (Matrix3f, Vector3f) {
     let rotm = trans.fixed_slice::<U3, U3>(0, 0);
     let tvec = trans.fixed_slice::<U3, U1>(0, 3);
     return (Matrix3f::from(rotm), Vector3f::from(tvec));
@@ -66,7 +66,7 @@ pub fn skew(omeg: Vector3f) -> Matrix3f {
 ///
 /// - The 6x6 adjoint representation Ad T of T
 pub fn adjoint(trans: Matrix4f) -> Matrix6f {
-    let rp = trans_to_rp(trans);
+    let rp = tform2rp(trans);
     let rotm = rp.0;
     let tvec = rp.1;
     let tmp = vec_to_so3(tvec) * rotm;
@@ -84,19 +84,19 @@ pub fn adjoint(trans: Matrix4f) -> Matrix6f {
 /// # Arguments
 ///
 /// `trans`: A homogeneous transformation matrix
-pub fn trans_inv(trans: Matrix4f) -> Matrix4f {
-    let rp = trans_to_rp(trans);
+pub fn tform_inv(trans: Matrix4f) -> Matrix4f {
+    let rp = tform2rp(trans);
     let rotm = rp.0;
     let tvec = rp.1;
     let rotm_t = rotm.transpose();
 
-    let mut trans_inv = Matrix4f::zeros();
-    trans_inv.fixed_slice_mut::<U3, U3>(0, 0).copy_from(&rotm_t);
+    let mut tform_inv = Matrix4f::zeros();
+    tform_inv.fixed_slice_mut::<U3, U3>(0, 0).copy_from(&rotm_t);
     let tmp = - rotm_t * tvec;
-    trans_inv.fixed_slice_mut::<U3, U1>(0, 3).copy_from(&tmp);
-    trans_inv[(3, 3)] = 1.;
+    tform_inv.fixed_slice_mut::<U3, U1>(0, 3).copy_from(&tmp);
+    tform_inv[(3, 3)] = 1.;
 
-    return trans_inv;
+    return tform_inv;
 }
 
 /// Converts a spatial velocity vector into a 4x4 matrix in se3

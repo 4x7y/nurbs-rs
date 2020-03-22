@@ -8,7 +8,7 @@ fn test_trans2rp() {
         0., 0., -1., 0.,
         0., 1.,  0., 3.,
         0., 0.,  0., 1.);
-    let rp = trans_to_rp(trans);
+    let rp = tform2rp(trans);
     // println!("{}", rp.0);
     // println!("{}", rp.1);
     assert_eq!(rp.0, Matrix3f::new(
@@ -55,7 +55,7 @@ fn test_trans_inv() {
         0., 0., -1., 0.,
         0., 1.,  0., 3.,
         0., 0.,  0., 1.,);
-    let trans_inv = trans_inv(trans);
+    let trans_inv = tform_inv(trans);
     assert_eq!(trans_inv, Matrix4f::new(
         1., 0., 0., 0.,
         0., 0., 1.,-3.,

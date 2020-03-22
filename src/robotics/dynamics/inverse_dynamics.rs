@@ -62,7 +62,7 @@ pub fn rne(model: &RobotModel,
     let mut svel = vec![Vector6f::zeros(); n+1];
     let mut sacc = vec![Vector6f::zeros(); n+1];
     sacc[0].fixed_slice_mut::<U3, U1>(3, 0).copy_from(&-gravity);
-    ad_tform[n] = adjoint(trans_inv(tform_to_prev[n]));
+    ad_tform[n] = adjoint(tform_inv(tform_to_prev[n]));
 
     let mut xfrc = fext.clone();
     let mut tau = VectorDf::zeros(n);
@@ -72,11 +72,11 @@ pub fn rne(model: &RobotModel,
     // the base to the tip.
     for i in 0..n {
         tform = tform * tform_to_prev[i];
-        let tform_curr = trans_inv(tform);
+        let tform_curr = tform_inv(tform);
         screw_axis[i] = adjoint(tform_curr) * screw[i];
         ad_tform[i]   = adjoint(
             matrix_exp6(vec_to_se3(- screw_axis[i] * qpos[i]))
-                * trans_inv(tform_to_prev[i]));
+                * tform_inv(tform_to_prev[i]));
         svel[i+1] = ad_tform[i] * svel[i] + screw_axis[i] * qvel[i];
         sacc[i+1] = ad_tform[i] * sacc[i] + screw_axis[i] * qacc[i]
             + ad(svel[i+1]) * screw_axis[i] * qvel[i];

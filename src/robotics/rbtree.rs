@@ -11,11 +11,13 @@ use std::cell::RefCell;
 use std::rc::Rc;
 use prettytable::{Cell, Row, Table, format};
 use kiss3d::scene::SceneNode;
+use failure::_core::cmp::max;
+use std::cmp::min;
 
 
 #[derive(Clone)]
 pub struct RigidBodyTree {
-    pub name: String,                                   // name
+    name: String,                                       // name
     dof: usize,                                         // degree of freedom
     num_fixed_body: usize,                              // number of bodies with fixed joint
     num_non_fixed_body: usize,                          // number of bodies with non fixed joint
@@ -53,29 +55,34 @@ impl RigidBodyTree {
         }
     }
 
-    /// Add body to RigidBodyTree
-    pub fn add_link(&mut self, link: &Link, joint: &Joint, parent: &String) {
-        unimplemented!();
-    }
-
     /// Get body from RigidBodyTree
     pub fn get_body(&self, name: &str) -> RigidBody {
         if let Some(body) = self.bodies.get(name) {
             let body = body.borrow();
             return body.clone();
         } else {
-            error!("link '{}' not found.", name);
+            error!("body '{}' not found.", name);
             std::process::exit(utils::ERROR_CODE_RIGID_BODY_TREE);
         }
     }
 
     /// Get joint from RigidBodyTree by name
-    pub fn get_joint(&self, name: &str) -> Joint {
+    pub fn get_joint(&self, name: &str) -> Option<Joint> {
         if let Some(body) = self.joint.get(name) {
             let body = body.borrow();
             return body.joint.clone();
         } else {
-            error!("link '{}' not found.", name);
+            error!("joint '{}' not found.", name);
+            std::process::exit(utils::ERROR_CODE_RIGID_BODY_TREE);
+        }
+    }
+
+    /// Get joint ptr from RigidBodyTree by name
+    pub fn get_body_ptr(&self, name: &str) -> Rc<RefCell<RigidBody>> {
+        if let Some(body) = self.bodies.get(name) {
+            return Rc::clone(body);
+        } else {
+            error!("body '{}' not found.", name);
             std::process::exit(utils::ERROR_CODE_RIGID_BODY_TREE);
         }
     }
@@ -87,7 +94,17 @@ impl RigidBodyTree {
 
     /// Number of bodies
     pub fn num_body(&self) -> usize {
-        return self.bodies.len();
+        self.bodies.len()
+    }
+
+    /// Number of bodies with fixed joint
+    pub fn num_fixed_body(&self) -> usize {
+        self.num_fixed_body
+    }
+
+    /// Number of bodies with non-fixed joint (e.g. revolute, prismatic)
+    pub fn num_non_fixed_body(&self) -> usize {
+        self.num_non_fixed_body
     }
 
     /// Number of joints
@@ -116,15 +133,18 @@ impl RigidBodyTree {
         // return mass_matrix;
     }
 
+    /// Get home configuration
     pub fn home_configuration(&self) -> VectorDf {
         let qpos = VectorDf::zeros(self.dof);
         return qpos;
     }
 
+    /// Get body name by it ID in rigid body tree.
     pub fn body_name(&self, id: usize) -> String {
         self.body_id2ptr[id].borrow().link.name.to_string()
     }
 
+    /// Set position and orientation of bodies registered in the scene.
     pub fn render(&mut self, qpos: &VectorDf) {
         let tforms = self.forward_kinematics(qpos);
         for (i, scene_nodes) in self.scene_id2ptr.iter_mut().enumerate() {
@@ -144,6 +164,29 @@ impl RigidBodyTree {
         }
     }
 
+    /// Return body index in the rigid body tree given body name.
+    pub fn body_index_from_name(&self, name: &str) -> usize {
+        if let Some(body) = self.bodies.get(name) {
+            body.borrow().index.unwrap()
+        } else {
+            error!("body name {} not found.", name);
+            std::process::exit(utils::ERROR_CODE_RIGID_BODY_TREE);
+        }
+    }
+
+    /// Return the index of parent body
+    pub fn parent_index(&self, id: usize) -> Option<usize> {
+        if id >= self.body_id2ptr.len() {
+            error!("body id {} not found.", id);
+            std::process::exit(utils::ERROR_CODE_RIGID_BODY_TREE);
+        }
+
+        let parent = self.body_id2ptr[id].borrow().parent_index;
+        return parent;
+    }
+
+    /// Compute all transformation matrix from body frame `{B}` to world
+    /// frame `{W}`.
     pub fn forward_kinematics(&self, qpos: &VectorDf) -> Vec<Matrix4f> {
         let n = self.num_body();
         let mut tforms = vec![Matrix4f::identity(); n];
@@ -151,9 +194,9 @@ impl RigidBodyTree {
 
         for i in 0..n {
             let body = self.body_id2ptr[i].borrow();
-            let pnum = body.joint.qpos_dof();
-            let qi = body.joint.get_qpos_from_vec(qpos, k);
-            tforms[i] = body.joint.tform_body2parent(qi);
+            let pnum = body.qpos_dof();
+            let qi = body.get_qpos_from_vec(qpos, k);
+            tforms[i] = body.tform_body2parent(qi);
 
             k = k + pnum;
             if let Some(parent_idx) = body.parent_index {
@@ -162,6 +205,76 @@ impl RigidBodyTree {
         }
 
         return tforms;
+    }
+
+    /// Compute the shortest kinematic path from body `from` to body
+    /// `to` in the rigid body tree.
+    pub fn kinematics_tree_path(&self, from: &str, to: &str) -> Vec<usize> {
+        let id_from = self.body_index_from_name(from);
+        let id_to = self.body_index_from_name(to);
+
+        let mut path = Vec::new();
+        let id_larger = max(id_to, id_from);
+        let id_smaller = min(id_to, id_from);
+        let mut curr = id_larger;
+        path.push(curr);
+        while curr > id_smaller {
+            if let Some(parent) = self.parent_index(curr) {
+                curr = parent;
+                path.push(curr);
+            } else {
+                break;
+            }
+        }
+
+        if curr != id_smaller {
+            return Vec::new();
+        }
+
+        if id_to > id_from {
+            path.reverse();
+        }
+        return path;
+    }
+
+    /// Get the transform T that converts points originally expressed
+    /// in `{from}` frame to `{to}` frame
+    pub fn get_transform(&self, qpos: &VectorDf, from: &str, to: &str) -> Matrix4f {
+        let tforms = self.forward_kinematics(qpos);
+
+        let id_from = self.body_index_from_name(from);
+        let tform_from2world = tforms[id_from];
+        let id_to = self.body_index_from_name(to);
+        let tform_to2world = tforms[id_to];
+        let tform_world2to = tform_inv(tform_to2world);
+        return tform_world2to * tform_from2world;
+    }
+
+    /// Get the transform T that converts points originally expressed
+    /// in `{from}` frame to world frame `{W}`
+    pub fn get_transform_to_world(&self, qpos: &VectorDf, from: &str) -> Matrix4f {
+        let tforms  = self.forward_kinematics(qpos);
+        let from_id = self.body_index_from_name(from);
+        return tforms[from_id];
+    }
+
+
+    /// Get all body names
+    pub fn get_body_names(&self) -> Vec<String> {
+        let mut names = Vec::new();
+        for body in self.bodies.values() {
+            names.push(body.borrow().link.name.clone());
+        }
+        return names;
+    }
+
+    /// Get base name
+    pub fn get_base_name(&self) -> Option<String> {
+        if let Some(base) = &self.base {
+            Some(base.borrow().link.name.clone())
+        } else {
+            None
+        }
     }
 
     pub fn register_scene(&mut self, scene: &mut SimScene) {
@@ -184,6 +297,7 @@ impl RigidBodyTree {
         }
     }
 }
+
 
 impl From<urdf_rs::Robot> for RigidBodyTree {
     fn from(robot: Robot) -> Self {
@@ -209,7 +323,7 @@ impl<'a> From<&'a urdf_rs::Robot> for RigidBodyTree {
                     std::process::exit(utils::ERROR_CODE_URDF_PARSING);
                 },
                 Some(body) => {
-                    body.borrow_mut().joint = Joint::from(joint);
+                    body.borrow_mut().joint = Some(Joint::from(joint));
                     model.joint.insert(joint.name.clone(), Rc::clone(body));
                 },
             }
@@ -239,15 +353,16 @@ impl<'a> From<&'a urdf_rs::Robot> for RigidBodyTree {
             }
 
             // Update DoF and num_fixed_body, num_non_fixed_body
-            match body.borrow().joint.joint_type {
-                JointType::Fixed => {
+            match body.borrow().joint_type() {
+                None => {},
+                Some(JointType::Fixed) => {
                     model.num_fixed_body += 1;
                 },
-                JointType::Prismatic { axis: _ } => {
+                Some(JointType::Prismatic { axis: _ }) => {
                     model.num_non_fixed_body += 1;
                     model.dof += 1;
                 }
-                JointType::Revolute { axis: _ } => {
+                Some(JointType::Revolute { axis: _ }) => {
                     model.num_non_fixed_body += 1;
                     model.dof += 1;
                 }
@@ -311,9 +426,9 @@ impl fmt::Display for RigidBodyTree {
             };
             table.add_row(row![
                 Cell::new(format!("{}", index).as_ref()),
-                Cell::new(&body.link.name),
-                Cell::new(&body.joint.name),
-                Cell::new(&body.joint.joint_type.to_string()),
+                Cell::new(&body.name()),
+                Cell::new(&body.joint_name()),
+                Cell::new(&body.joint_type_name()),
                 Cell::new(parent_name),
                 Cell::new(&children_names),
             ]);

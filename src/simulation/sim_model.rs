@@ -1,12 +1,19 @@
-use crate::robotics::RigidBodyTree;
+use crate::robotics::*;
 use kiss3d::window::Window;
 use kiss3d::light::Light;
 use kiss3d::scene::SceneNode;
-use crate::math::Matrix4f;
+use crate::math::{Matrix4f, Vector3f};
 use std::collections::HashMap;
 use std::rc::Rc;
 use std::cell::RefCell;
 use kiss3d::resource::Mesh;
+use crate::utils::*;
+
+pub struct Arrow {
+    pub radius: f32,
+    pub length: f32,
+    pub color: Color,
+}
 
 pub struct SimScene {
     pub window: Window,
@@ -41,6 +48,11 @@ impl SimScene {
 
     pub fn render(&mut self, model: &SimModel, data: &SimData) {
         let nodes = model.scene_nodes(data);
+    }
+
+    pub fn add_arrow(&mut self, arrow: Arrow, dir: Vector3f) {
+        let mut cy = self.window.add_cylinder(arrow.radius, arrow.length);
+        cy.set_color(1., 1., 1.);
     }
 }
 

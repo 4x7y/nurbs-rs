@@ -132,6 +132,7 @@ fn main() {
     log4rs::init_file("resource/log4rs.yaml", Default::default()).unwrap();
     info!("booting up...");
 
+
     let mut model: RigidBodyTree = RigidBodyTree::from_urdf_file("resource/sample.urdf").unwrap();
     info!("\n{}", model);
 
