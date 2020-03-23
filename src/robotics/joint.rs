@@ -119,9 +119,17 @@ impl Joint {
 
     pub fn qpos_dof(&self) -> usize {
         match self.joint_type {
-            JointType::Prismatic { .. } => { 1 },
-            JointType::Revolute { .. } => { 1 },
-            JointType::Fixed => { 0 },
+            JointType::Prismatic { .. } => 1,
+            JointType::Revolute { .. } => 1,
+            JointType::Fixed => 0,
+        }
+    }
+
+    pub fn qvel_dof(&self) -> usize {
+        match self.joint_type {
+            JointType::Prismatic { .. } => 1,
+            JointType::Revolute { .. } => 1,
+            JointType::Fixed => 0,
         }
     }
 

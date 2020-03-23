@@ -9,18 +9,24 @@ use std::fmt;
 pub struct RigidBody {
     pub link: Link,                             // link
     pub joint: Option<Joint>,                   // joint
-    pub index: Option<usize>,                   // index in the RBTree
+    pub index: usize,                           // index in the RBTree
     pub parent_index: Option<usize>,            // index of the parent in the RBTree
+    pub qvel_dof_map: (usize, usize),           //
+    pub qpos_dof_map: (usize, usize),           //
+    pub in_tree: bool,                          //
 }
 
 
 impl RigidBody {
-    pub fn from_link(link: Link) -> Self {
+    pub fn from_link(link: Link, in_tree: bool) -> Self {
         RigidBody {
             link: link,
             joint: None,
-            index: None,
+            index: 0,
             parent_index: None,
+            qvel_dof_map: (0, 0),
+            qpos_dof_map: (0, 0),
+            in_tree: in_tree,
         }
     }
 
@@ -36,6 +42,13 @@ impl RigidBody {
     }
 
     pub fn qpos_dof(&self) -> usize {
+        match &self.joint {
+            None => { 0 },
+            Some(joint) => { joint.qpos_dof() },
+        }
+    }
+
+    pub fn qvel_dof(&self) -> usize {
         match &self.joint {
             None => { 0 },
             Some(joint) => { joint.qpos_dof() },
@@ -70,6 +83,13 @@ impl RigidBody {
         }
     }
 
+    pub fn qvel_dof_map(&self) -> (usize, usize) {
+        self.qvel_dof_map
+    }
+
+    pub fn qpos_dof_map(&self) -> (usize, usize) {
+        self.qpos_dof_map
+    }
 }
 
 impl Display for RigidBody {

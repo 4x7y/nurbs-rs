@@ -148,7 +148,7 @@ impl Inertial {
             mass: mass,
             inertia_body: inertia_body,
             inertia_com: inertia_com,
-            spatial_inertia: spatial_inertia(mass, bvec_com, inertia_com),
+            spatial_inertia: spatial_inertia(mass, bvec_com, inertia_body),
         }
     }
     pub fn set_com(&mut self, origin: Vector3f) {
