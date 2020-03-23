@@ -109,31 +109,6 @@ impl RobotModel {
     }
 }
 
-impl Dynamics for RobotModel {
-    fn center_of_mass() {
-        unimplemented!()
-    }
-
-    fn mass_matrix() {
-        unimplemented!()
-    }
-
-    fn forward_dynamics() {
-        unimplemented!()
-    }
-
-    fn inverse_dynamics() {
-        unimplemented!()
-    }
-
-    fn velocity_product() {
-        unimplemented!()
-    }
-
-    fn gravity_torque() {
-        unimplemented!()
-    }
-}
 
 impl Kinematics for RobotModel {
     /// Get transform matrix between body frames

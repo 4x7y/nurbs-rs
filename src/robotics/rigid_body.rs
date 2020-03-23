@@ -8,7 +8,7 @@ use std::fmt;
 #[derive(Debug, Clone)]
 pub struct RigidBody {
     pub link: Link,                             // link
-    pub joint: Option<Joint>,                   // joint
+    pub joint: Joint,                           // joint
     pub index: usize,                           // index in the RBTree
     pub parent_index: Option<usize>,            // index of the parent in the RBTree
     pub qvel_dof_map: (usize, usize),           //
@@ -21,7 +21,7 @@ impl RigidBody {
     pub fn from_link(link: Link, in_tree: bool) -> Self {
         RigidBody {
             link: link,
-            joint: None,
+            joint: Joint::new("", JointType::Fixed),
             index: 0,
             parent_index: None,
             qvel_dof_map: (0, 0),
@@ -30,57 +30,41 @@ impl RigidBody {
         }
     }
 
+    #[inline]
     pub fn joint_name(&self) -> String {
-        match &self.joint {
-            None => "None".to_string(),
-            Some(joint) => joint.name.clone(),
-        }
+        self.joint.name.clone()
     }
 
+    #[inline]
     pub fn name(&self) -> String {
         self.link.name.clone()
     }
 
+    #[inline]
     pub fn qpos_dof(&self) -> usize {
-        match &self.joint {
-            None => { 0 },
-            Some(joint) => { joint.qpos_dof() },
-        }
+        self.joint.qpos_dof()
     }
 
+    #[inline]
     pub fn qvel_dof(&self) -> usize {
-        match &self.joint {
-            None => { 0 },
-            Some(joint) => { joint.qpos_dof() },
-        }
+        self.joint.qvel_dof()
     }
 
-    pub fn get_qpos_from_vec(&self, qpos: &VectorDf, start: usize) -> JointPosition {
-        match &self.joint {
-            None => JointPosition::Fixed,
-            Some(joint) => joint.get_qpos_from_vec(qpos, start)
-        }
+    #[inline]
+    pub fn get_qpos_from_vec(&self, qpos: &VectorDf, start: usize) -> VectorDf {
+        self.joint.get_qpos(qpos, start)
     }
 
-    pub fn joint_type(&self) -> Option<JointType> {
-        match &self.joint {
-            None => None,
-            Some(joint) => Some(joint.joint_type.clone()),
-        }
+    pub fn joint_type(&self) -> JointType {
+        self.joint.joint_type.clone()
     }
 
     pub fn joint_type_name(&self) -> String {
-        match &self.joint {
-            None => "None".to_string(),
-            Some(joint) => joint.joint_type.to_string(),
-        }
+        self.joint.joint_type.to_string()
     }
 
-    pub fn tform_body2parent(&self, qpos: JointPosition) -> Matrix4f {
-        match &self.joint {
-            None => Matrix4f::identity(),
-            Some(joint) => joint.tform_body2parent(qpos),
-        }
+    pub fn tform_body2parent(&self, qpos: &VectorDf) -> Matrix4f {
+        self.joint.tform_body2parent(qpos)
     }
 
     pub fn qvel_dof_map(&self) -> (usize, usize) {

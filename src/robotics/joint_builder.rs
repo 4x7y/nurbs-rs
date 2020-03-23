@@ -103,12 +103,14 @@ impl JointBuilder {
         let mut joint = Joint::new(&self.name, self.joint_type);
         joint.tform_jnt2parent = self.tform_jnt2parent;
         joint.qpos_limit = self.qpos_limit;
-        joint.screw_axis = match joint.joint_type {
+        joint.screw_axis = match &joint.joint_type {
             JointType::Prismatic { axis } =>
-                Vector6f::new(0., 0., 0., axis[0], axis[1], axis[2]),
+                Matrix6Df::from_row_slice(&[0., 0., 0., axis[0], axis[1], axis[2]]),
             JointType::Revolute { axis } =>
-                Vector6f::new(axis[0], axis[1], axis[2], 0., 0., 0.),
-            JointType::Fixed => Vector6f::zeros(),
+                Matrix6Df::from_row_slice(&[axis[0], axis[1], axis[2], 0., 0., 0.]),
+            JointType::Fixed => {
+                Matrix6Df::zeros(0)
+            },
         };
         joint
     }

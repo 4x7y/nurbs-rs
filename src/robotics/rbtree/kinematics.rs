@@ -12,10 +12,10 @@ impl RigidBodyTree {
         let mut k = 0;
 
         for i in 0..n {
-            let body = self.body_id2ptr[i].borrow();
+            let body = self.bodies[i].borrow();
             let pnum = body.qpos_dof();
             let qi = body.get_qpos_from_vec(qpos, k);
-            tforms[i] = body.tform_body2parent(qi);
+            tforms[i] = body.tform_body2parent(&qi);
 
             k = k + pnum;
             if let Some(parent_idx) = body.parent_index {

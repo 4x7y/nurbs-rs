@@ -24,11 +24,11 @@ impl RigidBodyTree {
             num_fixed_body: 0,
             num_non_fixed_body: 0,
             base: None,
-            bodies: HashMap::new(),
+            body_name2ptr: HashMap::new(),
             parent: HashMap::new(),
             children: HashMap::new(),
             joint: HashMap::new(),
-            body_id2ptr: Vec::new(),
+            bodies: Vec::new(),
             scene_id2ptr: Vec::new(),
             gravity: Vector3f::new(0., 0., -9.78),
         }
@@ -51,7 +51,7 @@ impl RigidBodyTree {
 
     /// Get body from RigidBodyTree
     pub fn get_body(&self, name: &str) -> RigidBody {
-        if let Some(body) = self.bodies.get(name) {
+        if let Some(body) = self.body_name2ptr.get(name) {
             let body = body.borrow();
             return body.clone();
         } else {
@@ -67,7 +67,7 @@ impl RigidBodyTree {
 
 
     /// Get joint from RigidBodyTree by name
-    pub fn get_joint(&self, name: &str) -> Option<Joint> {
+    pub fn get_joint(&self, name: &str) -> Joint {
         if let Some(body) = self.joint.get(name) {
             let body = body.borrow();
             return body.joint.clone();
@@ -85,7 +85,7 @@ impl RigidBodyTree {
 
     /// Get joint ptr from RigidBodyTree by name
     pub fn get_body_ptr(&self, name: &str) -> Rc<RefCell<RigidBody>> {
-        if let Some(body) = self.bodies.get(name) {
+        if let Some(body) = self.body_name2ptr.get(name) {
             return Rc::clone(body);
         } else {
             error!("body '{}' not found.", name);
@@ -144,14 +144,14 @@ impl RigidBodyTree {
 
     /// Get body name by it ID in rigid body tree.
     pub fn body_name(&self, id: usize) -> String {
-        self.body_id2ptr[id].borrow().link.name.to_string()
+        self.bodies[id].borrow().link.name.to_string()
     }
 
     /// Set position and orientation of bodies registered in the scene.
     pub fn render(&mut self, qpos: &VectorDf) {
         let tforms = self.forward_kinematics(qpos);
         for (i, scene_nodes) in self.scene_id2ptr.iter_mut().enumerate() {
-            let name = self.body_id2ptr[i].borrow().link.name.to_string();
+            let name = self.bodies[i].borrow().link.name.to_string();
             for node in scene_nodes.iter_mut() {
                 let tvec = Translation3f32::new(
                     tforms[i][(0, 3)] as f32, tforms[i][(1, 3)] as f32, tforms[i][(2, 3)] as f32);
@@ -169,7 +169,7 @@ impl RigidBodyTree {
 
     /// Return body index in the rigid body tree given body name.
     pub fn body_index_from_name(&self, name: &str) -> usize {
-        if let Some(body) = self.bodies.get(name) {
+        if let Some(body) = self.body_name2ptr.get(name) {
             body.borrow().index
         } else {
             error!("body name {} not found.", name);
@@ -179,12 +179,12 @@ impl RigidBodyTree {
 
     /// Return the index of parent body
     pub fn parent_index(&self, id: usize) -> Option<usize> {
-        if id >= self.body_id2ptr.len() {
+        if id >= self.bodies.len() {
             error!("body id {} not found.", id);
             std::process::exit(utils::ERROR_CODE_RIGID_BODY_TREE);
         }
 
-        let parent = self.body_id2ptr[id].borrow().parent_index;
+        let parent = self.bodies[id].borrow().parent_index;
         return parent;
     }
 
@@ -193,7 +193,7 @@ impl RigidBodyTree {
     /// Get all body names
     pub fn get_body_names(&self) -> Vec<String> {
         let mut names = Vec::new();
-        for body in self.bodies.values() {
+        for body in self.body_name2ptr.values() {
             names.push(body.borrow().link.name.clone());
         }
         return names;
@@ -209,9 +209,9 @@ impl RigidBodyTree {
     }
 
     pub fn register_scene(&mut self, scene: &mut SimScene) {
-        self.scene_id2ptr = vec![Vec::new(); self.bodies.len()];
+        self.scene_id2ptr = vec![Vec::new(); self.num_body()];
 
-        for (i, body) in self.body_id2ptr.iter().enumerate() {
+        for (i, body) in self.bodies.iter().enumerate() {
             for visual in &body.borrow().link.visuals {
                 match &visual.geometry {
                     Geometry::Mesh { filename, scale, mesh } => {

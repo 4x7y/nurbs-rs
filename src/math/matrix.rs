@@ -42,6 +42,7 @@ pub type Matrix4f = Matrix4<Scalar>;
 pub type Matrix6f = Matrix6<Scalar>;
 pub type MatrixMNf<R, C> = MatrixMN<Scalar, R, C>;
 pub type MatrixDDf = DMatrix<Scalar>;
+pub type Matrix3Df = Matrix<Scalar, U3, Dynamic, Owned<Scalar, U3, Dynamic>>;
 pub type Matrix6Df = Matrix<Scalar, U6, Dynamic, Owned<Scalar, U6, Dynamic>>;
 
 pub type Matrix3f32 = Matrix3<f32>;

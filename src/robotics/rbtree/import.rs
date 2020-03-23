@@ -17,19 +17,19 @@ impl<'a> From<&'a urdf_rs::Robot> for RigidBodyTree {
         let mut model = RigidBodyTree::new(&robot.name);
 
         for link in &robot.links {
-            model.bodies.insert(link.name.clone(), Rc::new(RefCell::new(
+            model.body_name2ptr.insert(link.name.clone(), Rc::new(RefCell::new(
                 RigidBody::from_link(Link::from(link.clone()), true))));
             model.children.insert(link.name.clone(), Vec::new());
         }
 
         for joint in &robot.joints {
-            match model.bodies.get_mut(&joint.child.link) {
+            match model.body_name2ptr.get_mut(&joint.child.link) {
                 None => {
                     error!("joint {}'s child link not found.", joint.name);
                     std::process::exit(utils::ERROR_CODE_URDF_PARSING);
                 },
                 Some(body) => {
-                    body.borrow_mut().joint = Some(Joint::from(joint));
+                    body.borrow_mut().joint = Joint::from(joint);
                     model.joint.insert(joint.name.clone(), Rc::clone(body));
                 },
             }
@@ -47,7 +47,7 @@ impl<'a> From<&'a urdf_rs::Robot> for RigidBodyTree {
 
         let mut qvel_dof = 0;
         let mut qpos_dof = 0;
-        for body_ptr in model.bodies.values() {
+        for body_ptr in model.body_name2ptr.values() {
             let body = body_ptr.borrow_mut();
 
             // Specify the base body of the rigid body tree.
@@ -66,7 +66,6 @@ impl<'a> From<&'a urdf_rs::Robot> for RigidBodyTree {
         // perform DFS to obtain the topological sort of the rigid bodies
         // and store the order in `body_id2ptr`
         if let Some(base) = &model.base {
-            model.body_id2ptr.push(Rc::clone(base));
             base.borrow_mut().index = 0;
             base.borrow_mut().parent_index = None;
 
@@ -76,12 +75,16 @@ impl<'a> From<&'a urdf_rs::Robot> for RigidBodyTree {
                 let parent = stack.pop().unwrap();
                 if let Some(children_name_vec) = model.children.get(&parent.borrow().link.name) {
                     for child_name in children_name_vec {
-                        if let Some(child_body) = model.bodies.get(child_name) {
+                        if let Some(child_body) = model.body_name2ptr.get(child_name) {
                             stack.push(Rc::clone(child_body));
-                            let index = model.body_id2ptr.len();
-                            model.body_id2ptr.push(Rc::clone(child_body));
+                            let index = model.bodies.len();
+                            model.bodies.push(Rc::clone(child_body));
                             let mut child_body = child_body.borrow_mut();
-                            child_body.parent_index = Some(parent.borrow().index);
+                            child_body.parent_index = if index == 0 {
+                                None
+                            } else {
+                                Some(parent.borrow().index)
+                            };
                             child_body.index = index;
                         }
                     }
@@ -90,20 +93,16 @@ impl<'a> From<&'a urdf_rs::Robot> for RigidBodyTree {
         }
 
         // set qpos_dof_map and qvel_dof_map
-        for body_ptr in model.body_id2ptr.iter() {
+        for body_ptr in model.bodies.iter() {
             let mut body = body_ptr.borrow_mut();
             // Update DoF and num_fixed_body, num_non_fixed_body
             match body.joint_type() {
-                None => {
-                    body.qvel_dof_map = (qvel_dof, qvel_dof);
-                    body.qpos_dof_map = (qpos_dof, qpos_dof);
-                },
-                Some(JointType::Fixed) => {
+                JointType::Fixed => {
                     model.num_fixed_body += 1;
                     body.qvel_dof_map = (qvel_dof, qvel_dof);
                     body.qpos_dof_map = (qpos_dof, qpos_dof);
                 },
-                Some(JointType::Prismatic { axis: _ }) => {
+                JointType::Prismatic { axis: _ } => {
                     model.num_non_fixed_body += 1;
                     model.dof += 1;
                     body.qvel_dof_map = (qvel_dof, qvel_dof + 1);
@@ -111,7 +110,7 @@ impl<'a> From<&'a urdf_rs::Robot> for RigidBodyTree {
                     qpos_dof += 1;
                     qvel_dof += 1;
                 }
-                Some(JointType::Revolute { axis: _ }) => {
+                JointType::Revolute { axis: _ } => {
                     model.num_non_fixed_body += 1;
                     model.dof += 1;
                     body.qvel_dof_map = (qvel_dof, qvel_dof + 1);

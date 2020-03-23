@@ -49,12 +49,12 @@ pub fn translation_from(array3: &[f64; 3]) -> na::Translation3<Scalar> {
 }
 
 /// Returns nalgebra::Unit<nalgebra::Vector3> from f64 array
-fn axis_from(array3: [f64; 3]) -> Vector3f {
-    Vector3f::new(
+fn axis_from(array3: [f64; 3]) -> Matrix3Df {
+    Matrix3Df::from_row_slice(&[
         na::convert(array3[0]),
         na::convert(array3[1]),
         na::convert(array3[2]),
-    )
+    ])
 }
 
 /// Returns nalgebra::UnitQuaternion from f64 array

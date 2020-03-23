@@ -12,7 +12,7 @@ impl fmt::Display for RigidBodyTree {
         "Joint Name", "Joint Type", "qpos Map", "qvel Map", "Parent Name", "Children Name(s)"]);
 
         let mut index = 0;
-        for body in &self.body_id2ptr {
+        for body in &self.bodies {
             let body = body.borrow();
             let name = &body.link.name;
             let none = "None".to_string();

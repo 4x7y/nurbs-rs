@@ -1,5 +1,4 @@
 pub mod link;
-pub mod tmp;
 pub mod robot_state;
 pub mod robot_model;
 pub mod dynamics;

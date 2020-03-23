@@ -9,12 +9,12 @@ use crate::robotics::sensor::SensorType::JointPos;
 use crate::utils;
 use log::{info, error};
 
-#[derive(Copy, Debug, Clone)]
+#[derive(Debug, Clone)]
 pub enum JointType {
     // sliding distance along body-fixed axis       (ndof 1)
-    Prismatic{ axis: Vector3f, },
+    Prismatic{ axis: Matrix3Df, },
     // rotation angle (rad) around body-fixed axis  (ndof 1)
-    Revolute { axis: Vector3f, },
+    Revolute { axis: Matrix3Df, },
     // fixed                                        (ndof 0)
     Fixed,
 }
@@ -57,6 +57,20 @@ pub enum JointPosition {
     Fixed,
 }
 
+#[derive(Debug, Clone)]
+pub enum JointVelocity {
+    Prismatic(Scalar),
+    Revolute(Scalar),
+    Fixed,
+}
+
+#[derive(Debug, Clone)]
+pub enum JointAcceleration {
+    Prismatic(Scalar),
+    Revolute(Scalar),
+    Fixed,
+}
+
 /// The reason of joint error
 #[derive(Debug, Clone, Fail)]
 pub enum JointError {
@@ -89,7 +103,7 @@ pub enum JointError {
 pub struct Joint {
     pub name: String,                             // name
     pub joint_type: JointType,                    // type of the joint
-    pub screw_axis: Vector6f,                     // screw axis
+    pub screw_axis: Matrix6Df,                    // screw axis
     pub qpos_home: Scalar,                        // home configuration of the joint
     pub qpos_limit: Option<Range>,                // joint position limits {None, (min, max)}
     pub qvel_limit: Option<Range>,                // joint velocity limits {None, (  0, max)}
@@ -106,7 +120,7 @@ impl Joint {
         Joint {
             name: name.into(),
             joint_type: joint_type,
-            screw_axis: Vector6f::zeros(),
+            screw_axis: Matrix6Df::zeros(1),
             qpos_home: 0.0,
             qpos_limit: None,
             qvel_limit: None,
@@ -133,37 +147,55 @@ impl Joint {
         }
     }
 
-    pub fn get_qpos_from_vec(&self, qpos: &VectorDf, start: usize) -> JointPosition {
-        match self.joint_type {
+    pub fn get_qpos(&self, qpos: &VectorDf, start: usize) -> VectorDf {
+        match &self.joint_type {
             JointType::Prismatic { .. } => {
-                JointPosition::Prismatic(qpos[start])
+                VectorDf::from_element(1, qpos[start])
             },
             JointType::Revolute { .. } => {
-                JointPosition::Revolute(qpos[start])
+                VectorDf::from_element(1, qpos[start])
             },
             JointType::Fixed => {
-                JointPosition::Fixed
+                VectorDf::zeros(0)
             },
         }
     }
 
-    pub fn tform_joint(&self, qpos: JointPosition) -> Matrix4f {
+    pub fn get_qvel(&self, qvel: &VectorDf, start: usize) -> VectorDf {
         match self.joint_type {
+            JointType::Prismatic { .. } => {
+                VectorDf::from_element(1, qvel[start])
+            },
+            JointType::Revolute { .. } => {
+                VectorDf::from_element(1, qvel[start])
+            },
+            JointType::Fixed => {
+                VectorDf::zeros(0)
+            },
+        }
+    }
+
+    pub fn get_qacc(&self, qacc: &VectorDf, start: usize) -> VectorDf {
+        match self.joint_type {
+            JointType::Prismatic { .. } => {
+                VectorDf::from_element(1, qacc[start])
+            },
+            JointType::Revolute { .. } => {
+                VectorDf::from_element(1, qacc[start])
+            },
+            JointType::Fixed => {
+                VectorDf::zeros(0)
+            },
+        }
+    }
+
+    pub fn tform_joint(&self, qpos: &VectorDf) -> Matrix4f {
+        match &self.joint_type {
             JointType::Prismatic { axis } => {
-                if let JointPosition::Prismatic(q) = qpos {
-                    trvec2tform(axis * q)
-                } else {
-                    error!("Joint type not match in tform_joint.");
-                    std::process::exit(utils::ERROR_CODE_JOINT_TYPE_NOT_MATCH);
-                }
+                trvec2tform(Vector3f::new(axis[0], axis[1], axis[2]) * qpos)
             },
             JointType::Revolute { axis } => {
-                if let JointPosition::Revolute(q) = qpos {
-                    axang2tform(axis, q)
-                } else {
-                    error!("Joint type not match in tform_joint.");
-                    std::process::exit(utils::ERROR_CODE_JOINT_TYPE_NOT_MATCH);
-                }
+                axang2tform(Vector3f::new(axis[0], axis[1], axis[2]), qpos[0])
             },
             JointType::Fixed => {
                 Matrix4f::identity()
@@ -171,7 +203,7 @@ impl Joint {
         }
     }
 
-    pub fn tform_body2parent(&self, qpos: JointPosition) -> Matrix4f {
+    pub fn tform_body2parent(&self, qpos: &VectorDf) -> Matrix4f {
         self.tform_jnt2parent * self.tform_joint(qpos) * self.tform_child2jnt
     }
 

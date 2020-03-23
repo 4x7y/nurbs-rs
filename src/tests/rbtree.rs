@@ -19,7 +19,7 @@ fn test_nums() {
     assert_eq!(rbtree.num_joint(), 42);
     assert_eq!(rbtree.num_fixed_body(), 12);
     assert_eq!(rbtree.num_non_fixed_body(), 30);
-    assert_eq!(rbtree.num_body(), 43);
+    assert_eq!(rbtree.num_body(), 42);
     assert_eq!(rbtree.num_dof(), 30);
 }
 
@@ -28,11 +28,11 @@ fn test_kinematics_tree_path () {
     let rbtree = setup();
 
     let path = rbtree.kinematics_tree_path("world", "rh_mfdistal");
-    let path_true = vec![0, 1, 2, 4, 5, 6, 7, 8, 9, 11, 12, 13, 17, 35, 36, 37];
+    let path_true = vec![0, 1, 3, 4, 5, 6, 7, 8, 10, 11, 12, 16, 34, 35, 36];
     assert_eq!(path, path_true);
 
     let path = rbtree.kinematics_tree_path("rh_mfdistal", "world");
-    let path_true = vec![37, 36, 35, 17, 13, 12, 11, 9, 8, 7, 6, 5, 4, 2, 1, 0];
+    let path_true = vec![36, 35, 34, 16, 12, 11, 10, 8, 7, 6, 5, 4, 3, 1, 0];
     assert_eq!(path, path_true);
 
     let path = rbtree.kinematics_tree_path("rh_mfdistal", "rh_rfdistal");
@@ -40,14 +40,14 @@ fn test_kinematics_tree_path () {
     assert_eq!(path, path_true);
 
     let path = rbtree.kinematics_tree_path("rh_mfdistal", "rh_mfdistal");
-    let path_true = vec![37];
+    let path_true = vec![36];
     assert_eq!(path, path_true);
 
     let path = rbtree.kinematics_tree_path("rh_mfdistal", "rh_palm");
-    let path_true = vec![37, 36, 35, 17, 13];
+    let path_true = vec![36, 35, 34, 16, 12];
     assert_eq!(path, path_true);
 
     let path = rbtree.kinematics_tree_path("rh_palm", "rh_mfdistal");
-    let path_true = vec![13, 17, 35, 36, 37];
+    let path_true = vec![12, 16, 34, 35, 36];
     assert_eq!(path, path_true);
 }
