@@ -132,7 +132,6 @@ fn main() {
     log4rs::init_file("resource/log4rs.yaml", Default::default()).unwrap();
     info!("booting up...");
 
-
     let mut model: RigidBodyTree = RigidBodyTree::from_urdf_file("resource/sample.urdf").unwrap();
     info!("\n{}", model);
 
@@ -140,10 +139,6 @@ fn main() {
     model.register_scene(&mut scene);
 
     let qpos_home = model.home_configuration();
-
-    let mass_matrix = model.mass_matrix(&qpos_home);
-    info!("\n{:.4}", mass_matrix);
-
     let mut qpos_incs = VectorDf::zeros(model.num_dof());
     qpos_incs[0] = 0.01;
     qpos_incs[1] = -0.01;

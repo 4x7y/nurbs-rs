@@ -29,6 +29,7 @@
       <w>fext</w>
       <w>hfield</w>
       <w>indx</w>
+      <w>iner</w>
       <w>isometry</w>
       <w>jacobian</w>
       <w>jcab</w>
@@ -68,6 +69,7 @@
       <w>svel</w>
       <w>tform</w>
       <w>tforms</w>
+      <w>torq</w>
       <w>trvec</w>
       <w>tvec</w>
       <w>ulmt</w>
