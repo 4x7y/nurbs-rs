@@ -30,7 +30,7 @@ impl RigidBodyTree {
             joint: HashMap::new(),
             bodies: Vec::new(),
             scene_id2ptr: Vec::new(),
-            gravity: Vector3f::new(0., 0., -9.78),
+            gravity: Vector3f::new(0., 0., -9.8),
         }
     }
 

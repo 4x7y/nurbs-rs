@@ -96,6 +96,10 @@ impl RigidBodyTree {
         unimplemented!()
     }
 
+    pub fn forward_dynamics_crb(&self, qpos: &VectorDf, qvel: &VectorDf,
+                                torq: &VectorDf, fext: &Vec<Vector6f>) -> VectorDf {
+        unimplemented!()
+    }
 
     /// Inverse dynamics
     ///
