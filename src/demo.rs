@@ -143,18 +143,25 @@ fn main() {
     let mass_matrix = model.mass_matrix(&qpos_home);
     info!("\n{:.4}", mass_matrix);
 
+    let res = model.mass_matrix_internal(&qpos_home);
+    info!("\n{:?}", res.1);
+
     let fext = vec![Vector6f::zeros(); model.num_body()];
     let torq = model.inverse_dynamics(&qpos_home, &qpos_home, &qpos_home, &fext);
     info!("\n{:.8}", torq);
 
-    let mut qpos_incs = VectorDf::zeros(model.num_dof());
-    qpos_incs[0] = 0.01;
-    qpos_incs[1] = -0.01;
-    qpos_incs[2] = 0.01;
-    let mut qpos = qpos_home;
+    let qacc = model.forward_dynamics_crb(&qpos_home, &qpos_home, &torq, &fext);
+    info!("\n{:.8}", qacc);
 
+    let mut qpos = qpos_home;
+    let mut qvel = VectorDf::zeros(model.num_dof());
+    let torq = VectorDf::zeros(model.num_dof());
     while scene.window.render() {
-        qpos = qpos + &qpos_incs;
+        let qacc = model.forward_dynamics_crb(&qpos, &qvel, &torq, &fext);
+        qvel = qvel + &qacc * 0.03;
+        qpos = qpos + &qvel * 0.03;
+
+        info!("{:.3}", qacc.transpose());
         model.render(&qpos);
         sleep(30);
     }

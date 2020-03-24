@@ -1,5 +1,6 @@
 use crate::robotics::*;
 use crate::math::{VectorDf, MatrixDDf, Vector6f, Matrix6f};
+use crate::robotics::special_cholesky::special_cholesky;
 
 impl RigidBodyTree {
 
@@ -8,14 +9,17 @@ impl RigidBodyTree {
     /// # Arguments
     ///
     /// - `qpos`: joint configuration                     (np x 1)
-    fn mass_matrix_internal(&self, qpos: &VectorDf) -> MatrixDDf {
+    pub fn mass_matrix_internal(&self, qpos: &VectorDf) -> (MatrixDDf, Vec<Option<usize>>) {
         let nb = self.num_body();
         // composite-rigid-body inertia
         let mut iner_comp = vec![Matrix6f::zeros(); nb];
         // spatial transform from parent of body i to body i
         let mut xforms    = vec![Matrix6f::zeros(); nb];
-        let nv = self.num_dof();
-        let mut mass_mat = MatrixDDf::zeros(nv, nv);
+        let     nv        = self.num_dof();
+        let mut mmat      = MatrixDDf::zeros(nv, nv);
+
+        let mut lambda_   = vec![Option::None; nb];
+        let mut lambda    = vec![Option::None; nv];
 
         // preparation
         let mut k = 0;
@@ -35,13 +39,22 @@ impl RigidBodyTree {
             let body = self.bodies[i].borrow();
             if let Some(pid) = body.parent_index {
                 iner_comp[pid] = iner_comp[pid] + xforms[i].transpose() * iner_comp[i] * xforms[i];
+
+                lambda_[i] = Some(pid);
+                while let Some(lambda_i) = lambda_[i] {
+                    if let JointType::Fixed = self.bodies[lambda_i].borrow().joint_type() {
+                        lambda_[i] = self.bodies[lambda_i].borrow().parent_index;
+                    } else {
+                        break;
+                    }
+                }
             }
 
             let a = body.qvel_dof_map();
             if a.1 > a.0 {
                 let si = &body.joint.screw_axis;
                 let mut fi = iner_comp[i] * si;
-                mass_mat.slice_mut((a.0, a.0), (a.1 - a.0, a.1 - a.0))
+                mmat.slice_mut((a.0, a.0), (a.1 - a.0, a.1 - a.0))
                     .copy_from(&(si.transpose() * &fi));
 
                 fi = xforms[i].transpose() * &fi;
@@ -55,9 +68,9 @@ impl RigidBodyTree {
                     let b = body_j.qvel_dof_map();
                     if b.0 < b.1 {
                         let mass_ji = sj.transpose() * &fi;
-                        mass_mat.slice_mut((b.0, a.0), (b.1 - b.0, a.1 - a.0))
+                        mmat.slice_mut((b.0, a.0), (b.1 - b.0, a.1 - a.0))
                             .copy_from(&mass_ji);
-                        mass_mat.slice_mut((a.0, b.0), (a.1 - a.0, b.1 - b.0))
+                        mmat.slice_mut((a.0, b.0), (a.1 - a.0, b.1 - b.0))
                             .copy_from(&mass_ji.transpose());
                     }
                     fi = xforms[j].transpose() * &fi;
@@ -67,7 +80,31 @@ impl RigidBodyTree {
             }
         }
 
-        return mass_mat;
+        // post-processing lambda vector
+        // lambda_[i] is either the index of the first non-fixed parent of
+        // body i or 0 (base)
+        for i in 0..nb {
+            if let JointType::Fixed = self.bodies[i].borrow().joint_type() {
+                // skip fixed joint
+            } else {
+                let a = self.bodies[i].borrow().qvel_dof_map();
+                for k in a.0..a.1 {
+                    lambda[k] = if k == 0 {
+                        None
+                    } else {
+                        Some(k - 1)
+                    }
+                }
+                if let Some(lambda_i) = lambda_[i] {
+                    let b = self.bodies[lambda_i].borrow().qvel_dof_map();
+                    lambda[a.0] = if b.1 == 0 { None } else { Some(b.1 - 1) };
+                } else{
+                    lambda[a.0] = None;
+                }
+            }
+        }
+
+        return (mmat, lambda);
     }
 
     /// Compute the mass matrix, `M`, of the robot in the configuration `q`
@@ -76,7 +113,7 @@ impl RigidBodyTree {
     ///
     /// - `qpos`: joint configuration                     (np x 1)
     pub fn mass_matrix(&self, qpos: &VectorDf) -> MatrixDDf {
-        return self.mass_matrix_internal(qpos);
+        return self.mass_matrix_internal(qpos).0;
     }
 
     /// Compute resultant joint acceleration given joint torques and states.
@@ -96,9 +133,42 @@ impl RigidBodyTree {
         unimplemented!()
     }
 
+    /// Given the robot state (joint positions and velocities), joint input
+    /// (joint torques), and the external forces on each body, compute the
+    /// resultant joint accelerations using Composite Rigid Body Algorithm.
     pub fn forward_dynamics_crb(&self, qpos: &VectorDf, qvel: &VectorDf,
                                 torq: &VectorDf, fext: &Vec<Vector6f>) -> VectorDf {
-        unimplemented!()
+        let res = self.mass_matrix_internal(qpos);
+        let mmat   = res.0;
+        let lambda = res.1;
+
+        let nv   = self.num_dof();
+        let bias = self.inverse_dynamics(qpos, qvel, &VectorDf::zeros(nv), fext);
+        let mut y = torq - &bias;
+        let lmat = special_cholesky(&mmat, &lambda);
+
+        // specialized in-site backward substitution
+        // L^{-T}
+        for i in (0..nv).rev() {
+            y[i] = y[i] / lmat[(i, i)];
+            let mut j_opt = lambda[i];
+            while let Some(j) = j_opt {
+                y[j] = y[j] - y[i] * lmat[(i, j)];
+                j_opt = lambda[j];
+            }
+        }
+
+        // L^{-1}
+        for i in 0..nv {
+            let mut j_opt = lambda[i];
+            while let Some(j) = j_opt {
+                y[i] = y[i] - lmat[(i, j)] * y[j];
+                j_opt = lambda[j];
+            }
+            y[i] = y[i] / lmat[(i, i)]
+        }
+
+        return y;
     }
 
     /// Inverse dynamics

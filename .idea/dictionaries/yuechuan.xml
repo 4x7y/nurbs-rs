@@ -36,8 +36,10 @@
       <w>jnts</w>
       <w>knotvec</w>
       <w>llmt</w>
+      <w>lmat</w>
       <w>lspb</w>
       <w>matx</w>
+      <w>mmat</w>
       <w>nalgebra</w>
       <w>nbodies</w>
       <w>nbody</w>

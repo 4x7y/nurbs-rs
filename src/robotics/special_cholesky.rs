@@ -4,35 +4,36 @@ use crate::math::{MatrixDDf, VectorDf};
 /// tree inertia matrix ONLY.
 ///
 /// # Arguments
-/// The first input argument, inertiaMatrix, is
-/// a valid vNum x vNum inertia matrix of a rigid body tree, where vNum is
-/// the number of velocity variables. The second input, lambda, is a vNum x 1
-/// vector. lambda(i) corresponds to the index of the last non-zero of row
-/// i below the main diagonal. The output, L, is a lower trangular matrix
+///
+/// - `mmat`: inertia matrix of a rigid body tree               (nv x nv)
+/// - `lambda`: index of the last non-zero of row i below the   (nv x 1)
+///             main diagonal.
+///
+/// The output, L, is a lower triangular matrix
 /// that preserves the sparsity of inertiaMatrix, and L'*L = inertiaMatrix.
-pub fn special_cholesky(inertia: &MatrixDDf, lambda: &Vec<usize>) -> MatrixDDf {
-    let n = inertia.ncols();
-    let mut H = inertia.clone_owned();
+pub fn special_cholesky(mmat: &MatrixDDf, lambda: &Vec<Option<usize>>) -> MatrixDDf {
+    let nv = mmat.ncols();
+    let mut mmat = mmat.clone_owned();
 
-    for i in (0..n).rev() {
-        H[(i, i)] = H[(i, i)].sqrt();
-        let mut k = lambda[i];
-        while k > 0 {
-            H[(i, k)] = H[(i, k)] / H[(i, i)];
-            k = lambda[k];
+    for i in (0..nv).rev() {
+        mmat[(i, i)] = mmat[(i, i)].sqrt();
+        let mut k_opt = lambda[i];
+        while let Some(k) = k_opt {
+            mmat[(i, k)] = mmat[(i, k)] / mmat[(i, i)];
+            k_opt = lambda[k];
         }
 
-        k = lambda[i];
-        while k > 0 {
-            let mut j = k;
-            while j > 0 {
-                H[(k, j)] = H[(k, j)] - H[(i, k)] * H[(i, j)];
-                j = lambda[j];
+        k_opt = lambda[i];
+        while let Some(k) = k_opt {
+            let mut j_opt = Some(k);
+            while let Some(j) = j_opt {
+                mmat[(k, j)] = mmat[(k, j)] - mmat[(i, k)] * mmat[(i, j)];
+                j_opt = lambda[j];
             }
-            k = lambda[k];
+            k_opt = lambda[k];
         }
     }
 
-    return H.lower_triangle();
+    return mmat.lower_triangle();
 }
 
