@@ -208,6 +208,18 @@ impl RigidBodyTree {
         }
     }
 
+    pub fn joint_names_non_fixed(&self) -> Vec<String> {
+        let mut names = Vec::new();
+        for body in self.bodies.iter() {
+            if let JointType::Fixed = body.borrow().joint_type() {
+                // skip fixed joint
+            } else {
+                names.push(body.borrow().joint_name());
+            }
+        }
+        return names;
+    }
+
     pub fn register_scene(&mut self, scene: &mut SimScene) {
         self.scene_id2ptr = vec![Vec::new(); self.num_body()];
 

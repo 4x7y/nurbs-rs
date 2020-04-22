@@ -5,7 +5,7 @@
 
 extern crate nalgebra as na;
 
-use crobot::geometry::{bspline, DoubleEdgeList};
+use crobot::geometry::{bspline, DoubleEdgeList, nurbs};
 use kiss3d::light::Light;
 use kiss3d::window::Window;
 use kiss3d::resource::Mesh;
@@ -20,84 +20,89 @@ use crobot::robotics::RigidBodyTree;
 use crobot::utils::{read_stl, load_mesh};
 use std::fs::OpenOptions;
 use crobot::simulation::sim_model::SimScene;
+use crobot::geometry::bbox::*;
 
 fn sleep(millis: u64) {
     let duration = time::Duration::from_millis(millis);
     thread::sleep(duration);
 }
 
-fn bspline_test() {
+fn nurbs_test() {
 
     let control_points = vec![
-        Vector3f::new(0.0, 0.0,  0.0),
-        Vector3f::new(0.0, 4.0,  0.0),
-        Vector3f::new(0.0, 8.0, -3.0),
-        Vector3f::new(2.0, 0.0,  6.0),
-        Vector3f::new(2.0, 4.0,  0.0),
-        Vector3f::new(2.0, 8.0,  0.0),
-        Vector3f::new(4.0, 0.0,  0.0),
-        Vector3f::new(4.0, 4.0,  0.0),
-        Vector3f::new(4.0, 8.0,  3.0),
-        Vector3f::new(6.0, 0.0,  0.0),
-        Vector3f::new(6.0, 4.0, -3.0),
-        Vector3f::new(6.0, 8.0,  0.0),
+        Vector3f::new(-25.0, -25.0, -10.0),
+        Vector3f::new(-25.0, -15.0,  -5.0),
+        Vector3f::new(-25.0,  -5.0,   0.0),
+        Vector3f::new(-25.0,   5.0,   0.0),
+        Vector3f::new(-25.0,  15.0,  -5.0),
+        Vector3f::new(-25.0,  25.0, -10.0),
+        Vector3f::new(-15.0, -25.0,  -8.0),
+        Vector3f::new(-15.0, -15.0,  -4.0),
+        Vector3f::new(-15.0,  -5.0,  -4.0),
+        Vector3f::new(-15.0,   5.0,  -4.0),
+        Vector3f::new(-15.0,  15.0,  -4.0),
+        Vector3f::new(-15.0,  25.0,  -8.0),
+        Vector3f::new( -5.0, -25.0,  -5.0),
+        Vector3f::new( -5.0, -15.0,  -3.0),
+        Vector3f::new( -5.0,  -5.0,  -8.0),
+        Vector3f::new( -5.0,   5.0,  -8.0),
+        Vector3f::new( -5.0,  15.0,  -3.0),
+        Vector3f::new( -5.0,  25.0,  -5.0),
+        Vector3f::new(  5.0, -25.0,  -3.0),
+        Vector3f::new(  5.0, -15.0,  -2.0),
+        Vector3f::new(  5.0,  -5.0,  -8.0),
+        Vector3f::new(  5.0,   5.0,  -8.0),
+        Vector3f::new(  5.0,  15.0,  -2.0),
+        Vector3f::new(  5.0,  25.0,  -3.0),
+        Vector3f::new( 15.0, -25.0,  -8.0),
+        Vector3f::new( 15.0, -15.0,  -4.0),
+        Vector3f::new( 15.0,  -5.0,  -4.0),
+        Vector3f::new( 15.0,   5.0,  -4.0),
+        Vector3f::new( 15.0,  15.0,  -4.0),
+        Vector3f::new( 15.0,  25.0,  -8.0),
+        Vector3f::new( 25.0, -25.0, -10.0),
+        Vector3f::new( 25.0, -15.0,  -5.0),
+        Vector3f::new( 25.0,  -5.0,   0.0),
+        Vector3f::new( 25.0,   5.0,   0.0),
+        Vector3f::new( 25.0,  15.0,  -5.0),
+        Vector3f::new( 25.0,  25.0, -10.0),
     ];
     let knot_vector_u = vec![
-        0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0,
+        0.0, 0.0, 0.0, 0.0, 0.33, 0.66, 1.0, 1.0, 1.0, 1.0
     ];
     let knot_vector_v = vec![
-        0.0, 0.0, 0.0, 1.0, 1.0, 1.0,
+        0.0, 0.0, 0.0, 0.0, 0.33, 0.66, 1.0, 1.0, 1.0, 1.0
     ];
+    let mut weight = vec![1.; 36];
+    for i in 18..36 {
+        weight[i] = 20.;
+    }
 
-    let surface = bspline::BSplineSurface::new(
+    let surface = nurbs::NurbsSurface::new(
         control_points,
         knot_vector_u,
         knot_vector_v,
         3,               // degree_u
-        2,               // degree_v
-        4,               // size_u
-        3,               // size_v
+        3,               // degree_v
+        6,               // size_u
+        6,               // size_v
+        weight,
     );
 
-    let mut vertices = Vec::new();
-    let mut indices = Vec::new();
-    for i in 0u16..100 {
-        for j in 0u16..100 {
-            let u = i as Scalar / 100.0;
-            let v = j as Scalar / 100.0;
-            let coord = surface.evaluate_single(u, v);
-            vertices.push(Point3::new(
-                coord[0] as f32, coord[1] as f32, coord[2] as f32));
+    let mut bbox = BoundingBox::from(&surface);
+    println!("{}", bbox);
 
-            if i > 0 && j > 0 {
-                let idx_1 = i * 100 + j;
-                let idx_2 = (i - 1) * 100 + j;
-                let idx_3 = i * 100 + (j - 1);
-                indices.push(Point3::new(idx_1, idx_2, idx_3))
-            }
+    let mut scene = SimScene::new("[ME 625] B-Spline Surface Demo");
+    bbox.register_scene(&mut scene);
 
-            if i < 99 && j < 99 {
-                let idx_1 = i * 100 + j;
-                let idx_2 = (i + 1) * 100 + j;
-                let idx_3 = i * 100 + (j + 1);
-                indices.push(Point3::new(idx_1, idx_2, idx_3))
-            }
-        }
-    }
+    let mesh = surface.get_mesh();
+    let mut d = scene.window.add_mesh(mesh, Vector3::new(1.0, 1.0, 1.0));
+    d.set_color(1.0, 0.0, 0.0);
+    d.enable_backface_culling(false);
 
-    let mesh = Rc::new(RefCell::new(Mesh::new(
-        vertices, indices, None, None, false,
-    )));
-
-    let mut window = Window::new("[ME 625] B-Spline Surface Demo");
-    window.set_light(Light::StickToCamera);
-
-    let mut c = window.add_mesh(mesh, Vector3::new(1.0, 1.0, 1.0));
-    c.set_color(1.0, 0.0, 0.0);
-    c.enable_backface_culling(false);
-
-    while window.render() {
+    while scene.render() {
         sleep(30);
+        bbox.render();
     }
 }
 
@@ -126,9 +131,7 @@ fn dcel_test() {
     println!("{}", vech);
 }
 
-
-
-fn main() {
+fn sim_test() {
     log4rs::init_file("resource/log4rs.yaml", Default::default()).unwrap();
     info!("booting up...");
 
@@ -137,6 +140,9 @@ fn main() {
 
     let mut scene = SimScene::new("Demo");
     model.register_scene(&mut scene);
+    // let mut h = scene.window.add_mesh(bspline_test(), Vector3::new(1.0, 1.0, 1.0));
+    // h.set_color(1.0, 0.0, 0.0);
+    // h.enable_backface_culling(false);
 
     let qpos_home = model.home_configuration();
 
@@ -150,19 +156,35 @@ fn main() {
     let torq = model.inverse_dynamics(&qpos_home, &qpos_home, &qpos_home, &fext);
     info!("\n{:.8}", torq);
 
+    let torq = VectorDf::repeat(model.num_dof(), 1.);
     let qacc = model.forward_dynamics_crb(&qpos_home, &qpos_home, &torq, &fext);
-    info!("\n{:.8}", qacc);
+    info!("qacc [CRB] = \n{:.4}", qacc / 100000.0);
+    let qacc = model.forward_dynamics_ab(&qpos_home, &qpos_home, &torq, &fext);
+    info!("qacc [AB] = \n{:.4}", qacc / 100000.0);
+
+    info!("{:?}", model.joint_names_non_fixed());
 
     let mut qpos = qpos_home;
+    let mut qpos_inc = qpos.clone_owned();
+    qpos_inc[0] = 0.001;
+    qpos_inc[1] = 0.001;
+    qpos_inc[2] = -0.001;
     let mut qvel = VectorDf::zeros(model.num_dof());
     let torq = VectorDf::zeros(model.num_dof());
-    while scene.window.render() {
-        let qacc = model.forward_dynamics_crb(&qpos, &qvel, &torq, &fext);
-        qvel = qvel + &qacc * 0.03;
-        qpos = qpos + &qvel * 0.03;
 
-        info!("{:.3}", qacc.transpose());
+    let dt = 0.002;
+    let mut t = 0.0;
+    while scene.window.render() {
+        let qacc = model.forward_dynamics_ab(&qpos, &qvel, &torq, &fext);
+        qvel = qvel + &qacc * dt;
+        qpos = qpos + &qvel * dt;
         model.render(&qpos);
-        sleep(30);
+        t += dt;
     }
+}
+
+
+fn main() {
+    nurbs_test();
+    // sim_test();
 }

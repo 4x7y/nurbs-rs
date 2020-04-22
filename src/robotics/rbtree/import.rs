@@ -4,6 +4,10 @@ use std::cell::RefCell;
 use std::rc::Rc;
 use log::error;
 use crate::utils;
+use rand::distributions::uniform::SampleBorrow;
+
+type RigidBodyPtr = Rc<RefCell<RigidBody>>;
+
 
 impl From<urdf_rs::Robot> for RigidBodyTree {
     fn from(robot: Robot) -> Self {
@@ -68,24 +72,31 @@ impl<'a> From<&'a urdf_rs::Robot> for RigidBodyTree {
         if let Some(base) = &model.base {
             base.borrow_mut().index = 0;
             base.borrow_mut().parent_index = None;
+            base.borrow_mut().is_base = true;
+            let mut stack = Vec::<(RigidBodyPtr, Option<RigidBodyPtr>)>::new();
+            stack.push((Rc::clone(base), None));
 
-            let mut stack = Vec::new();
-            stack.push(Rc::clone(base));
+
             while !stack.is_empty() {
-                let parent = stack.pop().unwrap();
-                if let Some(children_name_vec) = model.children.get(&parent.borrow().link.name) {
-                    for child_name in children_name_vec {
+                let pair = stack.pop().unwrap();
+                let curr = pair.0;
+
+                if let Some(parent) = &pair.1 {
+                    let index = model.bodies.len();
+                    model.bodies.push(Rc::clone(&curr));
+                    curr.borrow_mut().parent_index = if index == 0 {
+                        None
+                    } else {
+                        Some(parent.borrow().index)
+                    };
+                    curr.borrow_mut().index = index;
+                }
+
+                let curr_name = &curr.borrow().link.name;
+                if let Some(child_name_vec) = model.children.get(curr_name) {
+                    for child_name in child_name_vec {
                         if let Some(child_body) = model.body_name2ptr.get(child_name) {
-                            stack.push(Rc::clone(child_body));
-                            let index = model.bodies.len();
-                            model.bodies.push(Rc::clone(child_body));
-                            let mut child_body = child_body.borrow_mut();
-                            child_body.parent_index = if index == 0 {
-                                None
-                            } else {
-                                Some(parent.borrow().index)
-                            };
-                            child_body.index = index;
+                            stack.push((Rc::clone(child_body), Some(Rc::clone(&curr))));
                         }
                     }
                 };

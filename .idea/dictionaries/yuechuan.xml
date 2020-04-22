@@ -19,6 +19,7 @@
       <w>crba</w>
       <w>crobot</w>
       <w>cspace</w>
+      <w>ctrlpt</w>
       <w>ctrlpts</w>
       <w>dcel</w>
       <w>ders</w>
@@ -68,6 +69,7 @@
       <w>rodrigues</w>
       <w>rotm</w>
       <w>sacc</w>
+      <w>schur</w>
       <w>sfrc</w>
       <w>svel</w>
       <w>tform</w>
@@ -76,7 +78,9 @@
       <w>trvec</w>
       <w>tvec</w>
       <w>ulmt</w>
+      <w>unpermute</w>
       <w>urdf</w>
+      <w>vals</w>
       <w>vecs</w>
       <w>velc</w>
       <w>velocimeter</w>

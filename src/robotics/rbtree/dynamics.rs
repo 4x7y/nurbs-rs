@@ -171,6 +171,118 @@ impl RigidBodyTree {
         return y;
     }
 
+
+    /// Forward dynamics (Articulated Body Algorithm)
+    ///
+    /// Given the robot state (joint positions and velocities), joint input
+    /// (joint torques), and the external forces on each body, compute the
+    /// resultant joint accelerations using Articulated Body Algorithm.
+    pub fn forward_dynamics_ab(&self, qpos: &VectorDf, qvel: &VectorDf,
+                               torq: &VectorDf, fext: &Vec<Vector6f>) -> VectorDf {
+        let a0 = Vector6f::new(
+            0., 0., 0.,
+            -self.gravity[0], -self.gravity[1], -self.gravity[2]);
+        let nb = self.num_body();
+        let nv = self.num_dof();
+
+        let mut xvel        = vec![Vector6f::zeros(); nb];  // spatial velocity for each body
+        let mut xacc        = vec![Vector6f::zeros(); nb];  // spatial acceleration for each body
+        let mut qacc        = VectorDf::zeros(nv);          // joint acceleration
+        let mut xfrc_bias   = vec![Vector6f::zeros(); nb];  // spatial accelerations due to coriolis effect for each body
+        let mut xint_ab     = vec![Matrix6f::zeros(); nb];  // articulated-body inertia for each body
+        let mut xfrc_ab     = vec![Vector6f::zeros(); nb];  // bias force for each body
+        let mut xforms      = vec![Matrix6f::zeros(); nb];  // spatial transform from body parent(i) to body i
+        let mut xforms_tree = vec![Matrix6f::zeros(); nb];  // spatial transform from body i to base
+
+        // outward
+        for i in 0..nb {
+            let body = self.bodies[i].borrow();
+            let joint = &body.joint;
+
+            let mut vj = Vector6f::zeros();
+            let      a = body.qpos_dof_map;
+            let      b = body.qvel_dof_map;
+
+            if let JointType::Fixed = body.joint_type() {
+            } else {
+                let si = &joint.screw_axis;
+                let qvel_i = joint.get_qvel(&qvel, b.0);
+                let qacc_i = joint.get_qacc(&qacc, b.0);
+                    vj = si * qvel_i;
+            }
+            let qpos_i = joint.get_qpos(&qpos, a.0);
+            let tform = body.joint.tform_body2parent(&qpos_i);
+
+            let tform_inv = tform_inv(tform);
+            xforms[i] = tform_to_spatial_xform(tform_inv);
+
+            if let Some(pid) = body.parent_index {
+                xvel[i] = xforms[i] * xvel[pid] + vj;
+                xforms_tree[i] = xforms_tree[pid] * tform_to_spatial_xform(tform);
+            } else {
+                xvel[i] = vj;
+                xforms_tree[i] = tform_to_spatial_xform(tform);
+            }
+
+            xfrc_bias[i] = cross_motion(xvel[i], vj);
+            xint_ab[i] = body.link.inertial.spatial_inertia.clone();
+            xfrc_ab[i] = cross_force(xvel[i], xint_ab[i] * xvel[i]) - xforms_tree[i].transpose() * fext[i];
+        }
+
+        for i in (0..nb).rev() {
+            let body = self.bodies[i].borrow();
+
+            // propagating articulated body inertia across joint i
+            if let Some(pid) = body.parent_index {
+                if let JointType::Fixed = body.joint_type() {
+                    xint_ab[pid] = xint_ab[pid] + xforms[i].transpose() * xint_ab[i] * xforms[i];
+                    xfrc_ab[pid] = xfrc_ab[pid] + xforms[i].transpose() * xfrc_ab[i];
+                } else {
+                    let si = &body.joint.screw_axis;
+                    let xint = &xint_ab[i];
+                    let ui = &(xint * si);
+                    let di = si.transpose() * ui;
+                    let di_inv = &di.try_inverse().unwrap();
+                    let xint_a = xint - ui * di_inv * ui.transpose();
+                    let pi = xfrc_ab[i];
+                    let b = body.qvel_dof_map;
+                    let xfrc_a = pi + xint_a * xfrc_bias[i]
+                        + ui * di_inv * (torq.slice((b.0, 0), (b.1 - b.0, 1)) - si.transpose() * pi);
+
+                    xint_ab[pid] = xint_ab[pid] + xforms[i].transpose() * xint_a * xforms[i];
+                    xfrc_ab[pid] = xfrc_ab[pid] + xforms[i].transpose() * xfrc_a;
+                }
+            }
+        }
+
+        for i in 0..nb {
+            let body = self.bodies[i].borrow();
+
+            if let Some(pid) = body.parent_index {
+                xacc[i] = xforms[i] * xacc[pid] + xfrc_bias[i];
+            } else {
+                xacc[i] = xforms[i] * a0 + xfrc_bias[i];
+            }
+            let xint = &xint_ab[i];
+            let p = &xfrc_ab[i];
+            let b = body.qvel_dof_map;
+
+            if let JointType::Fixed = body.joint_type() {
+            } else {
+                let si = &body.joint.screw_axis;
+                let si_t = &si.transpose();
+                let torq_i = torq.slice((b.0, 0), (b.1 - b.0, 1));
+                let qacc_i =
+                    (si_t * xint * si).try_inverse().unwrap() *
+                        (torq_i - si_t * p - si_t * xint * xacc[i]);
+                qacc.slice_mut((b.0, 0), (b.1 - b.0, 1)).copy_from(&qacc_i);
+                xacc[i] = xacc[i] + si * qacc_i;
+            }
+        }
+
+        return qacc;
+    }
+
     /// Inverse dynamics
     ///
     /// Given the current (or desired) joint positions, and velocities, the
@@ -186,7 +298,9 @@ impl RigidBodyTree {
     pub fn inverse_dynamics(&self,
                             qpos: &VectorDf, qvel: &VectorDf, qacc: &VectorDf,
                             fext: &Vec<Vector6f>) -> VectorDf {
-        let sacc_g = Vector6f::new(0., 0., 0., -self.gravity[0], -self.gravity[1], -self.gravity[2]);
+        let sacc_g = Vector6f::new(
+            0., 0., 0.,
+            -self.gravity[0], -self.gravity[1], -self.gravity[2]);
         let nb = self.num_body();
         let nv = self.num_dof();
 

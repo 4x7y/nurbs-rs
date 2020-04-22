@@ -14,6 +14,7 @@ pub struct RigidBody {
     pub qvel_dof_map: (usize, usize),           //
     pub qpos_dof_map: (usize, usize),           //
     pub in_tree: bool,                          //
+    pub is_base: bool,                          //
 }
 
 
@@ -27,6 +28,7 @@ impl RigidBody {
             qvel_dof_map: (0, 0),
             qpos_dof_map: (0, 0),
             in_tree: in_tree,
+            is_base: false,
         }
     }
 

@@ -46,8 +46,8 @@ impl SimScene {
         let objs = model.renderable_objects();
     }
 
-    pub fn render(&mut self, model: &SimModel, data: &SimData) {
-        let nodes = model.scene_nodes(data);
+    pub fn render(&mut self) -> bool {
+        self.window.render()
     }
 
     pub fn add_arrow(&mut self, arrow: Arrow, dir: Vector3f) {
@@ -74,7 +74,6 @@ pub enum RenderableObject {
 }
 
 impl SimModel {
-
     pub fn new() -> Self {
         SimModel {
             rbtrees: vec![]
