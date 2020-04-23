@@ -20,7 +20,8 @@ use crobot::robotics::RigidBodyTree;
 use crobot::utils::{read_stl, load_mesh};
 use std::fs::OpenOptions;
 use crobot::simulation::sim_model::SimScene;
-use crobot::geometry::bbox::*;
+use crobot::geometry::*;
+use crobot::ccd::*;
 
 fn sleep(millis: u64) {
     let duration = time::Duration::from_millis(millis);
@@ -89,7 +90,7 @@ fn nurbs_test() {
         weight,
     );
 
-    let mut bbox = BoundingBox::from(&surface);
+    let mut bbox = OBB::from(&surface);
     println!("{}", bbox);
 
     let mut scene = SimScene::new("[ME 625] B-Spline Surface Demo");

@@ -46,6 +46,7 @@
       <w>nbody</w>
       <w>ndof</w>
       <w>nurbs</w>
+      <w>obb</w>
       <w>omeg</w>
       <w>omegmat</w>
       <w>petgraph</w>

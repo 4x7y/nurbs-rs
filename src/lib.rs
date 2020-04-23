@@ -1,6 +1,7 @@
 #![allow(dead_code)]
 #![allow(unused_imports)]
 #![allow(unused_variables)]
+#![allow(non_snake_case)]
 #![cfg_attr(debug_assertions, allow(dead_code, unused_imports))]
 
 extern crate nalgebra as na;
@@ -12,6 +13,7 @@ pub mod robotics;
 pub mod utils;
 pub mod control;
 pub mod simulation;
+pub mod ccd;            // convex collision detection
 
 #[macro_use]
 extern crate approx;

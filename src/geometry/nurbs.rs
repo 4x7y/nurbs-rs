@@ -3,7 +3,7 @@ use na::{Point3};
 use std::cell::RefCell;
 use std::rc::Rc;
 use kiss3d::resource::Mesh;
-use crate::geometry::{BSplineSurface, BoundingBox};
+use crate::geometry::{BSplineSurface};
 
 #[derive(Debug, Clone)]
 pub struct NurbsSurface {
