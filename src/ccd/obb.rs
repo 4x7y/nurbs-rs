@@ -13,6 +13,16 @@ pub struct OBB {
 }
 
 impl OBB {
+
+    /// Tests whether this OBB and the given object intersect.
+    ///
+    /// Both objects are treated as "solid", meaning that if one of the objects
+    /// is fully contained inside another, this function still returns true. (e.g.
+    /// in case a line segment is contained inside this OBB, or this OBB is
+    /// contained inside a Sphere, etc.) The first parameter of this function
+    /// specifies the other object to test against. The OBB-OBB intersection test
+    /// is from Christer Ericson's book Real-Time Collision Detection, p. 101-106.
+    /// See http://realtimecollisiondetection.net/
     pub fn intersects(&self, b: &OBB, epsilon: Scalar) -> bool {
         // Generate a rotation matrix that transforms from world
         // space to this OBB's coordinate space.

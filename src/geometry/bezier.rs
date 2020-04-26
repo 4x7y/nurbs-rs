@@ -53,7 +53,7 @@ impl RationalBezierCurve {
             control_points_homo.push(cart2homo(&control_points[i]) * weights[i]);
         }
         RationalBezierCurve {
-            bezier_curve: BezierCurve::new(control_points_homo),
+            bezier_curve: BezierCurve::<U4>::new(control_points_homo),
         }
     }
 

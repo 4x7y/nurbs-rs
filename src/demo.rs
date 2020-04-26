@@ -9,7 +9,7 @@ use crobot::geometry::{bspline, DoubleEdgeList, nurbs};
 use kiss3d::light::Light;
 use kiss3d::window::Window;
 use kiss3d::resource::Mesh;
-use na::{Point3, Vector3, VectorN, U4};
+use na::{Point3, Vector3, VectorN, U4, Vector};
 use std::{thread, time};
 use std::cell::RefCell;
 use std::rc::Rc;
@@ -75,12 +75,41 @@ fn nurbs_test() {
         0.0, 0.0, 0.0, 0.0, 0.33, 0.66, 1.0, 1.0, 1.0, 1.0
     ];
     let mut weight = vec![1.; 36];
-    for i in 18..36 {
-        weight[i] = 20.;
+    // for i in 18..36 {
+    //     weight[i] = 20.;
+    // }
+
+
+    let mut control_points_2 = Vec::new();
+    for point in &control_points {
+        control_points_2.push(point + Vector3f::new(0., 0., 13.));
     }
 
-    let surface = nurbs::NurbsSurface::new(
-        control_points,
+
+    // let surf1 = nurbs::NurbsSurface::new(
+    //     control_points.clone(),
+    //     knot_vector_u.clone(),
+    //     knot_vector_v.clone(),
+    //     3,               // degree_u
+    //     3,               // degree_v
+    //     6,               // size_u
+    //     6,               // size_v
+    //     weight.clone(),
+    // );
+    //
+    // let surf2 = nurbs::NurbsSurface::new(
+    //     control_points_2,
+    //     knot_vector_u,
+    //     knot_vector_v,
+    //     3,               // degree_u
+    //     3,               // degree_v
+    //     6,               // size_u
+    //     6,               // size_v
+    //     weight,
+    // );
+
+    let surf = nurbs::NurbsSurface::new(
+        control_points_2,
         knot_vector_u,
         knot_vector_v,
         3,               // degree_u
@@ -90,20 +119,30 @@ fn nurbs_test() {
         weight,
     );
 
-    let mut bbox = OBB::from(&surface);
-    println!("{}", bbox);
+    let (surf1, surf2) = surf.split_surface_u(0.5);
+
+    let obb1 = OBB::from(&surf1);
+    let obb2 = OBB::from(&surf2);
+    println!("{}", obb1.intersects(&obb2, 0.001));
 
     let mut scene = SimScene::new("[ME 625] B-Spline Surface Demo");
-    bbox.register_scene(&mut scene);
+    // obb1.register_scene(&mut scene);
+    // obb2.register_scene(&mut scene);
 
-    let mesh = surface.get_mesh();
+    let mesh = surf1.get_mesh();
     let mut d = scene.window.add_mesh(mesh, Vector3::new(1.0, 1.0, 1.0));
     d.set_color(1.0, 0.0, 0.0);
     d.enable_backface_culling(false);
 
+    let mesh = surf2.get_mesh();
+    let mut d = scene.window.add_mesh(mesh, Vector3::new(1.0, 1.0, 1.0));
+    d.set_color(0.0, 0.0, 1.0);
+    d.enable_backface_culling(false);
+
     while scene.render() {
         sleep(30);
-        bbox.render();
+        // obb1.render();
+        // obb2.render();
     }
 }
 

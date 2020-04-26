@@ -4,6 +4,7 @@ pub mod dcel;
 pub mod list;
 pub mod volint;
 pub mod nurbs;
+mod helper;
 
 pub use self::bezier::*;
 pub use self::bspline::*;
