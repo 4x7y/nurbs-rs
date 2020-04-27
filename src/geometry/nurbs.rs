@@ -5,6 +5,8 @@ use std::rc::Rc;
 use kiss3d::resource::Mesh;
 use crate::geometry::{BSplineSurface, homo2cart};
 use crate::geometry::helper;
+use crate::robotics::{tform2rotm, tform2tvec};
+use crate::simulation::sim_model::SimScene;
 
 #[derive(Debug, Clone)]
 pub struct NurbsSurface {
@@ -297,5 +299,17 @@ impl NurbsSurface {
         // Return the new surfaces
         let ret_val = (surf1, surf2);
         return ret_val
+    }
+
+    pub fn transform(&mut self, trans: &Matrix4f) {
+        let rotm = tform2rotm(trans.clone_owned());
+        let tvec = tform2tvec(trans.clone_owned());
+        for i in 0..self.ctrlpts.len() {
+            self.ctrlpts[i] = rotm * self.ctrlpts[i] + &tvec;
+        }
+
+        for i in 0..self.bspline.ctrlpts.len() {
+            self.bspline.ctrlpts[i] = trans * self.bspline.ctrlpts[i];
+        }
     }
 }

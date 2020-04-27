@@ -15,7 +15,7 @@ use kiss3d::resource::Mesh;
 /// * `u` - parameter
 /// * `knot_vec` - knot vector
 pub fn find_span(n: usize, p: usize, u: Scalar, knot_vec: &Vec<Scalar>) -> usize {
-    if (u - knot_vec[n+1]).abs() < 1e-6 {
+    if (u - knot_vec[n+1]).abs() < 1e-3 {
         return n;
     }
 

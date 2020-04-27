@@ -278,6 +278,11 @@ pub fn tform2rotm(tform: Matrix4f) -> Matrix3f {
     Matrix3f::from(tform.fixed_slice::<U3, U3>(0, 0))
 }
 
+/// Extract translational vector from homogeneous transformation
+pub fn tform2tvec(tform: Matrix4f) -> Vector3f {
+    Vector3f::from(tform.fixed_slice::<U3, U1>(0, 3))
+}
+
 /// Extract quaternion from homogeneous transformation
 pub fn tform2quat(tform: Matrix4f) -> Vector4f {
     let rotm = tform2rotm(tform);

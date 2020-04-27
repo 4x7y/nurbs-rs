@@ -16,7 +16,7 @@ use std::rc::Rc;
 use log::{info, error};
 use crobot::utils::JointSpaceTrajectory;
 use crobot::math::*;
-use crobot::robotics::RigidBodyTree;
+use crobot::robotics::{RigidBodyTree, trvec2tform};
 use crobot::utils::{read_stl, load_mesh};
 use std::fs::OpenOptions;
 use crobot::simulation::sim_model::SimScene;
@@ -28,45 +28,44 @@ fn sleep(millis: u64) {
     thread::sleep(duration);
 }
 
-fn nurbs_test() {
-
+fn nurbs_surf_1() -> NurbsSurface {
     let control_points = vec![
-        Vector3f::new(-25.0, -25.0, -10.0),
-        Vector3f::new(-25.0, -15.0,  -5.0),
-        Vector3f::new(-25.0,  -5.0,   0.0),
-        Vector3f::new(-25.0,   5.0,   0.0),
-        Vector3f::new(-25.0,  15.0,  -5.0),
-        Vector3f::new(-25.0,  25.0, -10.0),
-        Vector3f::new(-15.0, -25.0,  -8.0),
-        Vector3f::new(-15.0, -15.0,  -4.0),
-        Vector3f::new(-15.0,  -5.0,  -4.0),
-        Vector3f::new(-15.0,   5.0,  -4.0),
-        Vector3f::new(-15.0,  15.0,  -4.0),
-        Vector3f::new(-15.0,  25.0,  -8.0),
-        Vector3f::new( -5.0, -25.0,  -5.0),
-        Vector3f::new( -5.0, -15.0,  -3.0),
-        Vector3f::new( -5.0,  -5.0,  -8.0),
-        Vector3f::new( -5.0,   5.0,  -8.0),
-        Vector3f::new( -5.0,  15.0,  -3.0),
-        Vector3f::new( -5.0,  25.0,  -5.0),
-        Vector3f::new(  5.0, -25.0,  -3.0),
-        Vector3f::new(  5.0, -15.0,  -2.0),
-        Vector3f::new(  5.0,  -5.0,  -8.0),
-        Vector3f::new(  5.0,   5.0,  -8.0),
-        Vector3f::new(  5.0,  15.0,  -2.0),
-        Vector3f::new(  5.0,  25.0,  -3.0),
-        Vector3f::new( 15.0, -25.0,  -8.0),
-        Vector3f::new( 15.0, -15.0,  -4.0),
-        Vector3f::new( 15.0,  -5.0,  -4.0),
-        Vector3f::new( 15.0,   5.0,  -4.0),
-        Vector3f::new( 15.0,  15.0,  -4.0),
-        Vector3f::new( 15.0,  25.0,  -8.0),
-        Vector3f::new( 25.0, -25.0, -10.0),
-        Vector3f::new( 25.0, -15.0,  -5.0),
-        Vector3f::new( 25.0,  -5.0,   0.0),
-        Vector3f::new( 25.0,   5.0,   0.0),
-        Vector3f::new( 25.0,  15.0,  -5.0),
-        Vector3f::new( 25.0,  25.0, -10.0),
+        Vector3f::new(-2.5, -2.5,  -1.0),
+        Vector3f::new(-2.5, -1.5,  -0.5),
+        Vector3f::new(-2.5, -0.5,   0.0),
+        Vector3f::new(-2.5,  0.5,   0.0),
+        Vector3f::new(-2.5,  1.5,  -0.5),
+        Vector3f::new(-2.5,  2.5,  -1.0),
+        Vector3f::new(-1.5, -2.5,  -0.8),
+        Vector3f::new(-1.5, -1.5,  -0.4),
+        Vector3f::new(-1.5, -0.5,  -0.4),
+        Vector3f::new(-1.5,  0.5,  -0.4),
+        Vector3f::new(-1.5,  1.5,  -0.4),
+        Vector3f::new(-1.5,  2.5,  -0.8),
+        Vector3f::new(-0.5, -2.5,  -0.5),
+        Vector3f::new(-0.5, -1.5,  -0.3),
+        Vector3f::new(-0.5, -0.5,  -0.8),
+        Vector3f::new(-0.5,  0.5,  -0.8),
+        Vector3f::new(-0.5,  1.5,  -0.3),
+        Vector3f::new(-0.5,  2.5,  -0.5),
+        Vector3f::new( 0.5, -2.5,  -0.3),
+        Vector3f::new( 0.5, -1.5,  -0.2),
+        Vector3f::new( 0.5, -0.5,  -0.8),
+        Vector3f::new( 0.5,  0.5,  -0.8),
+        Vector3f::new( 0.5,  1.5,  -0.2),
+        Vector3f::new( 0.5,  2.5,  -0.3),
+        Vector3f::new( 1.5, -2.5,  -0.8),
+        Vector3f::new( 1.5, -1.5,  -0.4),
+        Vector3f::new( 1.5, -0.5,  -0.4),
+        Vector3f::new( 1.5,  0.5,  -0.4),
+        Vector3f::new( 1.5,  1.5,  -0.4),
+        Vector3f::new( 1.5,  2.5,  -0.8),
+        Vector3f::new( 2.5, -2.5,  -1.0),
+        Vector3f::new( 2.5, -1.5,  -0.5),
+        Vector3f::new( 2.5, -0.5,   0.0),
+        Vector3f::new( 2.5,  0.5,   0.0),
+        Vector3f::new( 2.5,  1.5,  -0.5),
+        Vector3f::new( 2.5,  2.5, -1.0),
     ];
     let knot_vector_u = vec![
         0.0, 0.0, 0.0, 0.0, 0.33, 0.66, 1.0, 1.0, 1.0, 1.0
@@ -79,25 +78,176 @@ fn nurbs_test() {
     //     weight[i] = 20.;
     // }
 
+    nurbs::NurbsSurface::new(
+        control_points,
+        knot_vector_u,
+        knot_vector_v,
+        3,               // degree_u
+        3,               // degree_v
+        6,               // size_u
+        6,               // size_v
+        weight,
+    )
+}
 
-    let mut control_points_2 = Vec::new();
-    for point in &control_points {
-        control_points_2.push(point + Vector3f::new(0., 0., 13.));
-    }
+fn nurbs_surf_2() -> NurbsSurface {
+
+    let frac1sqrt2 = std::f64::consts::FRAC_1_SQRT_2 as Scalar;
+
+    let control_points = vec![
+        Vector3f::new(1.0,0.0,0.0),
+        Vector3f::new(frac1sqrt2,frac1sqrt2,0.0),
+        Vector3f::new(0.0,1.0,0.0),
+        Vector3f::new(-frac1sqrt2,frac1sqrt2,0.0),
+        Vector3f::new(-1.0,0.0,0.0),
+
+        Vector3f::new(1.0,0.0,1.0),
+        Vector3f::new(frac1sqrt2,frac1sqrt2,frac1sqrt2),
+        Vector3f::new(0.0,1.0,1.0),
+        Vector3f::new(-frac1sqrt2,frac1sqrt2,frac1sqrt2),
+        Vector3f::new(-1.0,0.0,1.0),
+    ];
+
+    let weight = vec![
+        1., frac1sqrt2, 1., frac1sqrt2, 1.,
+        1., frac1sqrt2, 1., frac1sqrt2, 1.];
+    let knotvec_u = vec![0., 0., 1., 1.];
+    let knotvec_v = vec![0., 0., 0., 0.5, 0.5, 1., 1., 1.];
+    let degree_u = 1;
+    let degree_v = 2;
+
+    nurbs::NurbsSurface::new(
+        control_points,
+        knotvec_u,
+        knotvec_v,
+        degree_u,        // degree_u
+        degree_v,        // degree_v
+        2,               // size_u
+        5,               // size_v
+        weight,
+    )
+}
+
+fn nurbs_surf_3() -> NurbsSurface {
+
+    let frac1sqrt2 = std::f64::consts::FRAC_1_SQRT_2 as Scalar;
+    let control_points = vec![
+        Vector3f::new(1.0,0.0,0.0),
+        Vector3f::new(frac1sqrt2,frac1sqrt2,0.0),
+        Vector3f::new(0.0,1.0,0.0),
+        Vector3f::new(-frac1sqrt2,frac1sqrt2,0.0),
+        Vector3f::new(-1.0,0.0,0.0),
+        Vector3f::new(-frac1sqrt2,-frac1sqrt2,0.0),
+        Vector3f::new(0.0,-1.0,0.0),
+        Vector3f::new(frac1sqrt2,-frac1sqrt2,0.0),
+        Vector3f::new(1.0,0.0,0.0),
+        
+        Vector3f::new(1.0,0.0,1.0),
+        Vector3f::new(frac1sqrt2,frac1sqrt2,frac1sqrt2),
+        Vector3f::new(0.0,1.0,1.0),
+        Vector3f::new(-frac1sqrt2,frac1sqrt2,frac1sqrt2),
+        Vector3f::new(-1.0,0.0,1.0),
+        Vector3f::new(-frac1sqrt2,-frac1sqrt2,frac1sqrt2),
+        Vector3f::new(0.0,-1.0,1.0),
+        Vector3f::new(frac1sqrt2,-frac1sqrt2,frac1sqrt2),
+        Vector3f::new(1.0,0.0,1.0)
+    ];
+
+    let weight = vec![
+        1.0, frac1sqrt2, 1.0, frac1sqrt2, 1.0, frac1sqrt2, 1.0, frac1sqrt2, 1.0,
+        1.0, frac1sqrt2, 1.0, frac1sqrt2, 1.0, frac1sqrt2, 1.0, frac1sqrt2, 1.0];
+    let knotvec_u = vec![0., 0., 1., 1.];
+    let knotvec_v = vec![0., 0., 0., 0.25, 0.25, 0.5, 0.5, 0.75, 0.75, 1., 1., 1.];
+    let degree_u = 1;
+    let degree_v = 2;
+
+    nurbs::NurbsSurface::new(
+        control_points,
+        knotvec_u,
+        knotvec_v,
+        degree_u,        // degree_u
+        degree_v,        // degree_v
+        2,               // size_u
+        9,               // size_v
+        weight,
+    )
+}
+
+fn nurbs_surf_4() -> NurbsSurface {
+
+    let control_points = vec![
+        Vector3f::new(-2.5, -2.5, -8.0),
+        Vector3f::new(-2.5, -1.5, -8.0),
+        Vector3f::new(-2.5, -0.5, -8.0),
+        Vector3f::new(-2.5,  0.5, -8.0),
+        Vector3f::new(-2.5,  1.5, -8.0),
+        Vector3f::new(-2.5,  2.5, -8.0),
+
+        Vector3f::new(-1.5, -2.5, -8.0),
+        Vector3f::new(-1.5, -1.5, -7.6),
+        Vector3f::new(-1.5, -0.5, -5.6),
+        Vector3f::new(-1.5,  0.5, -5.6),
+        Vector3f::new(-1.5,  1.5, -7.6),
+        Vector3f::new(-1.5,  2.5, -8.0),
+
+        Vector3f::new(-0.5, -2.5, -8.0),
+        Vector3f::new(-0.5, -1.5, -6.0),
+        Vector3f::new(-0.5, -0.5, -4.2),
+        Vector3f::new(-0.5,  0.5, -4.2),
+        Vector3f::new(-0.5,  1.5, -6.0),
+        Vector3f::new(-0.5,  2.5, -8.0),
+
+        Vector3f::new( 0.5, -2.5, -8.0),
+        Vector3f::new( 0.5, -1.5, -6.0),
+        Vector3f::new( 0.5, -0.5, -4.2),
+        Vector3f::new( 0.5,  0.5, -4.2),
+        Vector3f::new( 0.5,  1.5, -6.0),
+        Vector3f::new( 0.5,  2.5, -8.0),
+
+        Vector3f::new( 1.5, -2.5, -8.0),
+        Vector3f::new( 1.5, -1.5, -7.6),
+        Vector3f::new( 1.5, -0.5, -5.6),
+        Vector3f::new( 1.5,  0.5, -5.6),
+        Vector3f::new( 1.5,  1.5, -7.6),
+        Vector3f::new( 1.5,  2.5, -8.0),
+
+        Vector3f::new( 2.5, -2.5, -8.0),
+        Vector3f::new( 2.5, -1.5, -8.0),
+        Vector3f::new( 2.5, -0.5, -8.0),
+        Vector3f::new( 2.5,  0.5, -8.0),
+        Vector3f::new( 2.5,  1.5, -8.0),
+        Vector3f::new( 2.5,  2.5, -8.0),
+    ];
+    let knot_vector_u = vec![
+        0.0, 0.0, 0.0, 0.0, 0.33, 0.66, 1.0, 1.0, 1.0, 1.0
+    ];
+    let knot_vector_v = vec![
+        0.0, 0.0, 0.0, 0.0, 0.33, 0.66, 1.0, 1.0, 1.0, 1.0
+    ];
+    let mut weight = vec![1.; 36];
+    // for i in 18..36 {
+    //     weight[i] = 20.;
+    // }
+
+    nurbs::NurbsSurface::new(
+        control_points,
+        knot_vector_u,
+        knot_vector_v,
+        3,               // degree_u
+        3,               // degree_v
+        6,               // size_u
+        6,               // size_v
+        weight,
+    )
+}
+
+fn nurbs_test() {
+
+    let mut surf1 = nurbs_surf_1();
+    let mut surf2 = nurbs_surf_4();
 
 
-    // let surf1 = nurbs::NurbsSurface::new(
-    //     control_points.clone(),
-    //     knot_vector_u.clone(),
-    //     knot_vector_v.clone(),
-    //     3,               // degree_u
-    //     3,               // degree_v
-    //     6,               // size_u
-    //     6,               // size_v
-    //     weight.clone(),
-    // );
-    //
-    // let surf2 = nurbs::NurbsSurface::new(
+    // let surf = nurbs::NurbsSurface::new(
     //     control_points_2,
     //     knot_vector_u,
     //     knot_vector_v,
@@ -107,42 +257,63 @@ fn nurbs_test() {
     //     6,               // size_v
     //     weight,
     // );
+    //
+    // let (surf1, surf2) = surf.split_surface_u(0.5);
+    //
+    // let obb1 = OBB::from(&surf1);
+    // let obb2 = OBB::from(&surf2);
+    // println!("{}", obb1.intersects(&obb2, 0.001));
 
-    let surf = nurbs::NurbsSurface::new(
-        control_points_2,
-        knot_vector_u,
-        knot_vector_v,
-        3,               // degree_u
-        3,               // degree_v
-        6,               // size_u
-        6,               // size_v
-        weight,
-    );
+    // let tree1 = OBBTree::from_nurbs_surface(&surf1, 0);
+    // let tree2 = OBBTree::from_nurbs_surface(&surf2, 0);
+    // println!("collide = {}", tree1.intersect(&tree2, 0.001));
 
-    let (surf1, surf2) = surf.split_surface_u(0.5);
-
-    let obb1 = OBB::from(&surf1);
-    let obb2 = OBB::from(&surf2);
-    println!("{}", obb1.intersects(&obb2, 0.001));
 
     let mut scene = SimScene::new("[ME 625] B-Spline Surface Demo");
     // obb1.register_scene(&mut scene);
     // obb2.register_scene(&mut scene);
 
-    let mesh = surf1.get_mesh();
-    let mut d = scene.window.add_mesh(mesh, Vector3::new(1.0, 1.0, 1.0));
-    d.set_color(1.0, 0.0, 0.0);
-    d.enable_backface_culling(false);
+
+    let tree2 = OBBTree::from_nurbs_surface(&surf2, 4);
+    let mut obbs = tree2.collect_base_obb();
+    // for obb in &mut obbs {
+    //     obb.register_scene(&mut scene);
+    // }
+
+    // let mesh = surf1.get_mesh();
+    // let mut h1 = scene.window.add_mesh(mesh, Vector3::new(1.0, 1.0, 1.0));
+    // h1.set_color(1.0, 0.0, 0.0);
+    // h1.enable_backface_culling(false);
+
 
     let mesh = surf2.get_mesh();
-    let mut d = scene.window.add_mesh(mesh, Vector3::new(1.0, 1.0, 1.0));
-    d.set_color(0.0, 0.0, 1.0);
-    d.enable_backface_culling(false);
+    let mut h2 = scene.window.add_mesh(mesh, Vector3::new(1.0, 1.0, 1.0));
+    h2.set_color(0.0, 0.0, 1.0);
+    h2.enable_backface_culling(false);
+
+    // let vel = Vector3f::new(0., 0., 0.01);
+    // let tform = trvec2tform(vel.clone());
+    // let trans = na::Translation3::new(
+    //     vel[0] as f32, vel[1] as f32, vel[2] as f32);
+
 
     while scene.render() {
         sleep(30);
         // obb1.render();
         // obb2.render();
+
+        // for obb in &mut obbs {
+        //     obb.render();
+        // }
+
+        // surf2.transform(&tform);
+        // let tree2 = OBBTree::from_nurbs_surface(&surf2, 10);
+        // if tree1.intersect(&tree2, 0.005) {
+        //     h2.set_color(0.0, 1.0, 0.0);
+        // } else {
+        //     h2.set_color(0.0, 0.0, 1.0);
+        // }
+        // h2.append_translation(&trans);
     }
 }
 

@@ -5,6 +5,7 @@ use crate::geometry::NurbsSurface;
 use core::fmt;
 use std::fmt::Formatter;
 
+#[derive(Clone)]
 pub struct OBB {
     pub pos:  Vector3f,      // The center position of this OBB.
     pub r:    Vector3f,      // Half-sizes to x, y and z directions in the local space.
@@ -235,7 +236,7 @@ impl <'a> From<&'a NurbsSurface> for OBB {
 
 impl fmt::Display for OBB {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
-        write!(f, "({}, {})", self.axis, self.r)
+        write!(f, "({}, {})", self.axis.transpose(), self.r.transpose())
     }
 }
 
