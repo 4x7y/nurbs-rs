@@ -22,7 +22,9 @@
       <w>cspace</w>
       <w>ctrlpt</w>
       <w>ctrlpts</w>
+      <w>dantzig</w>
       <w>dcel</w>
+      <w>decomp</w>
       <w>ders</w>
       <w>eulr</w>
       <w>eulrate</w>
@@ -37,11 +39,14 @@
       <w>jcab</w>
       <w>jnts</w>
       <w>knotvec</w>
+      <w>ldlt</w>
       <w>llmt</w>
       <w>lmat</w>
       <w>lspb</w>
       <w>matx</w>
+      <w>mlcp</w>
       <w>mmat</w>
+      <w>multibody</w>
       <w>nalgebra</w>
       <w>nbodies</w>
       <w>nbody</w>

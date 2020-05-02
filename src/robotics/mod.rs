@@ -12,6 +12,7 @@ pub mod range;
 pub mod joint_builder;
 pub mod inertia;
 mod special_cholesky;
+mod solver;
 
 pub use self::rigid_body::*;
 pub use self::rbtree::*;

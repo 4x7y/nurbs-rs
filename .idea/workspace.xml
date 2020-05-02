@@ -4,46 +4,28 @@
     <generated />
   </component>
   <component name="CMakeSettings">
-    <configurations />
+    <configurations>
+      <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" />
+    </configurations>
   </component>
   <component name="CargoProjects">
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b92580e9-e141-4d94-8411-f6c0c303c8ed" name="Default Changelist" comment="">
-<<<<<<< HEAD
-      <change afterPath="$PROJECT_DIR$/src/control/mod.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/control/pid.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/robotics/dynamics/crba.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/tests/kinematics_test.rs" afterDir="false" />
+    <list default="true" id="9f2af6a9-2f05-4190-908a-d8dd6e4ec606" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/math/decomp_cholesky.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/robotics/solver/constraint.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/robotics/solver/constraint_solver.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/robotics/solver/dantzig_lcp_solver.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/robotics/solver/fast_ldlt.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/robotics/solver/lcp_solver.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/robotics/solver/mod.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dictionaries/yuechuan.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/yuechuan.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vscode/launch.json" beforeDir="false" afterPath="$PROJECT_DIR$/.vscode/launch.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/demo.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/demo.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/math/matrix.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/math/matrix.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/math/screw.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/math/screw.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/robotics/dynamics/dynamics.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/robotics/dynamics/dynamics.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/robotics/dynamics/forward_dynamics.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/robotics/dynamics/forward_dynamics.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/robotics/dynamics/inverse_dynamics.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/robotics/dynamics/inverse_dynamics.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/robotics/dynamics/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/robotics/dynamics/mod.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/robotics/kinematics.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/robotics/kinematics.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/robotics/robot.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/robotics/robot.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tests/dynamics_test.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/tests/dynamics_test.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tests/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/tests/mod.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/common.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/common.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/mod.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/rotation.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/rotation.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/trajectory.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/trajectory.rs" afterDir="false" />
-=======
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/demo.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/demo.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/geometry/dcel/dcel.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/geometry/dcel/dcel.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tests/dcel_test.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/tests/dcel_test.rs" afterDir="false" />
->>>>>>> b7279c71778709c1e7867155bdcea5a38d33b190
+      <change beforePath="$PROJECT_DIR$/.vscode/launch.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.vscode/tasks.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/math/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/math/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/robotics/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/robotics/mod.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,90 +35,25 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="DefaultGradleProjectSettings">
-    <option name="isMigrated" value="true" />
-  </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Rust File" />
-      </list>
-    </option>
-  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MacroExpansionManager">
-    <option name="directoryName" value="bRHwaZaj" />
+    <option name="directoryName" value="u940w43u" />
   </component>
-  <component name="ProjectId" id="1Xj15NIHV12lr01a6YLoUJCpSSD" />
-  <component name="ProjectLevelVcsManager">
-    <ConfirmationsSetting value="2" id="Add" />
-  </component>
+  <component name="ProjectId" id="1bMghWT3849KmWcdH8mgvVKadAk" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
-    <option name="showExcludedFiles" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
-    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
-    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="cf.first.check.clang-format" value="false" />
     <property name="org.rust.cargo.project.model.PROJECT_DISCOVERY" value="true" />
-    <property name="project.structure.last.edited" value="Project" />
-    <property name="project.structure.proportion" value="0.0" />
-    <property name="project.structure.side.proportion" value="0.0" />
-    <property name="settings.editor.selected.configurable" value="CPPToolchains" />
   </component>
-  <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\yuechuan\Develop\crobot\src\geometry\dcel" />
-      <recent name="C:\Users\yuechuan\Develop\crobot\src\robotics\dynamics" />
-    </key>
-  </component>
-  <component name="RunManager" selected="Cargo Command.Test tests::kinematics_test::test_axis_ang">
-    <configuration name="Build" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
-      <option name="channel" value="DEFAULT" />
-      <option name="command" value="build" />
-      <option name="allFeatures" value="false" />
-      <option name="nocapture" value="false" />
-      <option name="emulateTerminal" value="false" />
-      <option name="backtrace" value="SHORT" />
-      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
-      <envs />
-      <method v="2">
-        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="Doc" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
-      <option name="channel" value="DEFAULT" />
-      <option name="command" value="doc --no-deps" />
-      <option name="allFeatures" value="false" />
-      <option name="nocapture" value="false" />
-      <option name="emulateTerminal" value="false" />
-      <option name="backtrace" value="FULL" />
-      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
-      <envs>
-        <env name="RUSTDOCFLAGS" value="--html-in-header resource/header.html" />
-      </envs>
-      <method v="2">
-        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="Run demo" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
-      <option name="channel" value="DEFAULT" />
-      <option name="command" value="run --package crobot --bin demo" />
-      <option name="allFeatures" value="false" />
-      <option name="nocapture" value="false" />
-      <option name="emulateTerminal" value="false" />
-      <option name="backtrace" value="FULL" />
-      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
-      <envs />
-      <method v="2">
-        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RunManager">
     <configuration name="Run" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
       <option name="channel" value="DEFAULT" />
       <option name="command" value="run" />
@@ -145,333 +62,45 @@
       <option name="emulateTerminal" value="false" />
       <option name="backtrace" value="SHORT" />
       <option name="workingDirectory" value="file://$PROJECT_DIR$" />
-      <envs>
-        <env name="RUSTFLAGS" value="$RUSTFLAGS - A dead_code unused_code" />
-      </envs>
-      <method v="2">
-        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
-      </method>
-    </configuration>
-<<<<<<< HEAD
-    <configuration name="Test tests::dynamics_test::test_rne" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
-      <option name="channel" value="DEFAULT" />
-      <option name="command" value="test --package crobot --lib tests::dynamics_test::test_rne -- --exact" />
-      <option name="allFeatures" value="false" />
-      <option name="nocapture" value="false" />
-      <option name="emulateTerminal" value="false" />
-      <option name="backtrace" value="SHORT" />
-      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
       <envs />
       <method v="2">
         <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Test tests::kinematics_test::test_axis_ang" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
-      <option name="channel" value="DEFAULT" />
-      <option name="command" value="test --package crobot --lib tests::kinematics_test::test_axis_ang -- --exact" />
-      <option name="allFeatures" value="false" />
-      <option name="nocapture" value="false" />
-      <option name="emulateTerminal" value="false" />
-      <option name="backtrace" value="SHORT" />
-      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
-      <envs />
-      <method v="2">
-        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="Test tests::kinematics_test::test_matrix_exp6" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
-      <option name="channel" value="DEFAULT" />
-      <option name="command" value="test --package crobot --lib tests::kinematics_test::test_matrix_exp6 -- --exact" />
-      <option name="allFeatures" value="false" />
-      <option name="nocapture" value="false" />
-      <option name="emulateTerminal" value="false" />
-      <option name="backtrace" value="SHORT" />
-      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
-      <envs />
-      <method v="2">
-        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="Test tests::kinematics_test::test_trans_inv" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
-      <option name="channel" value="DEFAULT" />
-      <option name="command" value="test --package crobot --lib tests::kinematics_test::test_trans_inv -- --exact" />
-      <option name="allFeatures" value="false" />
-      <option name="nocapture" value="false" />
-      <option name="emulateTerminal" value="false" />
-      <option name="backtrace" value="SHORT" />
-      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
-      <envs />
-      <method v="2">
-        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="Test tests::kinematics_test::test_vec2se3" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
-      <option name="channel" value="DEFAULT" />
-      <option name="command" value="test --package crobot --lib tests::kinematics_test::test_vec2se3 -- --exact" />
-=======
-    <configuration name="Test tests::dcel_test::test_dcel_init" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
-      <option name="channel" value="DEFAULT" />
-      <option name="command" value="test --package crobot --lib tests::dcel_test::test_dcel_init -- --exact" />
->>>>>>> b7279c71778709c1e7867155bdcea5a38d33b190
-      <option name="allFeatures" value="false" />
-      <option name="nocapture" value="false" />
-      <option name="emulateTerminal" value="false" />
-      <option name="backtrace" value="SHORT" />
-      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
-      <envs />
-      <method v="2">
-        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
-      </method>
-    </configuration>
-    <list>
-      <item itemvalue="Cargo Command.Build" />
-      <item itemvalue="Cargo Command.Run" />
-      <item itemvalue="Cargo Command.Doc" />
-      <item itemvalue="Cargo Command.Run demo" />
-<<<<<<< HEAD
-      <item itemvalue="Cargo Command.Test tests::kinematics_test::test_trans_inv" />
-      <item itemvalue="Cargo Command.Test tests::kinematics_test::test_vec2se3" />
-      <item itemvalue="Cargo Command.Test tests::kinematics_test::test_matrix_exp6" />
-      <item itemvalue="Cargo Command.Test tests::kinematics_test::test_axis_ang" />
-      <item itemvalue="Cargo Command.Test tests::dynamics_test::test_rne" />
-    </list>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Cargo Command.Test tests::kinematics_test::test_axis_ang" />
-        <item itemvalue="Cargo Command.Test tests::kinematics_test::test_matrix_exp6" />
-        <item itemvalue="Cargo Command.Test tests::dynamics_test::test_rne" />
-        <item itemvalue="Cargo Command.Test tests::kinematics_test::test_vec2se3" />
-        <item itemvalue="Cargo Command.Test tests::kinematics_test::test_trans_inv" />
-=======
-      <item itemvalue="Cargo Command.Test tests::dcel_test::test_dcel_init" />
-    </list>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Cargo Command.Test tests::dcel_test::test_dcel_init" />
->>>>>>> b7279c71778709c1e7867155bdcea5a38d33b190
-      </list>
-    </recent_temporary>
   </component>
   <component name="RustProjectSettings">
     <option name="toolchainHomeDirectory" value="$USER_HOME$/.cargo/bin" />
-    <option name="version" value="2" />
   </component>
   <component name="SvnConfiguration">
     <configuration />
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="b92580e9-e141-4d94-8411-f6c0c303c8ed" name="Default Changelist" comment="" />
-      <created>1579724080125</created>
+      <changelist id="9f2af6a9-2f05-4190-908a-d8dd6e4ec606" name="Default Changelist" comment="" />
+      <created>1588447496154</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1579724080125</updated>
-      <workItem from="1579724083274" duration="13670000" />
-      <workItem from="1579795750093" duration="7284000" />
-      <workItem from="1579822858315" duration="1665000" />
-      <workItem from="1579831896794" duration="3214000" />
-      <workItem from="1579903030684" duration="6761000" />
-      <workItem from="1580351561973" duration="8796000" />
-      <workItem from="1580605500756" duration="66000" />
-      <workItem from="1581360821787" duration="11028000" />
-      <workItem from="1581389677816" duration="1683000" />
-      <workItem from="1581391388544" duration="508000" />
-      <workItem from="1581391916834" duration="837000" />
-      <workItem from="1581392783508" duration="4765000" />
-      <workItem from="1581450213242" duration="327000" />
-      <workItem from="1581544199081" duration="163000" />
-      <workItem from="1581544512150" duration="236000" />
-      <workItem from="1581544767805" duration="30000" />
-      <workItem from="1581544810183" duration="16055000" />
-      <workItem from="1581608761991" duration="8581000" />
-      <workItem from="1581696176538" duration="1066000" />
-      <workItem from="1581989799643" duration="18750000" />
-      <workItem from="1582053905546" duration="18411000" />
-      <workItem from="1582082401872" duration="231000" />
-      <workItem from="1582337005502" duration="5000" />
-      <workItem from="1583184804700" duration="4359000" />
-      <workItem from="1583189368258" duration="610000" />
-      <workItem from="1583690367973" duration="24973000" />
+      <updated>1588447496154</updated>
+      <workItem from="1588447499970" duration="132000" />
+      <workItem from="1588447644283" duration="110000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="1" />
-  </component>
-  <component name="VcsManagerConfiguration">
-    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <option name="version" value="2" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="690" y="256" key="#Plugins" timestamp="1581544794055">
+    <state x="552" y="252" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1588447711833">
       <screen x="0" y="0" width="2194" height="1194" />
     </state>
-    <state x="690" y="256" key="#Plugins/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1581544794055" />
-    <state x="483" y="219" width="1089" height="707" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1582087630928">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="552" y="252" width="1089" height="707" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1582081830895" />
-    <state x="483" y="219" key="#com.intellij.execution.impl.EditConfigurationsDialog/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1582087630928" />
-    <state x="903" y="313" key="#com.intellij.ide.util.MemberChooser" timestamp="1582080199941">
+    <state x="552" y="252" key="#com.intellij.execution.impl.EditConfigurationsDialog/3840.1090.1920.1010/0.0.2194.1194@0.0.2194.1194" timestamp="1588447711833" />
+    <state x="877" y="352" key="FileChooserDialogImpl" timestamp="1588447680917">
       <screen x="0" y="0" width="2194" height="1194" />
     </state>
-    <state x="903" y="313" key="#com.intellij.ide.util.MemberChooser/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1582080199941" />
-    <state x="778" y="325" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1583189330986">
+    <state x="877" y="352" key="FileChooserDialogImpl/3840.1090.1920.1010/0.0.2194.1194@0.0.2194.1194" timestamp="1588447680917" />
+    <state x="760" y="264" width="672" height="678" key="search.everywhere.popup" timestamp="1588447628686">
       <screen x="0" y="0" width="2194" height="1194" />
     </state>
-    <state x="778" y="325" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1583189330986" />
-    <state x="832" y="368" key="EnvironmentVariablesDialog" timestamp="1581992044217">
-      <screen x="0" y="0" width="2194" height="1194" />
-    </state>
-    <state x="832" y="368" key="EnvironmentVariablesDialog/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1581992044217" />
-<<<<<<< HEAD
-    <state width="2151" height="382" key="GridCell.Tab.0.bottom" timestamp="1583900590587">
-      <screen x="0" y="0" width="2194" height="1194" />
-    </state>
-    <state width="2151" height="382" key="GridCell.Tab.0.bottom/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1582082632267" />
-    <state width="2151" height="382" key="GridCell.Tab.0.bottom/3840.232.1200.1850/-1920.594.1920.1160/0.0.2194.1194@0.0.2194.1194" timestamp="1583900590587" />
-    <state width="2151" height="382" key="GridCell.Tab.0.center" timestamp="1583900590586">
-      <screen x="0" y="0" width="2194" height="1194" />
-    </state>
-    <state width="2151" height="382" key="GridCell.Tab.0.center/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1582082632267" />
-    <state width="2151" height="382" key="GridCell.Tab.0.center/3840.232.1200.1850/-1920.594.1920.1160/0.0.2194.1194@0.0.2194.1194" timestamp="1583900590586" />
-    <state width="2151" height="382" key="GridCell.Tab.0.left" timestamp="1583900590586">
-      <screen x="0" y="0" width="2194" height="1194" />
-    </state>
-    <state width="2151" height="382" key="GridCell.Tab.0.left/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1582082632267" />
-    <state width="2151" height="382" key="GridCell.Tab.0.left/3840.232.1200.1850/-1920.594.1920.1160/0.0.2194.1194@0.0.2194.1194" timestamp="1583900590586" />
-    <state width="2151" height="382" key="GridCell.Tab.0.right" timestamp="1583900590586">
-      <screen x="0" y="0" width="2194" height="1194" />
-    </state>
-    <state width="2151" height="382" key="GridCell.Tab.0.right/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1582082632267" />
-    <state width="2151" height="382" key="GridCell.Tab.0.right/3840.232.1200.1850/-1920.594.1920.1160/0.0.2194.1194@0.0.2194.1194" timestamp="1583900590586" />
-=======
-    <state width="1877" height="348" key="GridCell.Tab.0.bottom" timestamp="1582089078030">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="2151" height="382" key="GridCell.Tab.0.bottom/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1582081825202" />
-    <state width="1877" height="348" key="GridCell.Tab.0.bottom/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1582089078030" />
-    <state width="1877" height="348" key="GridCell.Tab.0.center" timestamp="1582089078030">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="2151" height="382" key="GridCell.Tab.0.center/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1582081825202" />
-    <state width="1877" height="348" key="GridCell.Tab.0.center/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1582089078030" />
-    <state width="1877" height="348" key="GridCell.Tab.0.left" timestamp="1582089078030">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="2151" height="382" key="GridCell.Tab.0.left/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1582081825202" />
-    <state width="1877" height="348" key="GridCell.Tab.0.left/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1582089078030" />
-    <state width="1877" height="348" key="GridCell.Tab.0.right" timestamp="1582089078030">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="2151" height="382" key="GridCell.Tab.0.right/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1582081825202" />
-    <state width="1877" height="348" key="GridCell.Tab.0.right/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1582089078030" />
-    <state width="1877" height="348" key="GridCell.Tab.1.bottom" timestamp="1582089078030">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1877" height="348" key="GridCell.Tab.1.bottom/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1582089078030" />
-    <state width="1877" height="348" key="GridCell.Tab.1.center" timestamp="1582089078030">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1877" height="348" key="GridCell.Tab.1.center/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1582089078030" />
-    <state width="1877" height="348" key="GridCell.Tab.1.left" timestamp="1582089078030">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1877" height="348" key="GridCell.Tab.1.left/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1582089078030" />
-    <state width="1877" height="348" key="GridCell.Tab.1.right" timestamp="1582089078030">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1877" height="348" key="GridCell.Tab.1.right/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1582089078030" />
-    <state x="463" y="165" key="SettingsEditor" timestamp="1582087571545">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="463" y="165" key="SettingsEditor/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1582087571545" />
->>>>>>> b7279c71778709c1e7867155bdcea5a38d33b190
-    <state x="760" y="264" width="672" height="678" key="search.everywhere.popup" timestamp="1582044916869">
-      <screen x="0" y="0" width="2194" height="1194" />
-    </state>
-    <state x="760" y="264" width="672" height="678" key="search.everywhere.popup/0.0.2194.1194/3840.232.1200.1880/-1920.594.1920.1160@0.0.2194.1194" timestamp="1582044916869" />
-  </component>
-  <component name="masterDetails">
-    <states>
-      <state key="ArtifactsStructureConfigurable.UI">
-        <settings>
-          <artifact-editor />
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="FacetStructureConfigurable.UI">
-        <settings>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="GlobalLibrariesConfigurable.UI">
-        <settings>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="JdkListConfigurable.UI">
-        <settings>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="ModuleStructureConfigurable.UI">
-        <settings>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="ProjectJDKs.UI">
-        <settings>
-          <last-edited>11.0.3</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="ProjectLibrariesConfigurable.UI">
-        <settings>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-    </states>
+    <state x="760" y="264" width="672" height="678" key="search.everywhere.popup/3840.1090.1920.1010/0.0.2194.1194@0.0.2194.1194" timestamp="1588447628686" />
   </component>
 </project>
