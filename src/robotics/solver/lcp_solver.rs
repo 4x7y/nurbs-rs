@@ -1,3 +1,5 @@
+pub use crate::math::Scalar;
+
 pub trait LCPSolver {
     /// Solve constraint impulses for a constrained group
     fn solve(&self);

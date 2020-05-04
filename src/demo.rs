@@ -74,9 +74,9 @@ fn nurbs_surf_1() -> NurbsSurface {
         0.0, 0.0, 0.0, 0.0, 0.33, 0.66, 1.0, 1.0, 1.0, 1.0
     ];
     let mut weight = vec![1.; 36];
-    // for i in 18..36 {
-    //     weight[i] = 20.;
-    // }
+    for i in 18..36 {
+        weight[i] = 20.;
+    }
 
     nurbs::NurbsSurface::new(
         control_points,
@@ -225,9 +225,9 @@ fn nurbs_surf_4() -> NurbsSurface {
         0.0, 0.0, 0.0, 0.0, 0.33, 0.66, 1.0, 1.0, 1.0, 1.0
     ];
     let mut weight = vec![1.; 36];
-    // for i in 18..36 {
-    //     weight[i] = 20.;
-    // }
+    for i in 18..36 {
+        weight[i] = 20.;
+    }
 
     nurbs::NurbsSurface::new(
         control_points,
@@ -243,8 +243,8 @@ fn nurbs_surf_4() -> NurbsSurface {
 
 fn nurbs_test() {
 
-    let mut surf1 = nurbs_surf_1();
-    let mut surf2 = nurbs_surf_4();
+    let surf1 = nurbs_surf_1();
+    let surf2 = nurbs_surf_4();
 
 
     // let surf = nurbs::NurbsSurface::new(
@@ -275,7 +275,7 @@ fn nurbs_test() {
 
 
     let tree2 = OBBTree::from_nurbs_surface(&surf2, 4);
-    let mut obbs = tree2.collect_base_obb();
+    let obbs = tree2.collect_base_obb();
     // for obb in &mut obbs {
     //     obb.register_scene(&mut scene);
     // }
@@ -394,8 +394,66 @@ fn sim_test() {
     }
 }
 
+struct Box {
+    pos: Vector3f,
+    x: Scalar,
+    y: Scalar,
+    z: Scalar,
+    rotm: Matrix3f,
+}
+
+impl Box {
+    fn new(pos: Vector3f, dim: Vec<Scalar>) -> Self {
+        Box {
+            pos: pos,
+            x: dim[0],
+            y: dim[1],
+            z: dim[2],
+            rotm: Matrix3f::identity(),
+        }
+    }
+}
+
+impl CCDObject for Box {
+    fn center(&self) -> Vector3f {
+        self.pos.clone_owned()
+    }
+
+    fn support(&self, dir: &Vector3f) -> Vector3f {
+
+        let dir_local = self.rotm.try_inverse().unwrap() * dir;
+        // compute support point in specified direction
+        let vec_local = Vector3f::new(
+            dir_local[0].signum() * self.x * 0.5,
+            dir_local[1].signum() * self.y * 0.5,
+            dir_local[2].signum() * self.z * 0.5
+        );
+        let vec = self.rotm * &vec_local + &self.pos;
+
+        return vec;
+    }
+}
+
+use crobot::ccd::mpr_penetration;
+
+fn ccd_test() {
+    let ccd = CCDCriteria {
+        max_iterations: 100,
+        epa_tolerance: 0.0001,
+        mpr_tolerance: 0.0001,
+        dist_tolerance: 1e-6
+    };
+
+    let obj1 = Box::new(Vector3f::zeros(), vec![0.2, 0.2, 0.2]);
+    let obj2 = Box::new(Vector3f::new(0.0, 0.0, 0.0), vec![0.2, 0.2, 0.2]);
+    let mut info = CCDResult::new();
+    let res = mpr_penetration(&obj1, &obj2, &ccd, &mut info);
+    println!("result = {}", res);
+    println!("{:?}", &info);
+}
 
 fn main() {
-    nurbs_test();
+    ccd_test();
+    // nurbs_test();
     // sim_test();
 }

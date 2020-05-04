@@ -13,19 +13,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9f2af6a9-2f05-4190-908a-d8dd6e4ec606" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/math/decomp_cholesky.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/robotics/solver/constraint.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/robotics/solver/constraint_solver.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/robotics/solver/dantzig_lcp_solver.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/robotics/solver/fast_ldlt.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/robotics/solver/lcp_solver.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/robotics/solver/mod.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/ccd/helper.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/ccd/mpr.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/ccd/vector.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dictionaries/yuechuan.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/yuechuan.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vscode/launch.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vscode/tasks.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/math/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/math/mod.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/robotics/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/robotics/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ccd/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/ccd/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/demo.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/demo.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/math/decomp_cholesky.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/math/decomp_cholesky.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/robotics/solver/dantzig_lcp_solver.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/robotics/solver/dantzig_lcp_solver.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/robotics/solver/fast_ldlt.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/robotics/solver/fast_ldlt.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/robotics/solver/lcp_solver.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/robotics/solver/lcp_solver.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,6 +34,13 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Rust File" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -42,6 +48,9 @@
     <option name="directoryName" value="u940w43u" />
   </component>
   <component name="ProjectId" id="1bMghWT3849KmWcdH8mgvVKadAk" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -70,6 +79,7 @@
   </component>
   <component name="RustProjectSettings">
     <option name="toolchainHomeDirectory" value="$USER_HOME$/.cargo/bin" />
+    <option name="version" value="2" />
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -83,6 +93,8 @@
       <updated>1588447496154</updated>
       <workItem from="1588447499970" duration="132000" />
       <workItem from="1588447644283" duration="110000" />
+      <workItem from="1588447772800" duration="23415000" />
+      <workItem from="1588514358046" duration="7413000" />
     </task>
     <servers />
   </component>
@@ -94,13 +106,53 @@
       <screen x="0" y="0" width="2194" height="1194" />
     </state>
     <state x="552" y="252" key="#com.intellij.execution.impl.EditConfigurationsDialog/3840.1090.1920.1010/0.0.2194.1194@0.0.2194.1194" timestamp="1588447711833" />
+    <state x="903" y="313" key="#com.intellij.ide.util.MemberChooser" timestamp="1588538231732">
+      <screen x="0" y="0" width="2194" height="1194" />
+    </state>
+    <state x="903" y="313" key="#com.intellij.ide.util.MemberChooser/3840.1090.1920.1010/0.0.2194.1194@0.0.2194.1194" timestamp="1588538231732" />
     <state x="877" y="352" key="FileChooserDialogImpl" timestamp="1588447680917">
       <screen x="0" y="0" width="2194" height="1194" />
     </state>
     <state x="877" y="352" key="FileChooserDialogImpl/3840.1090.1920.1010/0.0.2194.1194@0.0.2194.1194" timestamp="1588447680917" />
-    <state x="760" y="264" width="672" height="678" key="search.everywhere.popup" timestamp="1588447628686">
+    <state width="2151" height="309" key="GridCell.Tab.0.bottom" timestamp="1588543071748">
       <screen x="0" y="0" width="2194" height="1194" />
     </state>
-    <state x="760" y="264" width="672" height="678" key="search.everywhere.popup/3840.1090.1920.1010/0.0.2194.1194@0.0.2194.1194" timestamp="1588447628686" />
+    <state width="2151" height="309" key="GridCell.Tab.0.bottom/3840.1090.1920.1010/0.0.2194.1194@0.0.2194.1194" timestamp="1588543071748" />
+    <state width="2151" height="309" key="GridCell.Tab.0.center" timestamp="1588543071748">
+      <screen x="0" y="0" width="2194" height="1194" />
+    </state>
+    <state width="2151" height="309" key="GridCell.Tab.0.center/3840.1090.1920.1010/0.0.2194.1194@0.0.2194.1194" timestamp="1588543071748" />
+    <state width="2151" height="309" key="GridCell.Tab.0.left" timestamp="1588543071747">
+      <screen x="0" y="0" width="2194" height="1194" />
+    </state>
+    <state width="2151" height="309" key="GridCell.Tab.0.left/3840.1090.1920.1010/0.0.2194.1194@0.0.2194.1194" timestamp="1588543071747" />
+    <state width="2151" height="309" key="GridCell.Tab.0.right" timestamp="1588543071748">
+      <screen x="0" y="0" width="2194" height="1194" />
+    </state>
+    <state width="2151" height="309" key="GridCell.Tab.0.right/3840.1090.1920.1010/0.0.2194.1194@0.0.2194.1194" timestamp="1588543071748" />
+    <state width="2151" height="409" key="GridCell.Tab.1.bottom" timestamp="1588542666352">
+      <screen x="0" y="0" width="2194" height="1194" />
+    </state>
+    <state width="2151" height="409" key="GridCell.Tab.1.bottom/3840.1090.1920.1010/0.0.2194.1194@0.0.2194.1194" timestamp="1588542666352" />
+    <state width="2151" height="409" key="GridCell.Tab.1.center" timestamp="1588542666352">
+      <screen x="0" y="0" width="2194" height="1194" />
+    </state>
+    <state width="2151" height="409" key="GridCell.Tab.1.center/3840.1090.1920.1010/0.0.2194.1194@0.0.2194.1194" timestamp="1588542666352" />
+    <state width="2151" height="409" key="GridCell.Tab.1.left" timestamp="1588542666351">
+      <screen x="0" y="0" width="2194" height="1194" />
+    </state>
+    <state width="2151" height="409" key="GridCell.Tab.1.left/3840.1090.1920.1010/0.0.2194.1194@0.0.2194.1194" timestamp="1588542666351" />
+    <state width="2151" height="409" key="GridCell.Tab.1.right" timestamp="1588542666352">
+      <screen x="0" y="0" width="2194" height="1194" />
+    </state>
+    <state width="2151" height="409" key="GridCell.Tab.1.right/3840.1090.1920.1010/0.0.2194.1194@0.0.2194.1194" timestamp="1588542666352" />
+    <state x="906" y="511" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1588541603443">
+      <screen x="0" y="0" width="2194" height="1194" />
+    </state>
+    <state x="906" y="511" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/3840.1090.1920.1010/0.0.2194.1194@0.0.2194.1194" timestamp="1588541603443" />
+    <state x="760" y="264" width="672" height="678" key="search.everywhere.popup" timestamp="1588462923293">
+      <screen x="0" y="0" width="2194" height="1194" />
+    </state>
+    <state x="760" y="264" width="672" height="678" key="search.everywhere.popup/3840.1090.1920.1010/0.0.2194.1194@0.0.2194.1194" timestamp="1588462923293" />
   </component>
 </project>
