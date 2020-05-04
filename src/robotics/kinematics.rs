@@ -246,8 +246,51 @@ pub fn hom2cart(p: Vector4f) -> Vector3f {
 }
 
 /// Convert axis-angle rotation representation to rotation matrix
-pub fn axang2rotm(ax: Vector3f, ang: Scalar) -> Matrix3f {
+pub fn axang2rotm_alt(ax: Vector3f, ang: Scalar) -> Matrix3f {
     matrix_exp3(vec_to_so3(ax * ang))
+}
+
+/// Convert axis-angle rotation representation to rotation matrix
+/// MATLAB implementation
+pub fn axang2rotm(ax: Vector3f, ang: Scalar) -> Matrix3f {
+    let mut dcm = Matrix3f::zeros();
+    let mut u = ax;                          // rotation axis vector
+
+    let n = u.norm_squared();
+    if n > 1. {
+        u.normalize_mut();
+    }
+
+    // axis elements:
+    let u_1 = u[0];
+    let u_2 = u[1];
+    let u_3 = u[2];
+    // angles:
+    let c_t = ang.cos();
+    let s_t = ang.sin();
+    let ver_sine_t = 1. - c_t;
+
+    // Compute the Direction Cosine Matrix (DCM) by applying the
+    // Rodrigues' formula
+    //
+    //   R(u,theta) = I + sin(theta)*S_u + (1 - cos(theta))*(S_u*S_u),
+    //
+    // where S_u denotes the skew-symmetric matrix of the rotation
+    // axis u, and I = eye(3,3).
+    
+    dcm[(0,0)] = u_1*u_1*ver_sine_t + c_t;
+    dcm[(0,1)] = u_1*u_2*ver_sine_t - u_3*s_t;
+    dcm[(0,2)] = u_1*u_3*ver_sine_t + u_2*s_t;
+
+    dcm[(1,0)] = u_1*u_2*ver_sine_t + u_3*s_t;
+    dcm[(1,1)] = u_2*u_2*ver_sine_t + c_t;
+    dcm[(1,2)] = u_2*u_3*ver_sine_t - u_1*s_t;
+
+    dcm[(2,0)] = u_1*u_3*ver_sine_t - u_2*s_t;
+    dcm[(2,1)] = u_2*u_3*ver_sine_t + u_1*s_t;
+    dcm[(2,2)] = u_3*u_3*ver_sine_t + c_t;
+
+    return dcm;
 }
 
 /// Convert rotation matrix to homogeneous transform

@@ -4,3 +4,4 @@ pub mod dcel;
 pub mod kinematics;
 pub mod rbtree;
 pub mod bspline;
+pub mod ccd;

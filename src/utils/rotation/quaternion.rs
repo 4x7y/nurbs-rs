@@ -35,3 +35,29 @@ pub fn rotm2quat(rotm: Matrix3f) -> Vector4f {
     
     return Vector4f::new(qw, qx, qy, qz);
 }
+
+pub fn quat2rotm(quat: &Vector4f) -> Matrix3f {
+
+    let quat_normalized = quat.normalize();
+    let s = quat_normalized[0];
+    let x = quat_normalized[1];
+    let y = quat_normalized[2];
+    let z = quat_normalized[3];
+    let xx = x * x;
+    let yy = y * y;
+    let zz = z * z;
+    let xy = x * y;
+    let xz = x * z;
+    let yz = y * z;
+    let sx = s * x;
+    let sy = s * y;
+    let sz = s * z;
+    
+    let rotm = Matrix3f::new(
+        1. - 2. * (yy+zz),      2. * (xy-sz),      2. * (xz+sy),
+             2. * (xy+sz), 1. - 2. * (xx+zz),      2. * (yz-sx),
+             2. * (xz-sy),      2. * (yz+sx), 1. - 2. * (xx+yy),
+    );
+
+    return rotm;
+}

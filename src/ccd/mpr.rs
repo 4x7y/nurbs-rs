@@ -20,6 +20,26 @@ impl CCDResult {
     }
 }
 
+/// Returns true if two given objects intersect - MPR algorithm is used.
+pub fn mpr_intersect(obj1: &dyn CCDObject,
+                     obj2: &dyn CCDObject,
+                     ccd: &CCDCriteria) -> bool {
+    let mut portal = CCDSimplex::new();
+
+    // Phase 1: Portal discovery - find portal that intersects with origin
+    // ray (ray from center of Minkowski diff to origin of coordinates)
+    let res = discover_portal(obj1, obj2, ccd, &mut portal);
+    if res < 0 {
+        return false;
+    }
+    if res > 0 {
+        return true;
+    }
+
+    // Phase 2: Portal refinement
+    let res = refine_portal(obj1, obj2, ccd, &mut portal);
+    return if res == 0 { true } else { false };
+}
 
 /// Computes penetration of obj2 into obj1.
 /// Depth of penetration, direction and position is returned, i.e. if obj2
@@ -160,7 +180,7 @@ fn discover_portal(obj1: &dyn CCDObject,
     while portal.size() < 4 {
         portal.point_mut(3).initialize(obj1, obj2, &dir, ccd);
         let dot = portal.point(3).v.dot(&dir);
-        if dot < CCD_ZERO {
+        if dot < CCD_ZERO || is_zero_approx(dot) {
             return -1;
         }
 
@@ -168,8 +188,8 @@ fn discover_portal(obj1: &dyn CCDObject,
 
         // test if origin is outside (v1, v0, v3) - set v2 as v3 and
         // continue
-        va = portal.point(1).v - &portal.point(3).v;
-        let dot = portal.point(0).v.dot(&va);
+        va = portal.cross_self_point_v(1, 3);
+        let dot = portal.dot_point_v_with(0, &va);
         if dot < CCD_ZERO && !is_zero_approx(dot) {
             portal.set(2, portal.point(3).clone());
             cont = true;
@@ -178,8 +198,8 @@ fn discover_portal(obj1: &dyn CCDObject,
         if !cont {
             // test if origin is outside (v3, v0, v2) - set v1 as v3 and
             // continue
-            va = portal.point(3).v - &portal.point(2).v;
-            let dot = portal.point(0).v.dot(&va);
+            va = portal.cross_self_point_v(3, 2);
+            let dot = portal.dot_point_v_with(0, &va);
             if dot < CCD_ZERO && !is_zero_approx(dot) {
                 portal.set(1, portal.point(3).clone());
                 cont = true;

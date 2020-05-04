@@ -2,10 +2,13 @@ pub mod obb;
 pub mod obb_tree;
 mod mpr;
 mod helper;
+mod object;
 
 pub use self::obb::*;
 pub use self::obb_tree::*;
 pub use self::mpr::*;
+pub use self::helper::*;
+pub use self::object::*;
 use crate::math::{Vector3f, Scalar};
 
 
@@ -25,20 +28,15 @@ pub trait CCDObject {
     fn support(&self, dir: &Vector3f) -> Vector3f;
 }
 
-//
-// impl CCD {
-//
-//     pub fn new() -> Self {
-//         CCD {
-//             first_dir: (),
-//             center1: (),
-//             center2: (),
-//             support1: (),
-//             support2: (),
-//             max_iterations: 0,
-//             epa_tolerance: (),
-//             mpr_tolerance: (),
-//             dist_tolerance: ()
-//         }
-//     }
-// }
+
+impl CCDCriteria {
+
+    pub fn default() -> Self {
+        CCDCriteria {
+            max_iterations: 1000,
+            epa_tolerance:  1e-4,
+            mpr_tolerance:  1e-4,
+            dist_tolerance: 1e-6,
+        }
+    }
+}

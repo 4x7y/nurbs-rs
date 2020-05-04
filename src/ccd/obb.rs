@@ -186,8 +186,8 @@ impl OBB {
         let mut max = points_local[0];
 
         for point in points_local {
-            max = na::sup(&max, &point);
-            min = na::inf(&min, &point);
+            max = Vector3f::sup(&max, &point);
+            min = Vector3f::inf(&min, &point);
         }
 
         let pos = rotm_b2w * (max + min) / 2.;
