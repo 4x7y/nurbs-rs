@@ -22,7 +22,6 @@ use std::fs::OpenOptions;
 use crobot::simulation::sim_model::SimScene;
 use crobot::geometry::*;
 use crobot::ccd::*;
-use std::f64::consts::{FRAC_PI_3, FRAC_PI_4, PI};
 
 fn sleep(millis: u64) {
     let duration = time::Duration::from_millis(millis);
@@ -396,98 +395,7 @@ fn sim_test() {
 }
 
 
-// fn ccd_test() {
-//     let ccd = CCDCriteria {
-//         max_iterations: 100,
-//         epa_tolerance: 0.0001,
-//         mpr_tolerance: 0.0001,
-//         dist_tolerance: 1e-6
-//     };
-//
-//     let obj1 = Box::new(Vector3f::zeros(), vec![0.2, 0.2, 0.2]);
-//     let obj2 = Box::new(Vector3f::new(0.0, 0.0, 0.0), vec![0.2, 0.2, 0.2]);
-//     let mut info = CCDResult::new();
-//     let res = mpr_penetration(&obj1, &obj2, &ccd, &mut info);
-//     println!("result = {}", res);
-//     println!("{:?}", &info);
-// }
-
-
-fn test_box_cylinder() {
-    let mut obj_box = Box {
-        pos: Vector3f::zeros(),
-        rotm: Matrix3f::identity(),
-        dim: Vector3f::new(0.5, 1., 1.5),
-    };
-
-    let mut obj_cylinder = Cylinder {
-        pos: Vector3f::zeros(),
-        rotm: Matrix3f::identity(),
-        radius: 0.4,
-        height: 0.7,
-    };
-
-    let ccd = CCDCriteria::default();
-
-    // test 1
-    obj_cylinder.pos = Vector3f::new(0.1, 0.0, 0.0);
-    let mut res = CCDResult::new();
-    let is_intersect = mpr_penetration(&obj_box, &obj_cylinder, &ccd, &mut res);
-    println!("is_intersect = {}, \t {:?}", is_intersect, res);
-
-    // test 2
-    obj_cylinder.pos = Vector3f::new(0.6, 0.0, 0.0);
-    let mut res = CCDResult::new();
-    let is_intersect = mpr_penetration(&obj_box, &obj_cylinder, &ccd, &mut res);
-    println!("is_intersect = {}, \t {:?}", is_intersect, res);
-
-    // test 3
-    obj_cylinder.pos = Vector3f::new(0.6, 0.6, 0.0);
-    let mut res = CCDResult::new();
-    let is_intersect = mpr_penetration(&obj_box, &obj_cylinder, &ccd, &mut res);
-    println!("is_intersect = {}, \t {:?}", is_intersect, res);
-
-    // test 4
-    obj_cylinder.pos = Vector3f::new(0.6, 0.6, 0.5);
-    let mut res = CCDResult::new();
-    let is_intersect = mpr_penetration(&obj_box, &obj_cylinder, &ccd, &mut res);
-    println!("is_intersect = {}, \t {:?}", is_intersect, res);
-
-    // test 5
-    obj_cylinder.pos = Vector3f::new(0.6, 0.0, 0.5);
-    obj_cylinder.rotm = axang2rotm(Vector3f::new(0., 1., 0.), FRAC_PI_3 as Scalar);
-    let mut res = CCDResult::new();
-    let is_intersect = mpr_penetration(&obj_box, &obj_cylinder, &ccd, &mut res);
-    println!("is_intersect = {}, \t {:?}", is_intersect, res);
-
-    // test 6
-    obj_cylinder.pos = Vector3f::new(0.6, 0.0, 0.5);
-    obj_cylinder.rotm = axang2rotm(Vector3f::new(0.67, 1.1, 0.12), FRAC_PI_4 as Scalar);
-    let mut res = CCDResult::new();
-    let is_intersect = mpr_penetration(&obj_box, &obj_cylinder, &ccd, &mut res);
-    println!("is_intersect = {}, \t {:?}", is_intersect, res);
-
-    // test 7
-    obj_cylinder.pos = Vector3f::new(0.6, 0.0, 0.5);
-    obj_cylinder.rotm = axang2rotm(Vector3f::new(-0.1, 2.2, -1.), PI as Scalar / 5.);
-    obj_box.pos = Vector3f::new(0.6, 0., 0.5);
-    obj_box.rotm = axang2rotm(Vector3f::new(1., 1., 0.), -FRAC_PI_4);
-    let mut res = CCDResult::new();
-    let is_intersect = mpr_penetration(&obj_box, &obj_cylinder, &ccd, &mut res);
-    println!("is_intersect = {}, \t {:?}", is_intersect, res);
-
-    // test 8
-    obj_cylinder.pos = Vector3f::new(0.6, 0.0, 0.5);
-    obj_cylinder.rotm = axang2rotm(Vector3f::new(-0.1, 2.2, -1.), PI as Scalar / 5.);
-    obj_box.pos = Vector3f::new(0.9, 0.8, 0.5);
-    obj_box.rotm = axang2rotm(Vector3f::new(1., 1., 0.), -FRAC_PI_4);
-    let mut res = CCDResult::new();
-    let is_intersect = mpr_penetration(&obj_box, &obj_cylinder, &ccd, &mut res);
-    println!("is_intersect = {}, \t {:?}", is_intersect, res);
-}
-
 fn main() {
-    test_box_cylinder();
     // nurbs_test();
     // sim_test();
 }

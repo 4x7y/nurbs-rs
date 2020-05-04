@@ -97,8 +97,9 @@ fn find_origin(obj1: &dyn CCDObject,
     center.v  = center.v1 - center.v2;
 }
 
+
 /// Discovers initial portal - that is tetrahedron that intersects with
-/// origin ray (ray from center of Minkowski diff to (0,0,0).
+/// origin ray (ray from center of Minkowski diff to (0,0,0)).
 ///
 ///  Returns -1 if already recognized that origin is outside Minkowski
 ///  portal.

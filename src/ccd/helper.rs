@@ -1,7 +1,7 @@
 use crate::math::{Vector3f, Scalar};
 use crate::ccd::{CCDCriteria, CCDObject};
 
-pub(crate) const CCD_EPS: Scalar = 1e-6;
+pub(crate) const CCD_EPS: Scalar = std::f64::EPSILON as Scalar;
 pub(crate) const CCD_ZERO: Scalar = 0.;
 pub(crate) const CCD_ONE: Scalar = 1.;
 

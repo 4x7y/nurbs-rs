@@ -13,7 +13,7 @@ impl CCDObject for Box {
     }
 
     fn support(&self, dir: &Vector3f) -> Vector3f {
-        let dir_local = self.rotm.try_inverse().unwrap() * dir;
+        let dir_local = self.rotm.transpose() * dir;
         // compute support point in specified direction
         let vec_local = Vector3f::new(
             dir_local[0].signum() * self.dim[0] * 0.5,
@@ -37,7 +37,7 @@ impl CCDObject for Sphere {
     }
 
     fn support(&self, dir: &Vector3f) -> Vector3f {
-        let dir_local = self.rotm.try_inverse().unwrap() * dir;
+        let dir_local = self.rotm.transpose() * dir;
         let len = dir_local.norm_squared();
         let vec_local = if len - CCD_EPS > CCD_ZERO {
             dir * self.radius / len.sqrt()
@@ -62,7 +62,7 @@ impl CCDObject for Cylinder {
     }
 
     fn support(&self, dir: &Vector3f) -> Vector3f {
-        let dir_local = self.rotm.try_inverse().unwrap() * dir;
+        let dir_local = self.rotm.transpose() * dir;
 
         let dist_z = (dir_local[0] * dir_local[0] + dir_local[1] * dir_local[1]).sqrt();
         let vec_local = if is_zero_approx(dist_z) {
