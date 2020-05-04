@@ -2,7 +2,6 @@ pub mod obb;
 pub mod obb_tree;
 mod mpr;
 mod helper;
-mod vector;
 
 pub use self::obb::*;
 pub use self::obb_tree::*;

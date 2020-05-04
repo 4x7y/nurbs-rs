@@ -13,18 +13,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9f2af6a9-2f05-4190-908a-d8dd6e4ec606" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/ccd/helper.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/ccd/mpr.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/ccd/vector.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/yuechuan.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/yuechuan.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ccd/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/ccd/mod.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/demo.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/demo.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/math/decomp_cholesky.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/math/decomp_cholesky.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/robotics/solver/dantzig_lcp_solver.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/robotics/solver/dantzig_lcp_solver.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/robotics/solver/fast_ldlt.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/robotics/solver/fast_ldlt.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/robotics/solver/lcp_solver.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/robotics/solver/lcp_solver.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ccd/vector.rs" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -94,7 +84,7 @@
       <workItem from="1588447499970" duration="132000" />
       <workItem from="1588447644283" duration="110000" />
       <workItem from="1588447772800" duration="23415000" />
-      <workItem from="1588514358046" duration="7413000" />
+      <workItem from="1588514358046" duration="7708000" />
     </task>
     <servers />
   </component>
