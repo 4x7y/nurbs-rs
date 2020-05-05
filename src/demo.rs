@@ -244,7 +244,7 @@ fn nurbs_surf_4() -> NurbsSurface {
 fn nurbs_test() {
 
     let surf1 = nurbs_surf_1();
-    let surf2 = nurbs_surf_4();
+    let mut surf2 = nurbs_surf_4();
 
 
     // let surf = nurbs::NurbsSurface::new(
@@ -264,7 +264,7 @@ fn nurbs_test() {
     // let obb2 = OBB::from(&surf2);
     // println!("{}", obb1.intersects(&obb2, 0.001));
 
-    // let tree1 = OBBTree::from_nurbs_surface(&surf1, 0);
+    let tree1 = OBBTree::from_nurbs_surface(&surf1, 0);
     // let tree2 = OBBTree::from_nurbs_surface(&surf2, 0);
     // println!("collide = {}", tree1.intersect(&tree2, 0.001));
 
@@ -280,10 +280,10 @@ fn nurbs_test() {
     //     obb.register_scene(&mut scene);
     // }
 
-    // let mesh = surf1.get_mesh();
-    // let mut h1 = scene.window.add_mesh(mesh, Vector3::new(1.0, 1.0, 1.0));
-    // h1.set_color(1.0, 0.0, 0.0);
-    // h1.enable_backface_culling(false);
+    let mesh = surf1.get_mesh();
+    let mut h1 = scene.window.add_mesh(mesh, Vector3::new(1.0, 1.0, 1.0));
+    h1.set_color(1.0, 0.0, 0.0);
+    h1.enable_backface_culling(false);
 
 
     let mesh = surf2.get_mesh();
@@ -291,10 +291,10 @@ fn nurbs_test() {
     h2.set_color(0.0, 0.0, 1.0);
     h2.enable_backface_culling(false);
 
-    // let vel = Vector3f::new(0., 0., 0.01);
-    // let tform = trvec2tform(vel.clone());
-    // let trans = na::Translation3::new(
-    //     vel[0] as f32, vel[1] as f32, vel[2] as f32);
+    let vel = Vector3f::new(0., 0., 0.01);
+    let tform = trvec2tform(vel.clone());
+    let trans = na::Translation3::new(
+        vel[0] as f32, vel[1] as f32, vel[2] as f32);
 
 
     while scene.render() {
@@ -306,14 +306,14 @@ fn nurbs_test() {
         //     obb.render();
         // }
 
-        // surf2.transform(&tform);
-        // let tree2 = OBBTree::from_nurbs_surface(&surf2, 10);
-        // if tree1.intersect(&tree2, 0.005) {
-        //     h2.set_color(0.0, 1.0, 0.0);
-        // } else {
-        //     h2.set_color(0.0, 0.0, 1.0);
-        // }
-        // h2.append_translation(&trans);
+        surf2.transform(&tform);
+        let tree2 = OBBTree::from_nurbs_surface(&surf2, 6);
+        if tree1.intersect(&tree2, 0.005) {
+            h2.set_color(0.0, 1.0, 0.0);
+        } else {
+            h2.set_color(0.0, 0.0, 1.0);
+        }
+        h2.append_translation(&trans);
     }
 }
 
@@ -396,6 +396,6 @@ fn sim_test() {
 
 
 fn main() {
-    // nurbs_test();
+    nurbs_test();
     // sim_test();
 }

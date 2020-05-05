@@ -13,13 +13,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9f2af6a9-2f05-4190-908a-d8dd6e4ec606" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ccd/helper.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/ccd/helper.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ccd/mpr.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/ccd/mpr.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ccd/object.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/ccd/object.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/demo.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/demo.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tests/ccd.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/tests/ccd.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/geometry/volint.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/geometry/volint.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,7 +53,20 @@
     <property name="cf.first.check.clang-format" value="false" />
     <property name="org.rust.cargo.project.model.PROJECT_DISCOVERY" value="true" />
   </component>
-  <component name="RunManager" selected="Cargo Command.Test ccd">
+  <component name="RunManager" selected="Cargo Command.Run demo">
+    <configuration name="Run demo" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
+      <option name="channel" value="DEFAULT" />
+      <option name="command" value="run --package crobot --bin demo" />
+      <option name="allFeatures" value="false" />
+      <option name="nocapture" value="false" />
+      <option name="emulateTerminal" value="false" />
+      <option name="backtrace" value="SHORT" />
+      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
+      <envs />
+      <method v="2">
+        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Run" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
       <option name="channel" value="DEFAULT" />
       <option name="command" value="run" />
@@ -123,26 +132,13 @@
         <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Test tests::ccd::test_cylinder_cylinder_penetration" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
-      <option name="channel" value="DEFAULT" />
-      <option name="command" value="test --package crobot --lib tests::ccd::test_cylinder_cylinder_penetration -- --exact" />
-      <option name="allFeatures" value="false" />
-      <option name="nocapture" value="false" />
-      <option name="emulateTerminal" value="false" />
-      <option name="backtrace" value="SHORT" />
-      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
-      <envs />
-      <method v="2">
-        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
-      </method>
-    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Cargo Command.Run demo" />
         <item itemvalue="Cargo Command.Test ccd" />
         <item itemvalue="Cargo Command.Test tests::ccd::test_box_box_aligned_x_tiny" />
         <item itemvalue="Cargo Command.Test tests::ccd::test_box_box_aligned_x_small" />
         <item itemvalue="Cargo Command.Test tests::ccd::test_box_box_aligned_x" />
-        <item itemvalue="Cargo Command.Test tests::ccd::test_cylinder_cylinder_penetration" />
       </list>
     </recent_temporary>
   </component>
@@ -163,7 +159,10 @@
       <workItem from="1588447499970" duration="132000" />
       <workItem from="1588447644283" duration="110000" />
       <workItem from="1588447772800" duration="23415000" />
-      <workItem from="1588514358046" duration="20933000" />
+      <workItem from="1588514358046" duration="21099000" />
+      <workItem from="1588572069165" duration="86000" />
+      <workItem from="1588619481236" duration="43000" />
+      <workItem from="1588639468920" duration="1815000" />
     </task>
     <servers />
   </component>
@@ -183,38 +182,38 @@
       <screen x="0" y="0" width="2194" height="1194" />
     </state>
     <state x="877" y="352" key="FileChooserDialogImpl/3840.1090.1920.1010/0.0.2194.1194@0.0.2194.1194" timestamp="1588447680917" />
-    <state width="2151" height="605" key="GridCell.Tab.0.bottom" timestamp="1588571460423">
+    <state width="2151" height="605" key="GridCell.Tab.0.bottom" timestamp="1588571655291">
       <screen x="0" y="0" width="2194" height="1194" />
     </state>
-    <state width="2151" height="605" key="GridCell.Tab.0.bottom/3840.1090.1920.1010/0.0.2194.1194@0.0.2194.1194" timestamp="1588571460423" />
-    <state width="2151" height="605" key="GridCell.Tab.0.center" timestamp="1588571460422">
+    <state width="2151" height="605" key="GridCell.Tab.0.bottom/3840.1090.1920.1010/0.0.2194.1194@0.0.2194.1194" timestamp="1588571655291" />
+    <state width="2151" height="605" key="GridCell.Tab.0.center" timestamp="1588571655291">
       <screen x="0" y="0" width="2194" height="1194" />
     </state>
-    <state width="2151" height="605" key="GridCell.Tab.0.center/3840.1090.1920.1010/0.0.2194.1194@0.0.2194.1194" timestamp="1588571460422" />
-    <state width="2151" height="605" key="GridCell.Tab.0.left" timestamp="1588571460422">
+    <state width="2151" height="605" key="GridCell.Tab.0.center/3840.1090.1920.1010/0.0.2194.1194@0.0.2194.1194" timestamp="1588571655291" />
+    <state width="2151" height="605" key="GridCell.Tab.0.left" timestamp="1588571655291">
       <screen x="0" y="0" width="2194" height="1194" />
     </state>
-    <state width="2151" height="605" key="GridCell.Tab.0.left/3840.1090.1920.1010/0.0.2194.1194@0.0.2194.1194" timestamp="1588571460422" />
-    <state width="2151" height="605" key="GridCell.Tab.0.right" timestamp="1588571460422">
+    <state width="2151" height="605" key="GridCell.Tab.0.left/3840.1090.1920.1010/0.0.2194.1194@0.0.2194.1194" timestamp="1588571655291" />
+    <state width="2151" height="605" key="GridCell.Tab.0.right" timestamp="1588571655291">
       <screen x="0" y="0" width="2194" height="1194" />
     </state>
-    <state width="2151" height="605" key="GridCell.Tab.0.right/3840.1090.1920.1010/0.0.2194.1194@0.0.2194.1194" timestamp="1588571460422" />
-    <state width="2151" height="294" key="GridCell.Tab.1.bottom" timestamp="1588569272543">
+    <state width="2151" height="605" key="GridCell.Tab.0.right/3840.1090.1920.1010/0.0.2194.1194@0.0.2194.1194" timestamp="1588571655291" />
+    <state width="2151" height="294" key="GridCell.Tab.1.bottom" timestamp="1588571655290">
       <screen x="0" y="0" width="2194" height="1194" />
     </state>
-    <state width="2151" height="294" key="GridCell.Tab.1.bottom/3840.1090.1920.1010/0.0.2194.1194@0.0.2194.1194" timestamp="1588569272543" />
-    <state width="2151" height="294" key="GridCell.Tab.1.center" timestamp="1588569272543">
+    <state width="2151" height="294" key="GridCell.Tab.1.bottom/3840.1090.1920.1010/0.0.2194.1194@0.0.2194.1194" timestamp="1588571655290" />
+    <state width="2151" height="294" key="GridCell.Tab.1.center" timestamp="1588571655290">
       <screen x="0" y="0" width="2194" height="1194" />
     </state>
-    <state width="2151" height="294" key="GridCell.Tab.1.center/3840.1090.1920.1010/0.0.2194.1194@0.0.2194.1194" timestamp="1588569272543" />
-    <state width="2151" height="294" key="GridCell.Tab.1.left" timestamp="1588569272543">
+    <state width="2151" height="294" key="GridCell.Tab.1.center/3840.1090.1920.1010/0.0.2194.1194@0.0.2194.1194" timestamp="1588571655290" />
+    <state width="2151" height="294" key="GridCell.Tab.1.left" timestamp="1588571655290">
       <screen x="0" y="0" width="2194" height="1194" />
     </state>
-    <state width="2151" height="294" key="GridCell.Tab.1.left/3840.1090.1920.1010/0.0.2194.1194@0.0.2194.1194" timestamp="1588569272543" />
-    <state width="2151" height="294" key="GridCell.Tab.1.right" timestamp="1588569272543">
+    <state width="2151" height="294" key="GridCell.Tab.1.left/3840.1090.1920.1010/0.0.2194.1194@0.0.2194.1194" timestamp="1588571655290" />
+    <state width="2151" height="294" key="GridCell.Tab.1.right" timestamp="1588571655290">
       <screen x="0" y="0" width="2194" height="1194" />
     </state>
-    <state width="2151" height="294" key="GridCell.Tab.1.right/3840.1090.1920.1010/0.0.2194.1194@0.0.2194.1194" timestamp="1588569272543" />
+    <state width="2151" height="294" key="GridCell.Tab.1.right/3840.1090.1920.1010/0.0.2194.1194@0.0.2194.1194" timestamp="1588571655290" />
     <state x="906" y="511" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1588541603443">
       <screen x="0" y="0" width="2194" height="1194" />
     </state>
