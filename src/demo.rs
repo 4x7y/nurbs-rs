@@ -269,12 +269,12 @@ fn nurbs_test() {
     // println!("collide = {}", tree1.intersect(&tree2, 0.001));
 
 
-    let mut scene = SimScene::new("[ME 625] B-Spline Surface Demo");
+    let mut scene = SimScene::new("[ME 625] NURBS Collision Detection Demo");
     // obb1.register_scene(&mut scene);
     // obb2.register_scene(&mut scene);
 
 
-    let tree2 = OBBTree::from_nurbs_surface(&surf2, 4);
+    let tree2 = OBBTree::from_nurbs_surface(&surf2, 10);
     let obbs = tree2.collect_base_obb();
     // for obb in &mut obbs {
     //     obb.register_scene(&mut scene);
@@ -298,7 +298,6 @@ fn nurbs_test() {
 
 
     while scene.render() {
-        sleep(30);
         // obb1.render();
         // obb2.render();
 
@@ -307,7 +306,7 @@ fn nurbs_test() {
         // }
 
         surf2.transform(&tform);
-        let tree2 = OBBTree::from_nurbs_surface(&surf2, 6);
+        let tree2 = OBBTree::from_nurbs_surface(&surf2, 10);
         if tree1.intersect(&tree2, 0.005) {
             h2.set_color(0.0, 1.0, 0.0);
         } else {
